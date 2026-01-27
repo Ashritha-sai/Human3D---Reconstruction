@@ -1,0 +1,31 @@
+# Locked dependencies for reproducibility
+# Generated for Python 3.10+
+# Install with: pip install -r requirements-lock.txt
+
+# Core scientific stack
+numpy==1.26.4
+opencv-python==4.9.0.80
+pyyaml==6.0.1
+tqdm==4.66.2
+matplotlib==3.8.3
+
+# PyTorch (CPU or CUDA depending on system)
+# For CUDA: pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+torch==2.2.1
+torchvision==0.17.1
+
+# Depth estimation (MiDaS dependency)
+timm==0.9.16
+
+# YOLOv8 Pose
+ultralytics==8.1.24
+
+# Point cloud processing
+open3d==0.18.0
+
+# Segment Anything
+# Install from: pip install git+https://github.com/facebookresearch/segment-anything.git
+
+# Testing
+pytest==8.0.2
+pytest-cov==4.1.0

@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+title: "Human3D: Context-Aware 3D Reconstruction from a Single Image"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - given-names: "Ashritha"
+    alias: "Ashritha-sai"
+repository-code: "https://github.com/Ashritha-sai/Human3D---Reconstruction"
+url: "https://github.com/Ashritha-sai/Human3D---Reconstruction"
+license: MIT
+version: 0.1.0
+date-released: 2025-12-19
+keywords:
+  - 3d-reconstruction
+  - human-pose-estimation
+  - depth-estimation
+  - computer-vision
+  - point-cloud
+  - pytorch
+abstract: >-
+  Human3D is a modular, end-to-end pipeline for reconstructing
+  3D human geometry from a single RGB image. The system supports
+  both single-person and multi-person scenes using state-of-the-art
+  models including MiDaS for depth estimation, YOLOv8-Pose for
+  human detection, and Segment Anything (SAM) for instance segmentation.

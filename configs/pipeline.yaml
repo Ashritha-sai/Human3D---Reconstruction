@@ -1,0 +1,46 @@
+run:
+  output_dir: "outputs"
+  name_prefix: "run"
+
+device:
+  prefer: "cuda"   # "cuda" or "cpu"
+
+input:
+  rgb_resize_max: 1280
+
+subject:
+  selection: "centered"   # try this first
+  index: 0
+
+depth:
+  enabled: true
+  model_type: "DPT_Large"  # "DPT_Large", "DPT_Hybrid", "MiDaS_small"
+  invert: false            # if you want nearer=brighter behavior later
+
+pose:
+  enabled: true
+  model: checkpoints/yolov8m-pose.pt
+  conf: 0.15
+
+
+segmentation:
+  enabled: true
+  method: sam
+  prompt: box_from_pose
+  sam:
+    model_type: vit_b
+    checkpoint_path: checkpoints/sam_vit_b.pth
+    expand_box_px: 30
+
+  fallback: none   # or "largest_mask"
+reconstruction:
+  enabled: true
+  pointcloud:
+    enabled: true
+    # A simple pinhole guess (works for “coarse” 3D)
+    fx: 1000.0
+    fy: 1000.0
+
+viz:
+  draw_pose: true
+  draw_segmentation: true

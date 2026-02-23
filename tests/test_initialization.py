@@ -12,7 +12,11 @@ import torch
 import pytest
 
 from human3d.reconstruct import gaussian_utils as gu
-from human3d.reconstruct.gaussian_trainer import GaussianTrainer, GaussianConfig, CameraParams
+from human3d.reconstruct.gaussian_trainer import (
+    GaussianTrainer,
+    GaussianConfig,
+    CameraParams,
+)
 
 
 # =============================================================================
@@ -211,13 +215,22 @@ class TestGaussianTrainerInit:
         rgb, depth, mask = self.create_synthetic_data(256, 256)
 
         camera = CameraParams(
-            fx=1000.0, fy=1000.0, cx=127.5, cy=127.5, width=256, height=256,
+            fx=1000.0,
+            fy=1000.0,
+            cx=127.5,
+            cy=127.5,
+            width=256,
+            height=256,
         )
         config = GaussianConfig(sh_degree=3)
 
         trainer = GaussianTrainer(
-            rgb=rgb, depth=depth, mask=mask,
-            camera_params=camera, config=config, device="cpu",
+            rgb=rgb,
+            depth=depth,
+            mask=mask,
+            camera_params=camera,
+            config=config,
+            device="cpu",
         )
 
         assert trainer.rgb.shape == (256, 256, 3)
@@ -231,15 +244,22 @@ class TestGaussianTrainerInit:
         rgb, depth, mask = self.create_synthetic_data(h, w)
 
         camera = CameraParams(
-            fx=1000.0, fy=1000.0,
-            cx=(w - 1) / 2.0, cy=(h - 1) / 2.0,
-            width=w, height=h,
+            fx=1000.0,
+            fy=1000.0,
+            cx=(w - 1) / 2.0,
+            cy=(h - 1) / 2.0,
+            width=w,
+            height=h,
         )
         config = GaussianConfig(sh_degree=3, opacity_init=0.9)
 
         trainer = GaussianTrainer(
-            rgb=rgb, depth=depth, mask=mask,
-            camera_params=camera, config=config, device="cpu",
+            rgb=rgb,
+            depth=depth,
+            mask=mask,
+            camera_params=camera,
+            config=config,
+            device="cpu",
         )
 
         num_gaussians = trainer.initialize_gaussians()
@@ -269,7 +289,12 @@ class TestGaussianTrainerInit:
         rgb, depth, mask = self.create_synthetic_data(128, 128)
 
         camera = CameraParams(
-            fx=500.0, fy=500.0, cx=63.5, cy=63.5, width=128, height=128,
+            fx=500.0,
+            fy=500.0,
+            cx=63.5,
+            cy=63.5,
+            width=128,
+            height=128,
         )
         config = GaussianConfig(sh_degree=0)
 
@@ -330,8 +355,10 @@ class TestConsistencyWithOriginal:
         xyz_new_sorted = xyz_new[np.lexsort(xyz_new.T)]
 
         np.testing.assert_allclose(
-            xyz_original_sorted, xyz_new_sorted,
-            rtol=1e-4, atol=1e-6,
+            xyz_original_sorted,
+            xyz_new_sorted,
+            rtol=1e-4,
+            atol=1e-6,
             err_msg="XYZ coordinates don't match original implementation",
         )
 

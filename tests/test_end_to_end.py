@@ -14,7 +14,11 @@ import pytest
 import yaml
 import cv2
 
-from human3d.reconstruct.gaussian_trainer import GaussianTrainer, GaussianConfig, CameraParams
+from human3d.reconstruct.gaussian_trainer import (
+    GaussianTrainer,
+    GaussianConfig,
+    CameraParams,
+)
 from human3d.reconstruct import gaussian_utils
 from human3d.export.ply_exporter import load_gaussian_ply
 
@@ -98,9 +102,12 @@ class TestGaussianPipeline:
         rgb, depth, mask, camera_params = fixture_data
 
         camera = CameraParams(
-            fx=camera_params["fx"], fy=camera_params["fy"],
-            cx=camera_params["cx"], cy=camera_params["cy"],
-            width=camera_params["width"], height=camera_params["height"],
+            fx=camera_params["fx"],
+            fy=camera_params["fy"],
+            cx=camera_params["cx"],
+            cy=camera_params["cy"],
+            width=camera_params["width"],
+            height=camera_params["height"],
         )
 
         config = GaussianConfig(sh_degree=0, num_iterations=20)
@@ -112,7 +119,10 @@ class TestGaussianPipeline:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             history = trainer.optimize(
-                num_iterations=20, log_every=100, save_every=0, output_dir=tmpdir,
+                num_iterations=20,
+                log_every=100,
+                save_every=0,
+                output_dir=tmpdir,
             )
 
             assert len(history["loss"]) == 20
@@ -131,9 +141,12 @@ class TestGaussianPipeline:
         rgb, depth, mask, camera_params = fixture_data
 
         camera = CameraParams(
-            fx=camera_params["fx"], fy=camera_params["fy"],
-            cx=camera_params["cx"], cy=camera_params["cy"],
-            width=camera_params["width"], height=camera_params["height"],
+            fx=camera_params["fx"],
+            fy=camera_params["fy"],
+            cx=camera_params["cx"],
+            cy=camera_params["cy"],
+            width=camera_params["width"],
+            height=camera_params["height"],
         )
 
         config = GaussianConfig(sh_degree=0)
@@ -143,7 +156,10 @@ class TestGaussianPipeline:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             history = trainer.optimize(
-                num_iterations=30, log_every=100, save_every=0, output_dir=tmpdir,
+                num_iterations=30,
+                log_every=100,
+                save_every=0,
+                output_dir=tmpdir,
             )
 
         initial_loss = np.mean(history["loss"][:5])
@@ -166,9 +182,12 @@ class TestInitializationConsistency:
         rgb, depth, mask, camera_params = fixture_data
 
         camera = CameraParams(
-            fx=camera_params["fx"], fy=camera_params["fy"],
-            cx=camera_params["cx"], cy=camera_params["cy"],
-            width=camera_params["width"], height=camera_params["height"],
+            fx=camera_params["fx"],
+            fy=camera_params["fy"],
+            cx=camera_params["cx"],
+            cy=camera_params["cy"],
+            width=camera_params["width"],
+            height=camera_params["height"],
         )
 
         config = GaussianConfig(sh_degree=0, position_noise=0.0)
@@ -189,18 +208,26 @@ class TestInitializationConsistency:
         depth_tensor = torch.from_numpy(depth.astype(np.float32))
         mask_tensor = torch.from_numpy(mask.astype(np.float32))
 
-        depth_normalized = gaussian_utils.normalize_depth_to_metric(depth_tensor, 0.5, 2.5)
+        depth_normalized = gaussian_utils.normalize_depth_to_metric(
+            depth_tensor, 0.5, 2.5
+        )
 
         xyz_direct = gaussian_utils.depth_to_xyz(
-            depth_normalized, mask_tensor,
-            fx=camera_params["fx"], fy=camera_params["fy"],
-            cx=camera_params["cx"], cy=camera_params["cy"],
+            depth_normalized,
+            mask_tensor,
+            fx=camera_params["fx"],
+            fy=camera_params["fy"],
+            cx=camera_params["cx"],
+            cy=camera_params["cy"],
         )
 
         camera = CameraParams(
-            fx=camera_params["fx"], fy=camera_params["fy"],
-            cx=camera_params["cx"], cy=camera_params["cy"],
-            width=camera_params["width"], height=camera_params["height"],
+            fx=camera_params["fx"],
+            fy=camera_params["fy"],
+            cx=camera_params["cx"],
+            cy=camera_params["cy"],
+            width=camera_params["width"],
+            height=camera_params["height"],
         )
 
         config = GaussianConfig(sh_degree=0, position_noise=0.0)
@@ -215,7 +242,10 @@ class TestInitializationConsistency:
         )
 
         np.testing.assert_allclose(
-            xyz_direct.numpy(), xyz_trainer.numpy(), rtol=1e-5, atol=1e-6,
+            xyz_direct.numpy(),
+            xyz_trainer.numpy(),
+            rtol=1e-5,
+            atol=1e-6,
         )
 
 
@@ -231,9 +261,12 @@ class TestRenderingQuality:
         rgb, depth, mask, camera_params = fixture_data
 
         camera = CameraParams(
-            fx=camera_params["fx"], fy=camera_params["fy"],
-            cx=camera_params["cx"], cy=camera_params["cy"],
-            width=camera_params["width"], height=camera_params["height"],
+            fx=camera_params["fx"],
+            fy=camera_params["fy"],
+            cx=camera_params["cx"],
+            cy=camera_params["cy"],
+            width=camera_params["width"],
+            height=camera_params["height"],
         )
 
         config = GaussianConfig(sh_degree=0)
@@ -259,13 +292,18 @@ class TestRenderingQuality:
         rgb, depth, mask, camera_params = fixture_data
 
         camera = CameraParams(
-            fx=camera_params["fx"], fy=camera_params["fy"],
-            cx=camera_params["cx"], cy=camera_params["cy"],
-            width=camera_params["width"], height=camera_params["height"],
+            fx=camera_params["fx"],
+            fy=camera_params["fy"],
+            cx=camera_params["cx"],
+            cy=camera_params["cy"],
+            width=camera_params["width"],
+            height=camera_params["height"],
         )
 
         config = GaussianConfig(
-            sh_degree=0, loss_weight_l1=0.8, loss_weight_ssim=0.2,
+            sh_degree=0,
+            loss_weight_l1=0.8,
+            loss_weight_ssim=0.2,
         )
 
         trainer = GaussianTrainer(rgb, depth, mask, camera, config, device="cpu")
@@ -273,7 +311,10 @@ class TestRenderingQuality:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             trainer.optimize(
-                num_iterations=500, log_every=100, save_every=0, output_dir=tmpdir,
+                num_iterations=500,
+                log_every=100,
+                save_every=0,
+                output_dir=tmpdir,
             )
 
         rendered_rgb, _, _ = trainer.render_view()
@@ -298,9 +339,12 @@ class TestCUDAPipeline:
         rgb, depth, mask, camera_params = fixture_data
 
         camera = CameraParams(
-            fx=camera_params["fx"], fy=camera_params["fy"],
-            cx=camera_params["cx"], cy=camera_params["cy"],
-            width=camera_params["width"], height=camera_params["height"],
+            fx=camera_params["fx"],
+            fy=camera_params["fy"],
+            cx=camera_params["cx"],
+            cy=camera_params["cy"],
+            width=camera_params["width"],
+            height=camera_params["height"],
         )
 
         config = GaussianConfig(sh_degree=0)
@@ -312,7 +356,10 @@ class TestCUDAPipeline:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             trainer.optimize(
-                num_iterations=50, log_every=100, save_every=0, output_dir=tmpdir,
+                num_iterations=50,
+                log_every=100,
+                save_every=0,
+                output_dir=tmpdir,
             )
 
             ply_path = Path(tmpdir) / "cuda_output.ply"

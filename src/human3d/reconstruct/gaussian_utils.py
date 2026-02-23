@@ -245,9 +245,18 @@ def quaternion_to_rotation_matrix(
 
         R = torch.stack(
             [
-                torch.stack([1 - 2*(y*y + z*z), 2*(x*y - w*z), 2*(x*z + w*y)], dim=-1),
-                torch.stack([2*(x*y + w*z), 1 - 2*(x*x + z*z), 2*(y*z - w*x)], dim=-1),
-                torch.stack([2*(x*z - w*y), 2*(y*z + w*x), 1 - 2*(x*x + y*y)], dim=-1),
+                torch.stack(
+                    [1 - 2 * (y * y + z * z), 2 * (x * y - w * z), 2 * (x * z + w * y)],
+                    dim=-1,
+                ),
+                torch.stack(
+                    [2 * (x * y + w * z), 1 - 2 * (x * x + z * z), 2 * (y * z - w * x)],
+                    dim=-1,
+                ),
+                torch.stack(
+                    [2 * (x * z - w * y), 2 * (y * z + w * x), 1 - 2 * (x * x + y * y)],
+                    dim=-1,
+                ),
             ],
             dim=1,
         )
@@ -258,9 +267,18 @@ def quaternion_to_rotation_matrix(
 
         R = np.stack(
             [
-                np.stack([1 - 2*(y*y + z*z), 2*(x*y - w*z), 2*(x*z + w*y)], axis=-1),
-                np.stack([2*(x*y + w*z), 1 - 2*(x*x + z*z), 2*(y*z - w*x)], axis=-1),
-                np.stack([2*(x*z - w*y), 2*(y*z + w*x), 1 - 2*(x*x + y*y)], axis=-1),
+                np.stack(
+                    [1 - 2 * (y * y + z * z), 2 * (x * y - w * z), 2 * (x * z + w * y)],
+                    axis=-1,
+                ),
+                np.stack(
+                    [2 * (x * y + w * z), 1 - 2 * (x * x + z * z), 2 * (y * z - w * x)],
+                    axis=-1,
+                ),
+                np.stack(
+                    [2 * (x * z - w * y), 2 * (y * z + w * x), 1 - 2 * (x * x + y * y)],
+                    axis=-1,
+                ),
             ],
             axis=1,
         )
@@ -287,12 +305,17 @@ def inverse_sigmoid(x: Union[np.ndarray, Tensor]) -> Union[np.ndarray, Tensor]:
 
 
 def create_camera_intrinsics(
-    fx: float, fy: float, cx: float, cy: float, device: str = "cpu",
+    fx: float,
+    fy: float,
+    cx: float,
+    cy: float,
+    device: str = "cpu",
 ) -> Tensor:
     """Create a 3x3 camera intrinsics matrix K."""
     return torch.tensor(
         [[fx, 0, cx], [0, fy, cy], [0, 0, 1]],
-        dtype=torch.float32, device=device,
+        dtype=torch.float32,
+        device=device,
     )
 
 

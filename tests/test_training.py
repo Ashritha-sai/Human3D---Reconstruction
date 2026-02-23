@@ -15,7 +15,11 @@ import numpy as np
 import torch
 import pytest
 
-from human3d.reconstruct.gaussian_trainer import GaussianTrainer, GaussianConfig, CameraParams
+from human3d.reconstruct.gaussian_trainer import (
+    GaussianTrainer,
+    GaussianConfig,
+    CameraParams,
+)
 
 
 def create_synthetic_test_data(size=128):
@@ -65,7 +69,12 @@ class TestOptimization:
         rgb, depth, mask = create_synthetic_test_data(size=64)
 
         camera = CameraParams(
-            fx=500.0, fy=500.0, cx=31.5, cy=31.5, width=64, height=64,
+            fx=500.0,
+            fy=500.0,
+            cx=31.5,
+            cy=31.5,
+            width=64,
+            height=64,
         )
 
         config = GaussianConfig(
@@ -89,7 +98,10 @@ class TestOptimization:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             history = trainer.optimize(
-                num_iterations=10, log_every=5, save_every=0, output_dir=tmpdir,
+                num_iterations=10,
+                log_every=5,
+                save_every=0,
+                output_dir=tmpdir,
             )
 
         assert "loss" in history
@@ -101,7 +113,10 @@ class TestOptimization:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             history = trainer.optimize(
-                num_iterations=20, log_every=100, save_every=0, output_dir=tmpdir,
+                num_iterations=20,
+                log_every=100,
+                save_every=0,
+                output_dir=tmpdir,
             )
 
         losses = history["loss"]
@@ -120,7 +135,10 @@ class TestOptimization:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             history = trainer.optimize(
-                num_iterations=15, log_every=100, save_every=0, output_dir=tmpdir,
+                num_iterations=15,
+                log_every=100,
+                save_every=0,
+                output_dir=tmpdir,
             )
 
         losses = history["loss"]
@@ -140,7 +158,10 @@ class TestOptimization:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             trainer.optimize(
-                num_iterations=15, log_every=100, save_every=0, output_dir=tmpdir,
+                num_iterations=15,
+                log_every=100,
+                save_every=0,
+                output_dir=tmpdir,
             )
 
         # Check parameters changed - use max difference
@@ -160,7 +181,10 @@ class TestOptimization:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             history = trainer.optimize(
-                num_iterations=15, log_every=100, save_every=0, output_dir=tmpdir,
+                num_iterations=15,
+                log_every=100,
+                save_every=0,
+                output_dir=tmpdir,
             )
 
         assert "loss" in history
@@ -181,7 +205,10 @@ class TestOptimization:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             trainer.optimize(
-                num_iterations=10, log_every=100, save_every=5, output_dir=tmpdir,
+                num_iterations=10,
+                log_every=100,
+                save_every=5,
+                output_dir=tmpdir,
             )
 
             output_path = Path(tmpdir)
@@ -201,7 +228,12 @@ class TestOptimizationCUDA:
         rgb, depth, mask = create_synthetic_test_data(size=64)
 
         camera = CameraParams(
-            fx=500.0, fy=500.0, cx=31.5, cy=31.5, width=64, height=64,
+            fx=500.0,
+            fy=500.0,
+            cx=31.5,
+            cy=31.5,
+            width=64,
+            height=64,
         )
 
         config = GaussianConfig(sh_degree=0)
@@ -213,7 +245,10 @@ class TestOptimizationCUDA:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             history = trainer.optimize(
-                num_iterations=20, log_every=100, save_every=0, output_dir=tmpdir,
+                num_iterations=20,
+                log_every=100,
+                save_every=0,
+                output_dir=tmpdir,
             )
 
         assert len(history["loss"]) == 20
@@ -228,7 +263,12 @@ class TestDensification:
         rgb, depth, mask = create_synthetic_test_data(size=64)
 
         camera = CameraParams(
-            fx=500.0, fy=500.0, cx=31.5, cy=31.5, width=64, height=64,
+            fx=500.0,
+            fy=500.0,
+            cx=31.5,
+            cy=31.5,
+            width=64,
+            height=64,
         )
 
         config = GaussianConfig(
@@ -243,7 +283,10 @@ class TestDensification:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             history = trainer.optimize(
-                num_iterations=15, log_every=100, save_every=0, output_dir=tmpdir,
+                num_iterations=15,
+                log_every=100,
+                save_every=0,
+                output_dir=tmpdir,
             )
 
         assert "densify_added" in history
@@ -255,7 +298,12 @@ class TestDensification:
         rgb, depth, mask = create_synthetic_test_data(size=64)
 
         camera = CameraParams(
-            fx=500.0, fy=500.0, cx=31.5, cy=31.5, width=64, height=64,
+            fx=500.0,
+            fy=500.0,
+            cx=31.5,
+            cy=31.5,
+            width=64,
+            height=64,
         )
 
         config = GaussianConfig(
@@ -272,7 +320,10 @@ class TestDensification:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             history = trainer.optimize(
-                num_iterations=15, log_every=100, save_every=0, output_dir=tmpdir,
+                num_iterations=15,
+                log_every=100,
+                save_every=0,
+                output_dir=tmpdir,
             )
 
         counts = history["num_gaussians"]
@@ -284,7 +335,12 @@ class TestDensification:
         rgb, depth, mask = create_synthetic_test_data(size=32)
 
         camera = CameraParams(
-            fx=500.0, fy=500.0, cx=15.5, cy=15.5, width=32, height=32,
+            fx=500.0,
+            fy=500.0,
+            cx=15.5,
+            cy=15.5,
+            width=32,
+            height=32,
         )
 
         config = GaussianConfig(sh_degree=0, max_gaussians=500)
@@ -304,11 +360,18 @@ class TestLongerTraining:
         rgb, depth, mask = create_synthetic_test_data(size=128)
 
         camera = CameraParams(
-            fx=500.0, fy=500.0, cx=63.5, cy=63.5, width=128, height=128,
+            fx=500.0,
+            fy=500.0,
+            cx=63.5,
+            cy=63.5,
+            width=128,
+            height=128,
         )
 
         config = GaussianConfig(
-            sh_degree=0, loss_weight_l1=0.8, loss_weight_ssim=0.2,
+            sh_degree=0,
+            loss_weight_l1=0.8,
+            loss_weight_ssim=0.2,
         )
 
         trainer = GaussianTrainer(rgb, depth, mask, camera, config, device="cpu")
@@ -318,7 +381,9 @@ class TestLongerTraining:
         output_dir.mkdir(parents=True, exist_ok=True)
 
         history = trainer.optimize(
-            num_iterations=500, log_every=50, save_every=100,
+            num_iterations=500,
+            log_every=50,
+            save_every=100,
             output_dir=str(output_dir),
         )
 

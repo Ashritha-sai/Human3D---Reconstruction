@@ -13,7 +13,11 @@ from pathlib import Path
 import numpy as np
 import cv2
 
-from human3d.reconstruct.gaussian_trainer import GaussianTrainer, GaussianConfig, CameraParams
+from human3d.reconstruct.gaussian_trainer import (
+    GaussianTrainer,
+    GaussianConfig,
+    CameraParams,
+)
 
 
 def create_test_image_with_depth():
@@ -56,16 +60,23 @@ def test_render_view():
     print(f"\n1. Image size: {W}x{H}, Masked pixels: {mask.sum()}")
 
     camera = CameraParams(
-        fx=500.0, fy=500.0,
-        cx=(W - 1) / 2.0, cy=(H - 1) / 2.0,
-        width=W, height=H,
+        fx=500.0,
+        fy=500.0,
+        cx=(W - 1) / 2.0,
+        cy=(H - 1) / 2.0,
+        width=W,
+        height=H,
     )
 
     config = GaussianConfig(sh_degree=0, opacity_init=0.9, position_noise=0.0)
 
     trainer = GaussianTrainer(
-        rgb=rgb, depth=depth, mask=mask,
-        camera_params=camera, config=config, device="cpu",
+        rgb=rgb,
+        depth=depth,
+        mask=mask,
+        camera_params=camera,
+        config=config,
+        device="cpu",
     )
 
     num_gaussians = trainer.initialize_gaussians()
@@ -85,18 +96,26 @@ def test_render_view():
     bgr_np = (rgb_np[:, :, ::-1] * 255).astype(np.uint8)
     cv2.imwrite(str(output_dir / "test_render.png"), bgr_np)
 
-    cv2.imwrite(str(output_dir / "test_original.png"), cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR))
+    cv2.imwrite(
+        str(output_dir / "test_original.png"), cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
+    )
     cv2.imwrite(str(output_dir / "test_mask.png"), mask * 255)
 
     alpha_np = rendered_alpha.detach().cpu().numpy()
-    cv2.imwrite(str(output_dir / "test_render_alpha.png"), (alpha_np * 255).astype(np.uint8))
+    cv2.imwrite(
+        str(output_dir / "test_render_alpha.png"), (alpha_np * 255).astype(np.uint8)
+    )
 
     depth_np = rendered_depth.detach().cpu().numpy()
     depth_valid = depth_np[depth_np < float("inf")]
     if len(depth_valid) > 0:
-        depth_vis = (depth_np - depth_valid.min()) / (depth_valid.max() - depth_valid.min() + 1e-6)
+        depth_vis = (depth_np - depth_valid.min()) / (
+            depth_valid.max() - depth_valid.min() + 1e-6
+        )
         depth_vis = np.clip(depth_vis, 0, 1)
-        depth_vis = cv2.applyColorMap((depth_vis * 255).astype(np.uint8), cv2.COLORMAP_INFERNO)
+        depth_vis = cv2.applyColorMap(
+            (depth_vis * 255).astype(np.uint8), cv2.COLORMAP_INFERNO
+        )
         cv2.imwrite(str(output_dir / "test_render_depth.png"), depth_vis)
 
     print(f"\n4. Outputs saved to: {output_dir}")
@@ -137,9 +156,12 @@ def test_render_with_real_image():
     mask = np.ones((H, W), dtype=np.uint8)
 
     camera = CameraParams(
-        fx=1000.0, fy=1000.0,
-        cx=(W - 1) / 2.0, cy=(H - 1) / 2.0,
-        width=W, height=H,
+        fx=1000.0,
+        fy=1000.0,
+        cx=(W - 1) / 2.0,
+        cy=(H - 1) / 2.0,
+        width=W,
+        height=H,
     )
 
     config = GaussianConfig(sh_degree=0, opacity_init=0.9)

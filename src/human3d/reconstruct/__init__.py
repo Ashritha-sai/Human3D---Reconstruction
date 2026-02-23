@@ -39,6 +39,7 @@ from .losses import (
 def __getattr__(name):
     if name in ("depth_to_pointcloud", "save_ply"):
         from . import pointcloud
+
         return getattr(pointcloud, name)
     raise AttributeError(f"module 'human3d.reconstruct' has no attribute {name!r}")
 

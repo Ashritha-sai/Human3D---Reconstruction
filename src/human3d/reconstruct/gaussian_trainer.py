@@ -784,6 +784,7 @@ class GaussianTrainer:
             # Try torch's built-in CUDA path first
             try:
                 from torch.utils.cpp_extension import CUDA_HOME as _torch_cuda
+
                 if _torch_cuda and os.path.exists(_torch_cuda):
                     os.environ["CUDA_HOME"] = _torch_cuda
             except ImportError:
@@ -1259,11 +1260,27 @@ class GaussianTrainer:
         """Create (or recreate) the Adam optimizer using config learning rates."""
         self.optimizer = torch.optim.Adam(
             [
-                {"params": [self.means], "lr": self.config.lr_position, "name": "means"},
+                {
+                    "params": [self.means],
+                    "lr": self.config.lr_position,
+                    "name": "means",
+                },
                 {"params": [self.scales], "lr": self.config.lr_scale, "name": "scales"},
-                {"params": [self.rotations], "lr": self.config.lr_rotation, "name": "rotations"},
-                {"params": [self.sh_coeffs], "lr": self.config.lr_color, "name": "sh_coeffs"},
-                {"params": [self.opacities], "lr": self.config.lr_opacity, "name": "opacities"},
+                {
+                    "params": [self.rotations],
+                    "lr": self.config.lr_rotation,
+                    "name": "rotations",
+                },
+                {
+                    "params": [self.sh_coeffs],
+                    "lr": self.config.lr_color,
+                    "name": "sh_coeffs",
+                },
+                {
+                    "params": [self.opacities],
+                    "lr": self.config.lr_opacity,
+                    "name": "opacities",
+                },
             ]
         )
 

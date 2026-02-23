@@ -21,7 +21,11 @@ from human3d.export.ply_exporter import (
     construct_ply_header,
     get_sh_coefficient_count,
 )
-from human3d.reconstruct.gaussian_trainer import GaussianTrainer, GaussianConfig, CameraParams
+from human3d.reconstruct.gaussian_trainer import (
+    GaussianTrainer,
+    GaussianConfig,
+    CameraParams,
+)
 
 
 def create_test_gaussians(n=1000, sh_degree=0):
@@ -177,7 +181,12 @@ class TestTrainerExport:
         mask = np.ones((H, W), dtype=np.uint8)
 
         camera = CameraParams(
-            fx=500.0, fy=500.0, cx=15.5, cy=15.5, width=W, height=H,
+            fx=500.0,
+            fy=500.0,
+            cx=15.5,
+            cy=15.5,
+            width=W,
+            height=H,
         )
         config = GaussianConfig(sh_degree=0)
 

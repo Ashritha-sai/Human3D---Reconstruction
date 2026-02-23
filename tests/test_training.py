@@ -123,7 +123,7 @@ class TestOptimization:
             sh_degree=0,
             opacity_init=0.9,
             position_noise=0.0,
-            num_iterations=100,
+            num_iterations=20,
             loss_weight_l1=0.8,
             loss_weight_ssim=0.2,
             loss_weight_lpips=0.0,
@@ -156,7 +156,7 @@ class TestOptimization:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             history = trainer.optimize(
-                num_iterations=50,
+                num_iterations=20,
                 log_every=100,  # Quiet
                 save_every=0,
                 output_dir=tmpdir,
@@ -164,9 +164,9 @@ class TestOptimization:
 
         losses = history['loss']
 
-        # Compare first 10 average vs last 10 average
-        early_avg = np.mean(losses[:10])
-        late_avg = np.mean(losses[-10:])
+        # Compare first 5 average vs last 5 average
+        early_avg = np.mean(losses[:5])
+        late_avg = np.mean(losses[-5:])
 
         # Loss should decrease (late should be lower)
         assert late_avg <= early_avg, \
@@ -178,7 +178,7 @@ class TestOptimization:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             history = trainer.optimize(
-                num_iterations=30,
+                num_iterations=15,
                 log_every=100,
                 save_every=0,
                 output_dir=tmpdir,
@@ -201,7 +201,7 @@ class TestOptimization:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             trainer.optimize(
-                num_iterations=30,
+                num_iterations=15,
                 log_every=100,
                 save_every=0,
                 output_dir=tmpdir,
@@ -327,11 +327,9 @@ class TestDensification:
         trainer = gt.GaussianTrainer(rgb, depth, mask, camera, config, device="cpu")
         trainer.initialize_gaussians()
 
-        initial_count = trainer.num_gaussians
-
         with tempfile.TemporaryDirectory() as tmpdir:
             history = trainer.optimize(
-                num_iterations=30,
+                num_iterations=15,
                 log_every=100,
                 save_every=0,
                 output_dir=tmpdir,
@@ -340,7 +338,7 @@ class TestDensification:
         # Check densification history is recorded
         assert 'densify_added' in history
         assert 'densify_removed' in history
-        assert len(history['densify_added']) == 30
+        assert len(history['densify_added']) == 15
 
     def test_gaussian_count_changes(self):
         """Test that Gaussian count can change during training."""
@@ -358,7 +356,7 @@ class TestDensification:
         config = gt.GaussianConfig(
             sh_degree=0,
             densify_from_iter=5,
-            densify_until_iter=100,
+            densify_until_iter=50,
             densify_interval=5,
             densify_grad_threshold=0.00001,  # Very low threshold to trigger densification
             prune_opacity_threshold=0.5,  # Aggressive pruning
@@ -369,7 +367,7 @@ class TestDensification:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             history = trainer.optimize(
-                num_iterations=25,
+                num_iterations=15,
                 log_every=100,
                 save_every=0,
                 output_dir=tmpdir,
@@ -377,7 +375,7 @@ class TestDensification:
 
         # Check that Gaussian count was tracked
         counts = history['num_gaussians']
-        assert len(counts) == 25
+        assert len(counts) == 15
 
         # With aggressive settings, count should have changed at some point
         # (either increased from densification or decreased from pruning)

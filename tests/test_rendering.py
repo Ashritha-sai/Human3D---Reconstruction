@@ -12,7 +12,6 @@ from pathlib import Path
 import importlib.util
 
 import numpy as np
-import torch
 import cv2
 
 # Add src to path

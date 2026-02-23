@@ -13,7 +13,6 @@ from pathlib import Path
 import importlib.util
 import tempfile
 
-import numpy as np
 import torch
 import pytest
 

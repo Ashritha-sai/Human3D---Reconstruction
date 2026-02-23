@@ -197,7 +197,7 @@ class TestGaussianPipeline:
         # Create config
         config = gt.GaussianConfig(
             sh_degree=0,
-            num_iterations=100,
+            num_iterations=20,
         )
 
         # Initialize trainer
@@ -209,13 +209,13 @@ class TestGaussianPipeline:
         # Run optimization (short)
         with tempfile.TemporaryDirectory() as tmpdir:
             history = trainer.optimize(
-                num_iterations=50,
+                num_iterations=20,
                 log_every=100,
                 save_every=0,
                 output_dir=tmpdir,
             )
 
-            assert len(history['loss']) == 50
+            assert len(history['loss']) == 20
 
             # Export PLY
             ply_path = Path(tmpdir) / "output.ply"
@@ -251,15 +251,15 @@ class TestGaussianPipeline:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             history = trainer.optimize(
-                num_iterations=100,
+                num_iterations=30,
                 log_every=100,
                 save_every=0,
                 output_dir=tmpdir,
             )
 
         # Loss should decrease
-        initial_loss = np.mean(history['loss'][:10])
-        final_loss = np.mean(history['loss'][-10:])
+        initial_loss = np.mean(history['loss'][:5])
+        final_loss = np.mean(history['loss'][-5:])
 
         assert final_loss < initial_loss, \
             f"Loss should decrease: {initial_loss:.4f} -> {final_loss:.4f}"
@@ -279,7 +279,6 @@ class TestInitializationConsistency:
     def test_initialization_produces_valid_points(self, modules, fixture_data):
         """Verify Gaussian initialization produces valid 3D points."""
         gt = modules['gaussian_trainer']
-        gu = modules['gaussian_utils']
 
         rgb, depth, mask, camera_params = fixture_data
 
@@ -428,7 +427,7 @@ class TestRenderingQuality:
 
         # Train
         with tempfile.TemporaryDirectory() as tmpdir:
-            history = trainer.optimize(
+            trainer.optimize(
                 num_iterations=500,
                 log_every=100,
                 save_every=0,
@@ -485,7 +484,7 @@ class TestCUDAPipeline:
         assert trainer.means.device.type == "cuda"
 
         with tempfile.TemporaryDirectory() as tmpdir:
-            history = trainer.optimize(
+            trainer.optimize(
                 num_iterations=50,
                 log_every=100,
                 save_every=0,

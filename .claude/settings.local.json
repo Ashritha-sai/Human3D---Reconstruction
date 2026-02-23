@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd /c/Users/Ashritha/OneDrive/Desktop/Human3D && git push origin main 2>&1)",
+      "Bash(cd /c/Users/Ashritha/OneDrive/Desktop/Human3D && gh run list --limit 3 2>&1)"
+    ]
+  }
+}

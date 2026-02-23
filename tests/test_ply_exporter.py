@@ -254,8 +254,6 @@ class TestTrainerExport:
         sys.modules['human3d.reconstruct.gaussian_trainer'] = gaussian_trainer
         spec_trainer.loader.exec_module(gaussian_trainer)
 
-        import torch
-
         # Create test data
         H, W = 32, 32
         rgb = np.random.rand(H, W, 3).astype(np.float32)

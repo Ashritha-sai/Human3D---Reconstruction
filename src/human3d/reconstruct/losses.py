@@ -158,7 +158,9 @@ class GaussianLosses(nn.Module):
         """
         # Ensure same shape
         if rendered.shape != target.shape:
-            raise ValueError(f"Shape mismatch: rendered {rendered.shape} vs target {target.shape}")
+            raise ValueError(
+                f"Shape mismatch: rendered {rendered.shape} vs target {target.shape}"
+            )
 
         # Compute pixel-wise difference
         if loss_type == "l1":
@@ -698,10 +700,12 @@ def visualize_loss_components(
     names = list(filtered.keys())
     values = list(filtered.values())
 
-    bars = ax.bar(names, values, color=["#2ecc71", "#3498db", "#9b59b6", "#e74c3c", "#f39c12"])
+    bars = ax.bar(
+        names, values, color=["#2ecc71", "#3498db", "#9b59b6", "#e74c3c", "#f39c12"]
+    )
 
     ax.set_ylabel("Loss Value")
-    ax.set_title(f'Loss Components (Total: {components.get("total", 0):.4f})')
+    ax.set_title(f"Loss Components (Total: {components.get('total', 0):.4f})")
 
     # Add value labels on bars
     for bar, val in zip(bars, values):

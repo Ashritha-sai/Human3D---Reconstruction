@@ -22,7 +22,7 @@ def _import_exporter():
     """Import ply_exporter module directly."""
     spec = importlib.util.spec_from_file_location(
         "ply_exporter",
-        Path(__file__).parent.parent / "src" / "human3d" / "export" / "ply_exporter.py"
+        Path(__file__).parent.parent / "src" / "human3d" / "export" / "ply_exporter.py",
     )
     ply_exporter = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(ply_exporter)
@@ -51,6 +51,7 @@ def create_test_gaussians(n=100, sh_degree=0):
 # PLY Format Tests
 # ==============================================================================
 
+
 class TestPLYFieldsExist:
     """Verify all required PLY fields exist."""
 
@@ -61,16 +62,16 @@ class TestPLYFieldsExist:
         ply = _import_exporter()
         means, scales, rots, sh, ops = create_test_gaussians(50)
 
-        with tempfile.NamedTemporaryFile(suffix='.ply', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=".ply", delete=False) as f:
             ply.save_gaussian_ply(means, scales, rots, sh, ops, f.name)
 
             data = PlyData.read(f.name)
-            vertex = data['vertex']
+            vertex = data["vertex"]
 
             # Check position fields
-            assert 'x' in vertex.data.dtype.names
-            assert 'y' in vertex.data.dtype.names
-            assert 'z' in vertex.data.dtype.names
+            assert "x" in vertex.data.dtype.names
+            assert "y" in vertex.data.dtype.names
+            assert "z" in vertex.data.dtype.names
 
     def test_normal_fields(self):
         """Test that normal fields (nx, ny, nz) exist."""
@@ -79,15 +80,15 @@ class TestPLYFieldsExist:
         ply = _import_exporter()
         means, scales, rots, sh, ops = create_test_gaussians(50)
 
-        with tempfile.NamedTemporaryFile(suffix='.ply', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=".ply", delete=False) as f:
             ply.save_gaussian_ply(means, scales, rots, sh, ops, f.name)
 
             data = PlyData.read(f.name)
-            vertex = data['vertex']
+            vertex = data["vertex"]
 
-            assert 'nx' in vertex.data.dtype.names
-            assert 'ny' in vertex.data.dtype.names
-            assert 'nz' in vertex.data.dtype.names
+            assert "nx" in vertex.data.dtype.names
+            assert "ny" in vertex.data.dtype.names
+            assert "nz" in vertex.data.dtype.names
 
     def test_dc_color_fields(self):
         """Test that DC color fields exist."""
@@ -96,15 +97,15 @@ class TestPLYFieldsExist:
         ply = _import_exporter()
         means, scales, rots, sh, ops = create_test_gaussians(50)
 
-        with tempfile.NamedTemporaryFile(suffix='.ply', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=".ply", delete=False) as f:
             ply.save_gaussian_ply(means, scales, rots, sh, ops, f.name)
 
             data = PlyData.read(f.name)
-            vertex = data['vertex']
+            vertex = data["vertex"]
 
-            assert 'f_dc_0' in vertex.data.dtype.names
-            assert 'f_dc_1' in vertex.data.dtype.names
-            assert 'f_dc_2' in vertex.data.dtype.names
+            assert "f_dc_0" in vertex.data.dtype.names
+            assert "f_dc_1" in vertex.data.dtype.names
+            assert "f_dc_2" in vertex.data.dtype.names
 
     def test_opacity_field(self):
         """Test that opacity field exists."""
@@ -113,13 +114,13 @@ class TestPLYFieldsExist:
         ply = _import_exporter()
         means, scales, rots, sh, ops = create_test_gaussians(50)
 
-        with tempfile.NamedTemporaryFile(suffix='.ply', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=".ply", delete=False) as f:
             ply.save_gaussian_ply(means, scales, rots, sh, ops, f.name)
 
             data = PlyData.read(f.name)
-            vertex = data['vertex']
+            vertex = data["vertex"]
 
-            assert 'opacity' in vertex.data.dtype.names
+            assert "opacity" in vertex.data.dtype.names
 
     def test_scale_fields(self):
         """Test that scale fields exist."""
@@ -128,15 +129,15 @@ class TestPLYFieldsExist:
         ply = _import_exporter()
         means, scales, rots, sh, ops = create_test_gaussians(50)
 
-        with tempfile.NamedTemporaryFile(suffix='.ply', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=".ply", delete=False) as f:
             ply.save_gaussian_ply(means, scales, rots, sh, ops, f.name)
 
             data = PlyData.read(f.name)
-            vertex = data['vertex']
+            vertex = data["vertex"]
 
-            assert 'scale_0' in vertex.data.dtype.names
-            assert 'scale_1' in vertex.data.dtype.names
-            assert 'scale_2' in vertex.data.dtype.names
+            assert "scale_0" in vertex.data.dtype.names
+            assert "scale_1" in vertex.data.dtype.names
+            assert "scale_2" in vertex.data.dtype.names
 
     def test_rotation_fields(self):
         """Test that rotation quaternion fields exist."""
@@ -145,16 +146,16 @@ class TestPLYFieldsExist:
         ply = _import_exporter()
         means, scales, rots, sh, ops = create_test_gaussians(50)
 
-        with tempfile.NamedTemporaryFile(suffix='.ply', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=".ply", delete=False) as f:
             ply.save_gaussian_ply(means, scales, rots, sh, ops, f.name)
 
             data = PlyData.read(f.name)
-            vertex = data['vertex']
+            vertex = data["vertex"]
 
-            assert 'rot_0' in vertex.data.dtype.names
-            assert 'rot_1' in vertex.data.dtype.names
-            assert 'rot_2' in vertex.data.dtype.names
-            assert 'rot_3' in vertex.data.dtype.names
+            assert "rot_0" in vertex.data.dtype.names
+            assert "rot_1" in vertex.data.dtype.names
+            assert "rot_2" in vertex.data.dtype.names
+            assert "rot_3" in vertex.data.dtype.names
 
     def test_sh_rest_fields_degree_3(self):
         """Test that SH rest fields exist for degree 3."""
@@ -163,16 +164,15 @@ class TestPLYFieldsExist:
         ply = _import_exporter()
         means, scales, rots, sh, ops = create_test_gaussians(50, sh_degree=3)
 
-        with tempfile.NamedTemporaryFile(suffix='.ply', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=".ply", delete=False) as f:
             ply.save_gaussian_ply(means, scales, rots, sh, ops, f.name)
 
             data = PlyData.read(f.name)
-            vertex = data['vertex']
+            vertex = data["vertex"]
 
             # For degree 3: 16 coeffs, 15 rest * 3 channels = 45 f_rest fields
             for i in range(45):
-                assert f'f_rest_{i}' in vertex.data.dtype.names, \
-                    f"Missing f_rest_{i}"
+                assert f"f_rest_{i}" in vertex.data.dtype.names, f"Missing f_rest_{i}"
 
 
 class TestPLYValueRanges:
@@ -185,15 +185,15 @@ class TestPLYValueRanges:
         ply = _import_exporter()
         means, scales, rots, sh, ops = create_test_gaussians(100)
 
-        with tempfile.NamedTemporaryFile(suffix='.ply', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=".ply", delete=False) as f:
             ply.save_gaussian_ply(means, scales, rots, sh, ops, f.name)
 
             data = PlyData.read(f.name)
-            vertex = data['vertex']
+            vertex = data["vertex"]
 
-            x = np.array(vertex['x'])
-            y = np.array(vertex['y'])
-            z = np.array(vertex['z'])
+            x = np.array(vertex["x"])
+            y = np.array(vertex["y"])
+            z = np.array(vertex["z"])
 
             assert np.all(np.isfinite(x)), "x should be finite"
             assert np.all(np.isfinite(y)), "y should be finite"
@@ -206,13 +206,13 @@ class TestPLYValueRanges:
         ply = _import_exporter()
         means, scales, rots, sh, ops = create_test_gaussians(100)
 
-        with tempfile.NamedTemporaryFile(suffix='.ply', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=".ply", delete=False) as f:
             ply.save_gaussian_ply(means, scales, rots, sh, ops, f.name)
 
             data = PlyData.read(f.name)
-            vertex = data['vertex']
+            vertex = data["vertex"]
 
-            opacity = np.array(vertex['opacity'])
+            opacity = np.array(vertex["opacity"])
 
             assert np.all(opacity >= 0), f"Opacity min: {opacity.min()}"
             assert np.all(opacity <= 1), f"Opacity max: {opacity.max()}"
@@ -224,18 +224,21 @@ class TestPLYValueRanges:
         ply = _import_exporter()
         means, scales, rots, sh, ops = create_test_gaussians(100)
 
-        with tempfile.NamedTemporaryFile(suffix='.ply', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=".ply", delete=False) as f:
             ply.save_gaussian_ply(means, scales, rots, sh, ops, f.name)
 
             data = PlyData.read(f.name)
-            vertex = data['vertex']
+            vertex = data["vertex"]
 
-            rot = np.stack([
-                vertex['rot_0'],
-                vertex['rot_1'],
-                vertex['rot_2'],
-                vertex['rot_3'],
-            ], axis=1)
+            rot = np.stack(
+                [
+                    vertex["rot_0"],
+                    vertex["rot_1"],
+                    vertex["rot_2"],
+                    vertex["rot_3"],
+                ],
+                axis=1,
+            )
 
             norms = np.linalg.norm(rot, axis=1)
 
@@ -249,15 +252,15 @@ class TestPLYValueRanges:
         ply = _import_exporter()
         means, scales, rots, sh, ops = create_test_gaussians(100)
 
-        with tempfile.NamedTemporaryFile(suffix='.ply', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=".ply", delete=False) as f:
             ply.save_gaussian_ply(means, scales, rots, sh, ops, f.name)
 
             data = PlyData.read(f.name)
-            vertex = data['vertex']
+            vertex = data["vertex"]
 
-            scale_0 = np.array(vertex['scale_0'])
-            scale_1 = np.array(vertex['scale_1'])
-            scale_2 = np.array(vertex['scale_2'])
+            scale_0 = np.array(vertex["scale_0"])
+            scale_1 = np.array(vertex["scale_1"])
+            scale_2 = np.array(vertex["scale_2"])
 
             # Log-space scales should typically be in [-10, 5]
             all_scales = np.concatenate([scale_0, scale_1, scale_2])
@@ -275,14 +278,14 @@ class TestPLYBinaryFormat:
         ply = _import_exporter()
         means, scales, rots, sh, ops = create_test_gaussians(100)
 
-        with tempfile.NamedTemporaryFile(suffix='.ply', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=".ply", delete=False) as f:
             ply.save_gaussian_ply(means, scales, rots, sh, ops, f.name)
 
             # Read first few bytes
-            with open(f.name, 'rb') as fp:
-                header = fp.read(200).decode('ascii', errors='ignore')
+            with open(f.name, "rb") as fp:
+                header = fp.read(200).decode("ascii", errors="ignore")
 
-            assert 'binary_little_endian' in header, "Should be binary format"
+            assert "binary_little_endian" in header, "Should be binary format"
 
     def test_vertex_count_matches(self):
         """Test that vertex count matches input."""
@@ -292,11 +295,11 @@ class TestPLYBinaryFormat:
         n = 73  # Arbitrary number
         means, scales, rots, sh, ops = create_test_gaussians(n)
 
-        with tempfile.NamedTemporaryFile(suffix='.ply', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=".ply", delete=False) as f:
             ply.save_gaussian_ply(means, scales, rots, sh, ops, f.name)
 
             data = PlyData.read(f.name)
-            assert len(data['vertex']) == n
+            assert len(data["vertex"]) == n
 
 
 class TestPLYRoundtrip:
@@ -307,55 +310,55 @@ class TestPLYRoundtrip:
         ply = _import_exporter()
         means, scales, rots, sh, ops = create_test_gaussians(100)
 
-        with tempfile.NamedTemporaryFile(suffix='.ply', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=".ply", delete=False) as f:
             ply.save_gaussian_ply(means, scales, rots, sh, ops, f.name)
             data = ply.load_gaussian_ply(f.name)
 
-        np.testing.assert_allclose(data['means'], means, rtol=1e-5)
+        np.testing.assert_allclose(data["means"], means, rtol=1e-5)
 
     def test_roundtrip_scales(self):
         """Test scales survive roundtrip."""
         ply = _import_exporter()
         means, scales, rots, sh, ops = create_test_gaussians(100)
 
-        with tempfile.NamedTemporaryFile(suffix='.ply', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=".ply", delete=False) as f:
             ply.save_gaussian_ply(means, scales, rots, sh, ops, f.name)
             data = ply.load_gaussian_ply(f.name)
 
-        np.testing.assert_allclose(data['scales'], scales, rtol=1e-5)
+        np.testing.assert_allclose(data["scales"], scales, rtol=1e-5)
 
     def test_roundtrip_rotations(self):
         """Test rotations survive roundtrip."""
         ply = _import_exporter()
         means, scales, rots, sh, ops = create_test_gaussians(100)
 
-        with tempfile.NamedTemporaryFile(suffix='.ply', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=".ply", delete=False) as f:
             ply.save_gaussian_ply(means, scales, rots, sh, ops, f.name)
             data = ply.load_gaussian_ply(f.name)
 
-        np.testing.assert_allclose(data['rotations'], rots, rtol=1e-5)
+        np.testing.assert_allclose(data["rotations"], rots, rtol=1e-5)
 
     def test_roundtrip_sh_coeffs(self):
         """Test SH coefficients survive roundtrip."""
         ply = _import_exporter()
         means, scales, rots, sh, ops = create_test_gaussians(100, sh_degree=3)
 
-        with tempfile.NamedTemporaryFile(suffix='.ply', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=".ply", delete=False) as f:
             ply.save_gaussian_ply(means, scales, rots, sh, ops, f.name)
             data = ply.load_gaussian_ply(f.name)
 
-        np.testing.assert_allclose(data['sh_coeffs'], sh, rtol=1e-5)
+        np.testing.assert_allclose(data["sh_coeffs"], sh, rtol=1e-5)
 
     def test_roundtrip_opacities(self):
         """Test opacities survive roundtrip."""
         ply = _import_exporter()
         means, scales, rots, sh, ops = create_test_gaussians(100)
 
-        with tempfile.NamedTemporaryFile(suffix='.ply', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=".ply", delete=False) as f:
             ply.save_gaussian_ply(means, scales, rots, sh, ops, f.name)
             data = ply.load_gaussian_ply(f.name)
 
-        np.testing.assert_allclose(data['opacities'], ops, rtol=1e-5)
+        np.testing.assert_allclose(data["opacities"], ops, rtol=1e-5)
 
 
 # ==============================================================================

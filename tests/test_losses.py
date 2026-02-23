@@ -26,7 +26,7 @@ def _import_losses():
     """Import losses module directly to avoid package dependencies."""
     spec = importlib.util.spec_from_file_location(
         "losses",
-        Path(__file__).parent.parent / "src" / "human3d" / "reconstruct" / "losses.py"
+        Path(__file__).parent.parent / "src" / "human3d" / "reconstruct" / "losses.py",
     )
     losses = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(losses)
@@ -36,6 +36,7 @@ def _import_losses():
 # ==============================================================================
 # Fixtures
 # ==============================================================================
+
 
 @pytest.fixture
 def losses_module():
@@ -55,7 +56,7 @@ def sample_images():
             for x in range(W):
                 rendered.data[y, x, 0] = x / W  # Red gradient
                 rendered.data[y, x, 1] = y / H  # Green gradient
-                rendered.data[y, x, 2] = 0.5    # Blue constant
+                rendered.data[y, x, 2] = 0.5  # Blue constant
 
     # Create a slightly different image as "target"
     target = rendered.detach().clone()
@@ -64,7 +65,7 @@ def sample_images():
 
     # Create a circular mask
     cy, cx = H // 2, W // 2
-    y, x = torch.meshgrid(torch.arange(H), torch.arange(W), indexing='ij')
+    y, x = torch.meshgrid(torch.arange(H), torch.arange(W), indexing="ij")
     mask = ((x - cx) ** 2 + (y - cy) ** 2 <= (H // 3) ** 2).float()
 
     return rendered, target, mask
@@ -98,6 +99,7 @@ def sample_gaussian_params():
 # ==============================================================================
 # Photometric Loss Tests
 # ==============================================================================
+
 
 class TestPhotometricLoss:
     """Tests for photometric loss function."""
@@ -161,7 +163,7 @@ class TestPhotometricLoss:
 
         # Mask only covers top half
         mask_half = torch.zeros(H, W)
-        mask_half[:H//2, :] = 1.0
+        mask_half[: H // 2, :] = 1.0
 
         mask_full = torch.ones(H, W)
 
@@ -182,13 +184,15 @@ class TestPhotometricLoss:
         assert loss_half.item() >= 0, "Loss should be non-negative"
         assert loss_full.item() >= 0, "Loss should be non-negative"
         # With uniform difference, both masked regions should give similar loss
-        assert abs(loss_half.item() - loss_full.item()) < 0.1, \
+        assert abs(loss_half.item() - loss_full.item()) < 0.1, (
             "Uniform difference should give similar loss regardless of mask size"
+        )
 
 
 # ==============================================================================
 # SSIM Loss Tests
 # ==============================================================================
+
 
 class TestSSIMLoss:
     """Tests for SSIM loss function."""
@@ -228,8 +232,12 @@ class TestSSIMLoss:
         rendered, target, mask = sample_images
         losses = losses_module.GaussianLosses()
 
-        loss_7 = losses.ssim_loss(rendered.clone().requires_grad_(True), target, mask, window_size=7)
-        loss_11 = losses.ssim_loss(rendered.clone().requires_grad_(True), target, mask, window_size=11)
+        loss_7 = losses.ssim_loss(
+            rendered.clone().requires_grad_(True), target, mask, window_size=7
+        )
+        loss_11 = losses.ssim_loss(
+            rendered.clone().requires_grad_(True), target, mask, window_size=11
+        )
 
         # Both should be valid losses
         assert 0 <= loss_7.item() <= 1.0
@@ -240,21 +248,21 @@ class TestSSIMLoss:
 # LPIPS Loss Tests
 # ==============================================================================
 
+
 class TestLPIPSLoss:
     """Tests for LPIPS perceptual loss function."""
 
     @pytest.mark.skipif(
-        not torch.cuda.is_available(),
-        reason="LPIPS test works best with CUDA"
+        not torch.cuda.is_available(), reason="LPIPS test works best with CUDA"
     )
     def test_lpips_basic_cuda(self, losses_module):
         """Test LPIPS loss on CUDA."""
         H, W = 64, 64
-        rendered = torch.rand(H, W, 3, device='cuda', requires_grad=True)
-        target = torch.rand(H, W, 3, device='cuda')
-        mask = torch.ones(H, W, device='cuda')
+        rendered = torch.rand(H, W, 3, device="cuda", requires_grad=True)
+        target = torch.rand(H, W, 3, device="cuda")
+        mask = torch.ones(H, W, device="cuda")
 
-        losses = losses_module.GaussianLosses(device='cuda')
+        losses = losses_module.GaussianLosses(device="cuda")
         loss = losses.lpips_loss(rendered, target, mask)
 
         assert loss.ndim == 0, "Loss should be a scalar"
@@ -267,7 +275,7 @@ class TestLPIPSLoss:
         target = torch.rand(H, W, 3)
         mask = torch.ones(H, W)
 
-        losses = losses_module.GaussianLosses(device='cpu')
+        losses = losses_module.GaussianLosses(device="cpu")
         loss = losses.lpips_loss(rendered, target, mask)
 
         assert loss.ndim == 0, "Loss should be a scalar"
@@ -281,7 +289,7 @@ class TestLPIPSLoss:
         mask = torch.ones(H, W)
 
         # Enable LPIPS by setting weight > 0
-        losses = losses_module.GaussianLosses(device='cpu', weight_lpips=0.1)
+        losses = losses_module.GaussianLosses(device="cpu", weight_lpips=0.1)
         loss = losses.lpips_loss(rendered, target, mask)
 
         # LPIPS may return a non-gradient tensor if network is frozen
@@ -293,6 +301,7 @@ class TestLPIPSLoss:
 # ==============================================================================
 # Regularization Loss Tests
 # ==============================================================================
+
 
 class TestRegularizationLoss:
     """Tests for regularization losses."""
@@ -344,18 +353,22 @@ class TestRegularizationLoss:
         normal_loss, _ = losses.regularization_loss(normal_scales, opacities.clone())
 
         # Small scales should have higher loss due to regularization
-        assert small_loss.item() > normal_loss.item(), \
+        assert small_loss.item() > normal_loss.item(), (
             "Very small scales should be penalized more"
+        )
 
 
 # ==============================================================================
 # Total Loss Tests
 # ==============================================================================
 
+
 class TestTotalLoss:
     """Tests for combined total loss."""
 
-    def test_total_loss_basic(self, losses_module, sample_images, sample_gaussian_params):
+    def test_total_loss_basic(
+        self, losses_module, sample_images, sample_gaussian_params
+    ):
         """Test total loss combines all components."""
         rendered, target, mask = sample_images
         scales, opacities = sample_gaussian_params
@@ -378,7 +391,9 @@ class TestTotalLoss:
         assert "opacity_reg" in components
         assert "total" in components
 
-    def test_total_loss_gradient_flow(self, losses_module, sample_images, sample_gaussian_params):
+    def test_total_loss_gradient_flow(
+        self, losses_module, sample_images, sample_gaussian_params
+    ):
         """Test that gradients flow through total loss to all parameters."""
         rendered, target, mask = sample_images
         scales, opacities = sample_gaussian_params
@@ -396,33 +411,47 @@ class TestTotalLoss:
         assert scales.grad is not None, "Gradients should flow to scales"
         assert opacities.grad is not None, "Gradients should flow to opacities"
 
-    def test_loss_weights_effect(self, losses_module, sample_images, sample_gaussian_params):
+    def test_loss_weights_effect(
+        self, losses_module, sample_images, sample_gaussian_params
+    ):
         """Test that loss weights properly scale components."""
         rendered, target, mask = sample_images
         scales, opacities = sample_gaussian_params
 
         # High SSIM weight
-        losses_high_ssim = losses_module.GaussianLosses(weight_ssim=1.0, weight_lpips=0.0)
+        losses_high_ssim = losses_module.GaussianLosses(
+            weight_ssim=1.0, weight_lpips=0.0
+        )
         # Low SSIM weight
-        losses_low_ssim = losses_module.GaussianLosses(weight_ssim=0.0, weight_lpips=0.0)
+        losses_low_ssim = losses_module.GaussianLosses(
+            weight_ssim=0.0, weight_lpips=0.0
+        )
 
         total_high, comp_high = losses_high_ssim.total_loss(
-            rendered.clone().requires_grad_(True), target, mask,
-            scales.clone().requires_grad_(True), opacities.clone().requires_grad_(True)
+            rendered.clone().requires_grad_(True),
+            target,
+            mask,
+            scales.clone().requires_grad_(True),
+            opacities.clone().requires_grad_(True),
         )
         total_low, comp_low = losses_low_ssim.total_loss(
-            rendered.clone().requires_grad_(True), target, mask,
-            scales.clone().requires_grad_(True), opacities.clone().requires_grad_(True)
+            rendered.clone().requires_grad_(True),
+            target,
+            mask,
+            scales.clone().requires_grad_(True),
+            opacities.clone().requires_grad_(True),
         )
 
         # Total loss should be higher with high SSIM weight (since SSIM loss adds to it)
-        assert total_high.item() >= total_low.item(), \
+        assert total_high.item() >= total_low.item(), (
             "Higher SSIM weight should give higher total loss"
+        )
 
 
 # ==============================================================================
 # Helper Function Tests
 # ==============================================================================
+
 
 class TestHelperFunctions:
     """Tests for helper functions."""
@@ -463,12 +492,15 @@ class TestHelperFunctions:
         if ssim_result.ndim == 0:
             assert ssim_result.item() > 0.99, "SSIM should be ~1 for identical images"
         else:
-            assert ssim_result.mean().item() > 0.99, "SSIM should be ~1 for identical images"
+            assert ssim_result.mean().item() > 0.99, (
+                "SSIM should be ~1 for identical images"
+            )
 
 
 # ==============================================================================
 # Visualization Tests
 # ==============================================================================
+
 
 class TestVisualization:
     """Tests for visualization helpers."""
@@ -481,9 +513,7 @@ class TestVisualization:
             output_path = Path(tmpdir) / "comparison.png"
 
             losses_module.save_comparison_image(
-                rendered.detach(),
-                target,
-                str(output_path)
+                rendered.detach(), target, str(output_path)
             )
 
             assert output_path.exists(), "Comparison image should be saved"
@@ -497,10 +527,7 @@ class TestVisualization:
         with tempfile.TemporaryDirectory() as tmpdir:
             output_path = Path(tmpdir) / "losses.png"
 
-            losses_module.visualize_loss_components(
-                components,
-                str(output_path)
-            )
+            losses_module.visualize_loss_components(components, str(output_path))
 
             assert output_path.exists(), "Loss plot should be saved"
             assert output_path.stat().st_size > 0, "Plot file should not be empty"
@@ -509,6 +536,7 @@ class TestVisualization:
 # ==============================================================================
 # Edge Case Tests
 # ==============================================================================
+
 
 class TestEdgeCases:
     """Tests for edge cases and boundary conditions."""
@@ -534,7 +562,7 @@ class TestEdgeCases:
         rendered = torch.rand(H, W, 3, requires_grad=True)
         target = torch.rand(H, W, 3)
         mask = torch.zeros(H, W)
-        mask[H//2, W//2] = 1.0  # Single pixel
+        mask[H // 2, W // 2] = 1.0  # Single pixel
 
         losses = losses_module.GaussianLosses()
 

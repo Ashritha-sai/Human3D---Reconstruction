@@ -29,38 +29,46 @@ def _import_modules():
     # Import gaussian_utils first
     spec_utils = importlib.util.spec_from_file_location(
         "gaussian_utils",
-        Path(__file__).parent.parent / "src" / "human3d" / "reconstruct" / "gaussian_utils.py"
+        Path(__file__).parent.parent
+        / "src"
+        / "human3d"
+        / "reconstruct"
+        / "gaussian_utils.py",
     )
     gaussian_utils = importlib.util.module_from_spec(spec_utils)
     spec_utils.loader.exec_module(gaussian_utils)
 
     # Set up module hierarchy
-    if 'human3d' not in sys.modules:
-        sys.modules['human3d'] = types.ModuleType('human3d')
-    if 'human3d.reconstruct' not in sys.modules:
-        sys.modules['human3d.reconstruct'] = types.ModuleType('human3d.reconstruct')
-        sys.modules['human3d'].reconstruct = sys.modules['human3d.reconstruct']
+    if "human3d" not in sys.modules:
+        sys.modules["human3d"] = types.ModuleType("human3d")
+    if "human3d.reconstruct" not in sys.modules:
+        sys.modules["human3d.reconstruct"] = types.ModuleType("human3d.reconstruct")
+        sys.modules["human3d"].reconstruct = sys.modules["human3d.reconstruct"]
 
-    sys.modules['human3d.reconstruct.gaussian_utils'] = gaussian_utils
-    sys.modules['human3d.reconstruct'].gaussian_utils = gaussian_utils
+    sys.modules["human3d.reconstruct.gaussian_utils"] = gaussian_utils
+    sys.modules["human3d.reconstruct"].gaussian_utils = gaussian_utils
 
     # Import losses
     spec_losses = importlib.util.spec_from_file_location(
         "human3d.reconstruct.losses",
-        Path(__file__).parent.parent / "src" / "human3d" / "reconstruct" / "losses.py"
+        Path(__file__).parent.parent / "src" / "human3d" / "reconstruct" / "losses.py",
     )
     losses = importlib.util.module_from_spec(spec_losses)
-    sys.modules['human3d.reconstruct.losses'] = losses
-    sys.modules['human3d.reconstruct'].losses = losses
+    sys.modules["human3d.reconstruct.losses"] = losses
+    sys.modules["human3d.reconstruct"].losses = losses
     spec_losses.loader.exec_module(losses)
 
     # Import gaussian_trainer
     spec_trainer = importlib.util.spec_from_file_location(
         "human3d.reconstruct.gaussian_trainer",
-        Path(__file__).parent.parent / "src" / "human3d" / "reconstruct" / "gaussian_trainer.py"
+        Path(__file__).parent.parent
+        / "src"
+        / "human3d"
+        / "reconstruct"
+        / "gaussian_trainer.py",
     )
     gaussian_trainer = importlib.util.module_from_spec(spec_trainer)
-    sys.modules['human3d.reconstruct.gaussian_trainer'] = gaussian_trainer
+    sys.modules["human3d.reconstruct.gaussian_trainer"] = gaussian_trainer
     spec_trainer.loader.exec_module(gaussian_trainer)
 
     return gaussian_trainer, losses
@@ -74,10 +82,10 @@ def create_synthetic_test_data(size=128):
     rgb = np.zeros((H, W, 3), dtype=np.uint8)
 
     # Quadrant colors
-    rgb[:H//2, :W//2] = [255, 100, 100]    # Red-ish top-left
-    rgb[:H//2, W//2:] = [100, 255, 100]    # Green-ish top-right
-    rgb[H//2:, :W//2] = [100, 100, 255]    # Blue-ish bottom-left
-    rgb[H//2:, W//2:] = [255, 255, 100]    # Yellow-ish bottom-right
+    rgb[: H // 2, : W // 2] = [255, 100, 100]  # Red-ish top-left
+    rgb[: H // 2, W // 2 :] = [100, 255, 100]  # Green-ish top-right
+    rgb[H // 2 :, : W // 2] = [100, 100, 255]  # Blue-ish bottom-left
+    rgb[H // 2 :, W // 2 :] = [255, 255, 100]  # Yellow-ish bottom-right
 
     # Add gradient overlay for smoothness
     for y in range(H):
@@ -90,11 +98,11 @@ def create_synthetic_test_data(size=128):
     cy, cx = H // 2, W // 2
     y, x = np.ogrid[:H, :W]
     dist = np.sqrt((x - cx) ** 2 + (y - cy) ** 2)
-    depth = depth - (0.3 * np.exp(-dist ** 2 / (2 * 40 ** 2)))
+    depth = depth - (0.3 * np.exp(-(dist**2) / (2 * 40**2)))
 
     # Create circular mask
     radius = min(H, W) // 3
-    mask = ((x - cx) ** 2 + (y - cy) ** 2 <= radius ** 2).astype(np.uint8)
+    mask = ((x - cx) ** 2 + (y - cy) ** 2 <= radius**2).astype(np.uint8)
 
     return rgb, depth, mask
 
@@ -102,6 +110,7 @@ def create_synthetic_test_data(size=128):
 # ==============================================================================
 # Tests
 # ==============================================================================
+
 
 class TestOptimization:
     """Tests for the optimization loop."""
@@ -114,9 +123,12 @@ class TestOptimization:
         rgb, depth, mask = create_synthetic_test_data(size=64)
 
         camera = gt.CameraParams(
-            fx=500.0, fy=500.0,
-            cx=31.5, cy=31.5,
-            width=64, height=64,
+            fx=500.0,
+            fy=500.0,
+            cx=31.5,
+            cy=31.5,
+            width=64,
+            height=64,
         )
 
         config = gt.GaussianConfig(
@@ -147,8 +159,8 @@ class TestOptimization:
                 output_dir=tmpdir,
             )
 
-        assert 'loss' in history
-        assert len(history['loss']) == 10
+        assert "loss" in history
+        assert len(history["loss"]) == 10
 
     def test_loss_decreases(self, trainer_setup):
         """Test that loss generally decreases during optimization."""
@@ -162,15 +174,16 @@ class TestOptimization:
                 output_dir=tmpdir,
             )
 
-        losses = history['loss']
+        losses = history["loss"]
 
         # Compare first 5 average vs last 5 average
         early_avg = np.mean(losses[:5])
         late_avg = np.mean(losses[-5:])
 
         # Loss should decrease (late should be lower)
-        assert late_avg <= early_avg, \
+        assert late_avg <= early_avg, (
             f"Loss should decrease: early={early_avg:.4f}, late={late_avg:.4f}"
+        )
 
     def test_no_nan_losses(self, trainer_setup):
         """Test that no NaN losses occur during training."""
@@ -184,7 +197,7 @@ class TestOptimization:
                 output_dir=tmpdir,
             )
 
-        losses = history['loss']
+        losses = history["loss"]
 
         for i, loss in enumerate(losses):
             assert not np.isnan(loss), f"NaN loss at iteration {i}"
@@ -215,8 +228,9 @@ class TestOptimization:
         # At least one parameter type should show significant change
         any_changed = means_diff > 1e-5 or sh_diff > 1e-4 or opacity_diff > 1e-3
 
-        assert any_changed, \
+        assert any_changed, (
             f"Parameters should update. Diffs: means={means_diff:.2e}, sh={sh_diff:.2e}, opacity={opacity_diff:.2e}"
+        )
 
     def test_history_tracking(self, trainer_setup):
         """Test that history is properly tracked."""
@@ -231,19 +245,19 @@ class TestOptimization:
             )
 
         # Check all expected keys
-        assert 'loss' in history
-        assert 'l1' in history
-        assert 'ssim' in history
-        assert 'num_gaussians' in history
-        assert 'iteration' in history
+        assert "loss" in history
+        assert "l1" in history
+        assert "ssim" in history
+        assert "num_gaussians" in history
+        assert "iteration" in history
 
         # Check lengths match
-        assert len(history['loss']) == 15
-        assert len(history['l1']) == 15
-        assert len(history['iteration']) == 15
+        assert len(history["loss"]) == 15
+        assert len(history["l1"]) == 15
+        assert len(history["iteration"]) == 15
 
         # Check iterations are sequential
-        assert history['iteration'] == list(range(15))
+        assert history["iteration"] == list(range(15))
 
     def test_image_saving(self, trainer_setup):
         """Test that images are saved correctly."""
@@ -278,9 +292,12 @@ class TestOptimizationCUDA:
         rgb, depth, mask = create_synthetic_test_data(size=64)
 
         camera = gt.CameraParams(
-            fx=500.0, fy=500.0,
-            cx=31.5, cy=31.5,
-            width=64, height=64,
+            fx=500.0,
+            fy=500.0,
+            cx=31.5,
+            cy=31.5,
+            width=64,
+            height=64,
         )
 
         config = gt.GaussianConfig(sh_degree=0)
@@ -298,8 +315,8 @@ class TestOptimizationCUDA:
                 output_dir=tmpdir,
             )
 
-        assert len(history['loss']) == 20
-        assert not any(np.isnan(loss_val) for loss_val in history['loss'])
+        assert len(history["loss"]) == 20
+        assert not any(np.isnan(loss_val) for loss_val in history["loss"])
 
 
 class TestDensification:
@@ -312,9 +329,12 @@ class TestDensification:
         rgb, depth, mask = create_synthetic_test_data(size=64)
 
         camera = gt.CameraParams(
-            fx=500.0, fy=500.0,
-            cx=31.5, cy=31.5,
-            width=64, height=64,
+            fx=500.0,
+            fy=500.0,
+            cx=31.5,
+            cy=31.5,
+            width=64,
+            height=64,
         )
 
         config = gt.GaussianConfig(
@@ -336,9 +356,9 @@ class TestDensification:
             )
 
         # Check densification history is recorded
-        assert 'densify_added' in history
-        assert 'densify_removed' in history
-        assert len(history['densify_added']) == 15
+        assert "densify_added" in history
+        assert "densify_removed" in history
+        assert len(history["densify_added"]) == 15
 
     def test_gaussian_count_changes(self):
         """Test that Gaussian count can change during training."""
@@ -347,9 +367,12 @@ class TestDensification:
         rgb, depth, mask = create_synthetic_test_data(size=64)
 
         camera = gt.CameraParams(
-            fx=500.0, fy=500.0,
-            cx=31.5, cy=31.5,
-            width=64, height=64,
+            fx=500.0,
+            fy=500.0,
+            cx=31.5,
+            cy=31.5,
+            width=64,
+            height=64,
         )
 
         # Aggressive densification settings for testing
@@ -374,7 +397,7 @@ class TestDensification:
             )
 
         # Check that Gaussian count was tracked
-        counts = history['num_gaussians']
+        counts = history["num_gaussians"]
         assert len(counts) == 15
 
         # With aggressive settings, count should have changed at some point
@@ -389,9 +412,12 @@ class TestDensification:
         rgb, depth, mask = create_synthetic_test_data(size=32)
 
         camera = gt.CameraParams(
-            fx=500.0, fy=500.0,
-            cx=15.5, cy=15.5,
-            width=32, height=32,
+            fx=500.0,
+            fy=500.0,
+            cx=15.5,
+            cy=15.5,
+            width=32,
+            height=32,
         )
 
         config = gt.GaussianConfig(
@@ -417,9 +443,12 @@ class TestLongerTraining:
         rgb, depth, mask = create_synthetic_test_data(size=128)
 
         camera = gt.CameraParams(
-            fx=500.0, fy=500.0,
-            cx=63.5, cy=63.5,
-            width=128, height=128,
+            fx=500.0,
+            fy=500.0,
+            cx=63.5,
+            cy=63.5,
+            width=128,
+            height=128,
         )
 
         config = gt.GaussianConfig(
@@ -442,21 +471,23 @@ class TestLongerTraining:
         )
 
         # Verify significant loss decrease
-        initial_loss = np.mean(history['loss'][:20])
-        final_loss = np.mean(history['loss'][-20:])
+        initial_loss = np.mean(history["loss"][:20])
+        final_loss = np.mean(history["loss"][-20:])
 
         print(f"\nInitial loss: {initial_loss:.4f}")
         print(f"Final loss: {final_loss:.4f}")
-        print(f"Reduction: {(1 - final_loss/initial_loss)*100:.1f}%")
+        print(f"Reduction: {(1 - final_loss / initial_loss) * 100:.1f}%")
 
         # Should see at least 20% reduction
-        assert final_loss < initial_loss * 0.9, \
+        assert final_loss < initial_loss * 0.9, (
             f"Expected significant loss reduction, got {initial_loss:.4f} -> {final_loss:.4f}"
+        )
 
 
 # ==============================================================================
 # Main
 # ==============================================================================
+
 
 def run_quick_training_demo():
     """Run a quick training demo and print results."""
@@ -475,9 +506,12 @@ def run_quick_training_demo():
     # Set up trainer
     print("\n2. Setting up trainer...")
     camera = gt.CameraParams(
-        fx=500.0, fy=500.0,
-        cx=63.5, cy=63.5,
-        width=128, height=128,
+        fx=500.0,
+        fy=500.0,
+        cx=63.5,
+        cy=63.5,
+        width=128,
+        height=128,
     )
 
     config = gt.GaussianConfig(
@@ -509,7 +543,7 @@ def run_quick_training_demo():
     print("\n4. Results:")
     print(f"   Initial loss: {history['loss'][0]:.4f}")
     print(f"   Final loss: {history['loss'][-1]:.4f}")
-    print(f"   Reduction: {(1 - history['loss'][-1]/history['loss'][0])*100:.1f}%")
+    print(f"   Reduction: {(1 - history['loss'][-1] / history['loss'][0]) * 100:.1f}%")
     print(f"   Output saved to: {output_dir}")
 
     print("\n" + "=" * 60)

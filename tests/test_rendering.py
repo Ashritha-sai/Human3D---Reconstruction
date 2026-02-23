@@ -27,28 +27,36 @@ def _import_gaussian_trainer():
     # Import gaussian_utils first
     spec_utils = importlib.util.spec_from_file_location(
         "gaussian_utils",
-        Path(__file__).parent.parent / "src" / "human3d" / "reconstruct" / "gaussian_utils.py"
+        Path(__file__).parent.parent
+        / "src"
+        / "human3d"
+        / "reconstruct"
+        / "gaussian_utils.py",
     )
     gaussian_utils = importlib.util.module_from_spec(spec_utils)
     spec_utils.loader.exec_module(gaussian_utils)
 
     # Set up module hierarchy
-    if 'human3d' not in sys.modules:
-        sys.modules['human3d'] = types.ModuleType('human3d')
-    if 'human3d.reconstruct' not in sys.modules:
-        sys.modules['human3d.reconstruct'] = types.ModuleType('human3d.reconstruct')
-        sys.modules['human3d'].reconstruct = sys.modules['human3d.reconstruct']
+    if "human3d" not in sys.modules:
+        sys.modules["human3d"] = types.ModuleType("human3d")
+    if "human3d.reconstruct" not in sys.modules:
+        sys.modules["human3d.reconstruct"] = types.ModuleType("human3d.reconstruct")
+        sys.modules["human3d"].reconstruct = sys.modules["human3d.reconstruct"]
 
-    sys.modules['human3d.reconstruct.gaussian_utils'] = gaussian_utils
-    sys.modules['human3d.reconstruct'].gaussian_utils = gaussian_utils
+    sys.modules["human3d.reconstruct.gaussian_utils"] = gaussian_utils
+    sys.modules["human3d.reconstruct"].gaussian_utils = gaussian_utils
 
     # Import gaussian_trainer
     spec_trainer = importlib.util.spec_from_file_location(
         "human3d.reconstruct.gaussian_trainer",
-        Path(__file__).parent.parent / "src" / "human3d" / "reconstruct" / "gaussian_trainer.py"
+        Path(__file__).parent.parent
+        / "src"
+        / "human3d"
+        / "reconstruct"
+        / "gaussian_trainer.py",
     )
     gaussian_trainer = importlib.util.module_from_spec(spec_trainer)
-    sys.modules['human3d.reconstruct.gaussian_trainer'] = gaussian_trainer
+    sys.modules["human3d.reconstruct.gaussian_trainer"] = gaussian_trainer
     spec_trainer.loader.exec_module(gaussian_trainer)
 
     return gaussian_trainer
@@ -62,10 +70,10 @@ def create_test_image_with_depth():
     rgb = np.zeros((H, W, 3), dtype=np.uint8)
 
     # Create color blocks
-    rgb[:H//2, :W//2] = [255, 0, 0]      # Red top-left
-    rgb[:H//2, W//2:] = [0, 255, 0]      # Green top-right
-    rgb[H//2:, :W//2] = [0, 0, 255]      # Blue bottom-left
-    rgb[H//2:, W//2:] = [255, 255, 0]    # Yellow bottom-right
+    rgb[: H // 2, : W // 2] = [255, 0, 0]  # Red top-left
+    rgb[: H // 2, W // 2 :] = [0, 255, 0]  # Green top-right
+    rgb[H // 2 :, : W // 2] = [0, 0, 255]  # Blue bottom-left
+    rgb[H // 2 :, W // 2 :] = [255, 255, 0]  # Yellow bottom-right
 
     # Add some gradient for more variation
     for y in range(H):
@@ -79,11 +87,11 @@ def create_test_image_with_depth():
     cy, cx = H // 2, W // 2
     y, x = np.ogrid[:H, :W]
     dist = np.sqrt((x - cx) ** 2 + (y - cy) ** 2)
-    depth = depth - (0.5 * np.exp(-dist ** 2 / (2 * 50 ** 2)))
+    depth = depth - (0.5 * np.exp(-(dist**2) / (2 * 50**2)))
 
     # Create circular mask
     radius = min(H, W) // 3
-    mask = ((x - cx) ** 2 + (y - cy) ** 2 <= radius ** 2).astype(np.uint8)
+    mask = ((x - cx) ** 2 + (y - cy) ** 2 <= radius**2).astype(np.uint8)
 
     return rgb, depth, mask
 
@@ -189,9 +197,11 @@ def test_render_view():
 
     # Save rendered depth (normalized for visualization)
     depth_np = rendered_depth.detach().cpu().numpy()
-    depth_valid = depth_np[depth_np < float('inf')]
+    depth_valid = depth_np[depth_np < float("inf")]
     if len(depth_valid) > 0:
-        depth_vis = (depth_np - depth_valid.min()) / (depth_valid.max() - depth_valid.min() + 1e-6)
+        depth_vis = (depth_np - depth_valid.min()) / (
+            depth_valid.max() - depth_valid.min() + 1e-6
+        )
         depth_vis = np.clip(depth_vis, 0, 1)
         depth_vis = (depth_vis * 255).astype(np.uint8)
         depth_vis = cv2.applyColorMap(depth_vis, cv2.COLORMAP_INFERNO)
@@ -252,9 +262,12 @@ def test_render_with_real_image():
     gt = _import_gaussian_trainer()
 
     camera = gt.CameraParams(
-        fx=1000.0, fy=1000.0,
-        cx=(W - 1) / 2.0, cy=(H - 1) / 2.0,
-        width=W, height=H,
+        fx=1000.0,
+        fy=1000.0,
+        cx=(W - 1) / 2.0,
+        cy=(H - 1) / 2.0,
+        width=W,
+        height=H,
     )
 
     config = gt.GaussianConfig(sh_degree=0, opacity_init=0.9)

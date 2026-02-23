@@ -44,14 +44,20 @@ def test_gsplat_basic():
     cx, cy = W / 2, H / 2
 
     # Camera intrinsics matrix K (3x3)
-    Ks = torch.tensor([
-        [fx, 0, cx],
-        [0, fy, cy],
-        [0, 0, 1],
-    ], dtype=torch.float32, device=device).unsqueeze(0)  # (1, 3, 3)
+    Ks = torch.tensor(
+        [
+            [fx, 0, cx],
+            [0, fy, cy],
+            [0, 0, 1],
+        ],
+        dtype=torch.float32,
+        device=device,
+    ).unsqueeze(0)  # (1, 3, 3)
 
     # View matrix (identity - camera at origin looking down -Z)
-    viewmats = torch.eye(4, dtype=torch.float32, device=device).unsqueeze(0)  # (1, 4, 4)
+    viewmats = torch.eye(4, dtype=torch.float32, device=device).unsqueeze(
+        0
+    )  # (1, 4, 4)
 
     print(f"Means shape: {means.shape}")
     print(f"Quats shape: {quats.shape}")
@@ -87,6 +93,7 @@ def test_gsplat_basic():
 
         # Save test image
         import cv2
+
         rgb = render_colors[0].cpu().numpy()  # (H, W, 3)
         rgb = np.clip(rgb, 0, 1)
         bgr = (rgb[:, :, ::-1] * 255).astype(np.uint8)
@@ -98,6 +105,7 @@ def test_gsplat_basic():
     except Exception as e:
         print(f"Rasterization failed: {e}")
         import traceback
+
         traceback.print_exc()
         return False
 
@@ -134,11 +142,15 @@ def test_gsplat_with_sh():
     fx, fy = 500.0, 500.0
     cx, cy = W / 2, H / 2
 
-    Ks = torch.tensor([
-        [fx, 0, cx],
-        [0, fy, cy],
-        [0, 0, 1],
-    ], dtype=torch.float32, device=device).unsqueeze(0)
+    Ks = torch.tensor(
+        [
+            [fx, 0, cx],
+            [0, fy, cy],
+            [0, 0, 1],
+        ],
+        dtype=torch.float32,
+        device=device,
+    ).unsqueeze(0)
 
     viewmats = torch.eye(4, dtype=torch.float32, device=device).unsqueeze(0)
 
@@ -168,6 +180,7 @@ def test_gsplat_with_sh():
     except Exception as e:
         print(f"SH Rasterization failed: {e}")
         import traceback
+
         traceback.print_exc()
         return False
 
@@ -184,5 +197,7 @@ if __name__ == "__main__":
     success2 = test_gsplat_with_sh()
 
     print("\n" + "=" * 50)
-    print(f"Results: Basic={'PASS' if success1 else 'FAIL'}, SH={'PASS' if success2 else 'FAIL'}")
+    print(
+        f"Results: Basic={'PASS' if success1 else 'FAIL'}, SH={'PASS' if success2 else 'FAIL'}"
+    )
     print("=" * 50)

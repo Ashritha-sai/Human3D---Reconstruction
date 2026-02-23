@@ -194,9 +194,13 @@ class GaussianTrainer:
 
         h, w = depth.shape
         if rgb.shape[:2] != (h, w):
-            raise ValueError(f"RGB shape {rgb.shape[:2]} doesn't match depth shape {(h, w)}")
+            raise ValueError(
+                f"RGB shape {rgb.shape[:2]} doesn't match depth shape {(h, w)}"
+            )
         if mask.shape != (h, w):
-            raise ValueError(f"Mask shape {mask.shape} doesn't match depth shape {(h, w)}")
+            raise ValueError(
+                f"Mask shape {mask.shape} doesn't match depth shape {(h, w)}"
+            )
 
         # Convert RGB to float32 [0, 1] if needed
         if rgb.dtype == np.uint8:
@@ -275,7 +279,9 @@ class GaussianTrainer:
         )
 
         # Normalize depth to pseudo-metric range (same as original pointcloud.py)
-        depth_normalized = normalize_depth_to_metric(self.depth, min_depth=0.5, max_depth=2.5)
+        depth_normalized = normalize_depth_to_metric(
+            self.depth, min_depth=0.5, max_depth=2.5
+        )
 
         # Get 3D points from depth (using mask to filter)
         xyz = depth_to_xyz(
@@ -299,7 +305,9 @@ class GaussianTrainer:
         # Sample RGB colors from image at masked pixel locations
         # Get the mask indices
         mask_bool = self.mask > 0
-        valid_mask = mask_bool & (depth_normalized > 0) & torch.isfinite(depth_normalized)
+        valid_mask = (
+            mask_bool & (depth_normalized > 0) & torch.isfinite(depth_normalized)
+        )
 
         # Flatten and get valid indices
         rgb_flat = self.rgb.reshape(-1, 3)  # (H*W, 3)
@@ -309,7 +317,9 @@ class GaussianTrainer:
 
         # Convert RGB to spherical harmonics
         sh_degree = self.config.sh_degree
-        sh_coeffs = rgb_to_spherical_harmonics(rgb_colors, degree=sh_degree)  # (N, num_sh, 3)
+        sh_coeffs = rgb_to_spherical_harmonics(
+            rgb_colors, degree=sh_degree
+        )  # (N, num_sh, 3)
 
         # Estimate scales using k-NN
         scales = estimate_point_scales(xyz, k_neighbors=8)  # (N, 3)
@@ -327,7 +337,9 @@ class GaussianTrainer:
         # Clamp to avoid infinity
         opacity_init = max(0.01, min(0.99, opacity_init))
         logit_opacity = inverse_sigmoid(
-            torch.full((n_points,), opacity_init, dtype=torch.float32, device=self.device)
+            torch.full(
+                (n_points,), opacity_init, dtype=torch.float32, device=self.device
+            )
         )
 
         # Create trainable parameters
@@ -340,11 +352,27 @@ class GaussianTrainer:
         # Set up optimizer with per-parameter learning rates
         self.optimizer = torch.optim.Adam(
             [
-                {"params": [self.means], "lr": self.config.lr_position, "name": "means"},
+                {
+                    "params": [self.means],
+                    "lr": self.config.lr_position,
+                    "name": "means",
+                },
                 {"params": [self.scales], "lr": self.config.lr_scale, "name": "scales"},
-                {"params": [self.rotations], "lr": self.config.lr_rotation, "name": "rotations"},
-                {"params": [self.sh_coeffs], "lr": self.config.lr_color, "name": "sh_coeffs"},
-                {"params": [self.opacities], "lr": self.config.lr_opacity, "name": "opacities"},
+                {
+                    "params": [self.rotations],
+                    "lr": self.config.lr_rotation,
+                    "name": "rotations",
+                },
+                {
+                    "params": [self.sh_coeffs],
+                    "lr": self.config.lr_color,
+                    "name": "sh_coeffs",
+                },
+                {
+                    "params": [self.opacities],
+                    "lr": self.config.lr_opacity,
+                    "name": "opacities",
+                },
             ]
         )
 
@@ -472,7 +500,9 @@ class GaussianTrainer:
         mask = self.mask  # (H, W)
 
         # Initialize gradient accumulators
-        self._xyz_gradient_accum = torch.zeros((self.num_gaussians, 1), device=self.device)
+        self._xyz_gradient_accum = torch.zeros(
+            (self.num_gaussians, 1), device=self.device
+        )
         self._denom = torch.zeros((self.num_gaussians, 1), device=self.device)
 
         # Densification settings
@@ -497,7 +527,9 @@ class GaussianTrainer:
         print(f"  Image size: {target_rgb.shape[0]}x{target_rgb.shape[1]}")
         print(f"  Device: {self.device}")
         print(f"  Mixed precision: {'enabled' if use_amp else 'disabled'}")
-        print(f"  Densification: iter {densify_from} to {densify_until}, every {densify_interval}")
+        print(
+            f"  Densification: iter {densify_from} to {densify_until}, every {densify_interval}"
+        )
         print("-" * 50)
 
         # Training loop with optional progress bar
@@ -542,7 +574,13 @@ class GaussianTrainer:
                 self._accumulate_gradients()
                 scaler.unscale_(self.optimizer)
                 torch.nn.utils.clip_grad_norm_(
-                    [self.means, self.scales, self.rotations, self.sh_coeffs, self.opacities],
+                    [
+                        self.means,
+                        self.scales,
+                        self.rotations,
+                        self.sh_coeffs,
+                        self.opacities,
+                    ],
                     max_norm=1.0,
                 )
                 scaler.step(self.optimizer)
@@ -551,7 +589,13 @@ class GaussianTrainer:
                 total_loss.backward()
                 self._accumulate_gradients()
                 torch.nn.utils.clip_grad_norm_(
-                    [self.means, self.scales, self.rotations, self.sh_coeffs, self.opacities],
+                    [
+                        self.means,
+                        self.scales,
+                        self.rotations,
+                        self.sh_coeffs,
+                        self.opacities,
+                    ],
                     max_norm=1.0,
                 )
                 self.optimizer.step()
@@ -564,7 +608,10 @@ class GaussianTrainer:
 
             # Densification and pruning
             num_added, num_removed = 0, 0
-            if densify_from <= iteration < densify_until and iteration % densify_interval == 0:
+            if (
+                densify_from <= iteration < densify_until
+                and iteration % densify_interval == 0
+            ):
                 if iteration > 0:
                     num_added, num_removed = self._densify_and_prune()
 
@@ -594,8 +641,12 @@ class GaussianTrainer:
                 print(loss_str)
 
             # Save rendered image
-            if save_every > 0 and (iteration % save_every == 0 or iteration == num_iterations - 1):
-                self._save_iteration_image(rendered_rgb, target_rgb, iteration, output_dir)
+            if save_every > 0 and (
+                iteration % save_every == 0 or iteration == num_iterations - 1
+            ):
+                self._save_iteration_image(
+                    rendered_rgb, target_rgb, iteration, output_dir
+                )
 
         print("-" * 50)
         print("Optimization complete!")
@@ -712,7 +763,9 @@ class GaussianTrainer:
             viewmat = create_front_camera_pose(device=self.device)
         else:
             if isinstance(camera_pose, np.ndarray):
-                viewmat = torch.tensor(camera_pose, dtype=torch.float32, device=self.device)
+                viewmat = torch.tensor(
+                    camera_pose, dtype=torch.float32, device=self.device
+                )
             else:
                 viewmat = camera_pose.to(self.device)
 
@@ -738,7 +791,9 @@ class GaussianTrainer:
                     means, quats, scales, opacities, sh_coeffs, viewmat, K, H, W
                 )
             except Exception as e:
-                print(f"[WARN] gsplat rendering failed: {e}, falling back to CPU renderer")
+                print(
+                    f"[WARN] gsplat rendering failed: {e}, falling back to CPU renderer"
+                )
                 use_gsplat = False
 
         # CPU fallback renderer
@@ -836,7 +891,9 @@ class GaussianTrainer:
 
         # Initialize output buffers
         rgb_buffer = torch.zeros((H, W, 3), dtype=torch.float32, device=device)
-        depth_buffer = torch.full((H, W), float("inf"), dtype=torch.float32, device=device)
+        depth_buffer = torch.full(
+            (H, W), float("inf"), dtype=torch.float32, device=device
+        )
         alpha_buffer = torch.zeros((H, W), dtype=torch.float32, device=device)
 
         # Extract camera parameters
@@ -958,7 +1015,9 @@ class GaussianTrainer:
         from .gaussian_utils import sigmoid
 
         if self.means is None:
-            raise RuntimeError("No Gaussians to export. Call initialize_gaussians() first.")
+            raise RuntimeError(
+                "No Gaussians to export. Call initialize_gaussians() first."
+            )
 
         # Convert to numpy
         means_np = self.means.detach().cpu().numpy()
@@ -1098,9 +1157,15 @@ class GaussianTrainer:
             # Append to existing
             self.means = nn.Parameter(torch.cat([self.means.data, new_means], dim=0))
             self.scales = nn.Parameter(torch.cat([self.scales.data, new_scales], dim=0))
-            self.rotations = nn.Parameter(torch.cat([self.rotations.data, new_rotations], dim=0))
-            self.sh_coeffs = nn.Parameter(torch.cat([self.sh_coeffs.data, new_sh_coeffs], dim=0))
-            self.opacities = nn.Parameter(torch.cat([self.opacities.data, new_opacities], dim=0))
+            self.rotations = nn.Parameter(
+                torch.cat([self.rotations.data, new_rotations], dim=0)
+            )
+            self.sh_coeffs = nn.Parameter(
+                torch.cat([self.sh_coeffs.data, new_sh_coeffs], dim=0)
+            )
+            self.opacities = nn.Parameter(
+                torch.cat([self.opacities.data, new_opacities], dim=0)
+            )
 
         # === SPLIT ===
         if split_mask.any():
@@ -1162,8 +1227,12 @@ class GaussianTrainer:
 
             # Remove original split Gaussians and add new ones
             keep_mask = ~split_mask
-            self.means = nn.Parameter(torch.cat([self.means.data[keep_mask], new_means], dim=0))
-            self.scales = nn.Parameter(torch.cat([self.scales.data[keep_mask], new_scales], dim=0))
+            self.means = nn.Parameter(
+                torch.cat([self.means.data[keep_mask], new_means], dim=0)
+            )
+            self.scales = nn.Parameter(
+                torch.cat([self.scales.data[keep_mask], new_scales], dim=0)
+            )
             self.rotations = nn.Parameter(
                 torch.cat([self.rotations.data[keep_mask], new_rotations], dim=0)
             )
@@ -1207,7 +1276,9 @@ class GaussianTrainer:
         num_removed = prune_mask.sum().item()
 
         # Reset gradient accumulators
-        self._xyz_gradient_accum = torch.zeros((self.num_gaussians, 1), device=self.device)
+        self._xyz_gradient_accum = torch.zeros(
+            (self.num_gaussians, 1), device=self.device
+        )
         self._denom = torch.zeros((self.num_gaussians, 1), device=self.device)
 
         # Rebuild optimizer with new parameters

@@ -23,11 +23,16 @@ if src_path not in sys.path:
 # Module Import Helpers (to avoid dependency chain issues)
 # =============================================================================
 
+
 def _import_gaussian_utils():
     """Import gaussian_utils directly to avoid package dependencies."""
     spec = importlib.util.spec_from_file_location(
         "gaussian_utils",
-        Path(__file__).parent.parent / "src" / "human3d" / "reconstruct" / "gaussian_utils.py"
+        Path(__file__).parent.parent
+        / "src"
+        / "human3d"
+        / "reconstruct"
+        / "gaussian_utils.py",
     )
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -38,7 +43,11 @@ def _import_pointcloud():
     """Import pointcloud directly to avoid package dependencies."""
     spec = importlib.util.spec_from_file_location(
         "pointcloud",
-        Path(__file__).parent.parent / "src" / "human3d" / "reconstruct" / "pointcloud.py"
+        Path(__file__).parent.parent
+        / "src"
+        / "human3d"
+        / "reconstruct"
+        / "pointcloud.py",
     )
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -54,29 +63,34 @@ def _import_gaussian_trainer():
     import types
 
     # Create parent modules if they don't exist
-    if 'human3d' not in sys.modules:
-        human3d = types.ModuleType('human3d')
-        sys.modules['human3d'] = human3d
+    if "human3d" not in sys.modules:
+        human3d = types.ModuleType("human3d")
+        sys.modules["human3d"] = human3d
 
-    if 'human3d.reconstruct' not in sys.modules:
-        reconstruct = types.ModuleType('human3d.reconstruct')
-        sys.modules['human3d.reconstruct'] = reconstruct
-        sys.modules['human3d'].reconstruct = reconstruct
+    if "human3d.reconstruct" not in sys.modules:
+        reconstruct = types.ModuleType("human3d.reconstruct")
+        sys.modules["human3d.reconstruct"] = reconstruct
+        sys.modules["human3d"].reconstruct = reconstruct
 
     # Add gaussian_utils to the module hierarchy
-    sys.modules['human3d.reconstruct.gaussian_utils'] = gaussian_utils
-    sys.modules['human3d.reconstruct'].gaussian_utils = gaussian_utils
+    sys.modules["human3d.reconstruct.gaussian_utils"] = gaussian_utils
+    sys.modules["human3d.reconstruct"].gaussian_utils = gaussian_utils
 
     # Create a proper module for gaussian_trainer
-    trainer_path = Path(__file__).parent.parent / "src" / "human3d" / "reconstruct" / "gaussian_trainer.py"
+    trainer_path = (
+        Path(__file__).parent.parent
+        / "src"
+        / "human3d"
+        / "reconstruct"
+        / "gaussian_trainer.py"
+    )
     spec = importlib.util.spec_from_file_location(
-        "human3d.reconstruct.gaussian_trainer",
-        trainer_path
+        "human3d.reconstruct.gaussian_trainer", trainer_path
     )
     module = importlib.util.module_from_spec(spec)
 
     # Register it before loading so dataclass can find it
-    sys.modules['human3d.reconstruct.gaussian_trainer'] = module
+    sys.modules["human3d.reconstruct.gaussian_trainer"] = module
 
     spec.loader.exec_module(module)
     return module
@@ -85,6 +99,7 @@ def _import_gaussian_trainer():
 # =============================================================================
 # Tests for depth_to_xyz
 # =============================================================================
+
 
 class TestDepthToXYZ:
     """Tests for the depth_to_xyz function."""
@@ -127,14 +142,16 @@ class TestDepthToXYZ:
         cy, cx = h // 2, w // 2
         radius = 10
         y, x = np.ogrid[:h, :w]
-        mask_circle = (x - cx) ** 2 + (y - cy) ** 2 <= radius ** 2
+        mask_circle = (x - cx) ** 2 + (y - cy) ** 2 <= radius**2
         mask[mask_circle] = 1
 
         expected_points = mask.sum()
 
         xyz = gu.depth_to_xyz(depth, mask, 500.0, 500.0, (w - 1) / 2, (h - 1) / 2)
 
-        assert xyz.shape[0] == expected_points, f"Expected {expected_points} points, got {xyz.shape[0]}"
+        assert xyz.shape[0] == expected_points, (
+            f"Expected {expected_points} points, got {xyz.shape[0]}"
+        )
 
     def test_torch_tensor_input(self):
         """Test that function works with PyTorch tensors."""
@@ -163,12 +180,15 @@ class TestDepthToXYZ:
 
         # Should have fewer points than h * w
         expected = h * w - 10 * 10
-        assert xyz.shape[0] == expected, f"Expected {expected} points, got {xyz.shape[0]}"
+        assert xyz.shape[0] == expected, (
+            f"Expected {expected} points, got {xyz.shape[0]}"
+        )
 
 
 # =============================================================================
 # Tests for normalize_depth_to_metric
 # =============================================================================
+
 
 class TestNormalizeDepth:
     """Tests for depth normalization."""
@@ -202,6 +222,7 @@ class TestNormalizeDepth:
 # Tests for estimate_point_scales
 # =============================================================================
 
+
 class TestEstimatePointScales:
     """Tests for scale estimation."""
 
@@ -220,7 +241,7 @@ class TestEstimatePointScales:
 
     @pytest.mark.skipif(
         not torch.cuda.is_available(),
-        reason="pytorch3d KNN requires CUDA or specific setup"
+        reason="pytorch3d KNN requires CUDA or specific setup",
     )
     def test_scale_estimation_torch(self):
         """Test scale estimation with PyTorch tensors."""
@@ -239,6 +260,7 @@ class TestEstimatePointScales:
 # Tests for RGB to SH conversion
 # =============================================================================
 
+
 class TestRGBToSH:
     """Tests for RGB to spherical harmonics conversion."""
 
@@ -246,11 +268,14 @@ class TestRGBToSH:
         """Test SH conversion with degree 0 (DC only)."""
         gu = _import_gaussian_utils()
 
-        rgb = np.array([
-            [1.0, 0.0, 0.0],  # Red
-            [0.0, 1.0, 0.0],  # Green
-            [0.0, 0.0, 1.0],  # Blue
-        ], dtype=np.float32)
+        rgb = np.array(
+            [
+                [1.0, 0.0, 0.0],  # Red
+                [0.0, 1.0, 0.0],  # Green
+                [0.0, 0.0, 1.0],  # Blue
+            ],
+            dtype=np.float32,
+        )
 
         sh = gu.rgb_to_spherical_harmonics(rgb, degree=0)
 
@@ -285,6 +310,7 @@ class TestRGBToSH:
 # Tests for GaussianTrainer
 # =============================================================================
 
+
 class TestGaussianTrainerInit:
     """Tests for GaussianTrainer initialization."""
 
@@ -301,7 +327,7 @@ class TestGaussianTrainerInit:
         cy, cx = h // 2, w // 2
         radius = min(h, w) // 4
         y, x = np.ogrid[:h, :w]
-        mask = ((x - cx) ** 2 + (y - cy) ** 2 <= radius ** 2).astype(np.uint8)
+        mask = ((x - cx) ** 2 + (y - cy) ** 2 <= radius**2).astype(np.uint8)
 
         return rgb, depth, mask
 
@@ -365,7 +391,9 @@ class TestGaussianTrainerInit:
 
         # Check number of Gaussians matches masked pixels
         expected_points = mask.sum()
-        assert num_gaussians == expected_points, f"Expected {expected_points}, got {num_gaussians}"
+        assert num_gaussians == expected_points, (
+            f"Expected {expected_points}, got {num_gaussians}"
+        )
 
         # Check parameter shapes
         assert trainer.means.shape == (num_gaussians, 3)
@@ -402,11 +430,11 @@ class TestGaussianTrainerInit:
 
         params = trainer.get_parameters()
 
-        assert 'means' in params
-        assert 'scales' in params
-        assert 'rotations' in params
-        assert 'sh_coeffs' in params
-        assert 'opacities' in params
+        assert "means" in params
+        assert "scales" in params
+        assert "rotations" in params
+        assert "sh_coeffs" in params
+        assert "opacities" in params
 
         # All should be tensors
         for name, tensor in params.items():
@@ -418,12 +446,12 @@ class TestGaussianTrainerInit:
 # Tests for consistency with original implementation
 # =============================================================================
 
+
 class TestConsistencyWithOriginal:
     """Tests to verify consistency with original pointcloud.py implementation."""
 
     @pytest.mark.skipif(
-        not importlib.util.find_spec("open3d"),
-        reason="open3d not installed"
+        not importlib.util.find_spec("open3d"), reason="open3d not installed"
     )
     def test_xyz_matches_original(self):
         """Verify depth_to_xyz produces same results as original."""
@@ -444,12 +472,15 @@ class TestConsistencyWithOriginal:
         xyz_original = np.asarray(pcd.points)
 
         # New implementation
-        depth_normalized = gu.normalize_depth_to_metric(depth_raw, min_depth=0.5, max_depth=2.5)
+        depth_normalized = gu.normalize_depth_to_metric(
+            depth_raw, min_depth=0.5, max_depth=2.5
+        )
         xyz_new = gu.depth_to_xyz(depth_normalized, mask, fx, fy, cx, cy)
 
         # Should have same number of points (both use full image)
-        assert xyz_original.shape[0] == xyz_new.shape[0], \
+        assert xyz_original.shape[0] == xyz_new.shape[0], (
             f"Point count mismatch: original {xyz_original.shape[0]} vs new {xyz_new.shape[0]}"
+        )
 
         # Sort both arrays for comparison (order may differ)
         xyz_original_sorted = xyz_original[np.lexsort(xyz_original.T)]
@@ -457,9 +488,11 @@ class TestConsistencyWithOriginal:
 
         # Values should be very close
         np.testing.assert_allclose(
-            xyz_original_sorted, xyz_new_sorted,
-            rtol=1e-4, atol=1e-6,
-            err_msg="XYZ coordinates don't match original implementation"
+            xyz_original_sorted,
+            xyz_new_sorted,
+            rtol=1e-4,
+            atol=1e-6,
+            err_msg="XYZ coordinates don't match original implementation",
         )
 
 

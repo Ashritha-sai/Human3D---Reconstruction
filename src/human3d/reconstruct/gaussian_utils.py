@@ -445,7 +445,9 @@ def rgb_to_spherical_harmonics(
         device = rgb_colors.device
 
         # Initialize output with zeros: (N, num_coeffs, 3)
-        sh_coeffs = torch.zeros((n_points, num_coeffs, 3), dtype=torch.float32, device=device)
+        sh_coeffs = torch.zeros(
+            (n_points, num_coeffs, 3), dtype=torch.float32, device=device
+        )
 
         # Set DC term: convert RGB [0,1] to SH space
         # Following 3DGS convention: sh_dc = (rgb - 0.5) / C0

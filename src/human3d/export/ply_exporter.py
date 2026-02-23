@@ -141,7 +141,9 @@ def save_gaussian_ply(
     from plyfile import PlyData, PlyElement
 
     # 1. Validate inputs
-    n_gaussians = validate_gaussian_attributes(means, scales, rotations, sh_coeffs, opacities)
+    n_gaussians = validate_gaussian_attributes(
+        means, scales, rotations, sh_coeffs, opacities
+    )
 
     # 2. Create output directory if needed
     filepath = Path(filepath)
@@ -351,9 +353,7 @@ def load_gaussian_ply(
             vertex["f_dc_2"],
         ],
         axis=1,
-    ).astype(
-        np.float32
-    )  # (N, 3)
+    ).astype(np.float32)  # (N, 3)
 
     # Count f_rest properties
     # vertex.data.dtype.names gives the property names
@@ -364,7 +364,9 @@ def load_gaussian_ply(
     if num_rest > 0:
         # Sort by index
         f_rest_names = sorted(f_rest_names, key=lambda x: int(x.split("_")[-1]))
-        f_rest = np.stack([vertex[name] for name in f_rest_names], axis=1).astype(np.float32)
+        f_rest = np.stack([vertex[name] for name in f_rest_names], axis=1).astype(
+            np.float32
+        )
         # Reshape: (N, num_rest) -> (N, num_rest//3, 3)
         f_rest = f_rest.reshape(n_gaussians, -1, 3)
         # Combine DC and rest
@@ -506,19 +508,27 @@ def validate_gaussian_attributes(
     if rotations.ndim != 2 or rotations.shape[1] != 4:
         raise ValueError(f"rotations must have shape (N, 4), got {rotations.shape}")
     if rotations.shape[0] != n_gaussians:
-        raise ValueError(f"rotations has {rotations.shape[0]} rows, expected {n_gaussians}")
+        raise ValueError(
+            f"rotations has {rotations.shape[0]} rows, expected {n_gaussians}"
+        )
 
     # Check sh_coeffs
     if sh_coeffs.ndim != 3 or sh_coeffs.shape[2] != 3:
-        raise ValueError(f"sh_coeffs must have shape (N, num_coeffs, 3), got {sh_coeffs.shape}")
+        raise ValueError(
+            f"sh_coeffs must have shape (N, num_coeffs, 3), got {sh_coeffs.shape}"
+        )
     if sh_coeffs.shape[0] != n_gaussians:
-        raise ValueError(f"sh_coeffs has {sh_coeffs.shape[0]} rows, expected {n_gaussians}")
+        raise ValueError(
+            f"sh_coeffs has {sh_coeffs.shape[0]} rows, expected {n_gaussians}"
+        )
 
     # Validate SH degree
     num_coeffs = sh_coeffs.shape[1]
     valid_counts = [1, 4, 9, 16]  # (degree+1)^2 for degrees 0-3
     if num_coeffs not in valid_counts:
-        raise ValueError(f"sh_coeffs has {num_coeffs} coefficients, expected one of {valid_counts}")
+        raise ValueError(
+            f"sh_coeffs has {num_coeffs} coefficients, expected one of {valid_counts}"
+        )
 
     # Check opacities
     if opacities.ndim == 2:
@@ -528,6 +538,8 @@ def validate_gaussian_attributes(
             f"opacities must have shape (N,) or (N, 1), got shape with {opacities.ndim} dims"
         )
     if opacities.shape[0] != n_gaussians:
-        raise ValueError(f"opacities has {opacities.shape[0]} elements, expected {n_gaussians}")
+        raise ValueError(
+            f"opacities has {opacities.shape[0]} elements, expected {n_gaussians}"
+        )
 
     return n_gaussians

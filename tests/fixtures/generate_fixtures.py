@@ -58,7 +58,7 @@ def generate_synthetic_depth(output_dir: Path, H=256, W=256):
 
     # Person is closer (lower depth values)
     person_mask = dist < 80
-    depth[person_mask] = 1.5 - 0.3 * np.exp(-dist[person_mask] ** 2 / (2 * 40 ** 2))
+    depth[person_mask] = 1.5 - 0.3 * np.exp(-(dist[person_mask] ** 2) / (2 * 40**2))
 
     # Save depth
     np.save(str(output_dir / "person_depth.npy"), depth)
@@ -74,19 +74,19 @@ def generate_synthetic_mask(output_dir: Path, H=256, W=256):
 
     # Head
     y, x = np.ogrid[:H, :W]
-    head_mask = (x - cx) ** 2 + (y - (cy - 60)) ** 2 <= 25 ** 2
+    head_mask = (x - cx) ** 2 + (y - (cy - 60)) ** 2 <= 25**2
     mask[head_mask] = 1
 
     # Body
-    mask[cy - 30:cy + 40, cx - 30:cx + 30] = 1
+    mask[cy - 30 : cy + 40, cx - 30 : cx + 30] = 1
 
     # Arms
-    mask[cy - 25:cy + 10, cx - 55:cx - 30] = 1
-    mask[cy - 25:cy + 10, cx + 30:cx + 55] = 1
+    mask[cy - 25 : cy + 10, cx - 55 : cx - 30] = 1
+    mask[cy - 25 : cy + 10, cx + 30 : cx + 55] = 1
 
     # Legs
-    mask[cy + 40:cy + 90, cx - 25:cx - 5] = 1
-    mask[cy + 40:cy + 90, cx + 5:cx + 25] = 1
+    mask[cy + 40 : cy + 90, cx - 25 : cx - 5] = 1
+    mask[cy + 40 : cy + 90, cx + 5 : cx + 25] = 1
 
     # Save mask
     np.save(str(output_dir / "person_mask.npy"), mask)
@@ -100,15 +100,15 @@ def generate_synthetic_mask(output_dir: Path, H=256, W=256):
 def generate_camera_params(output_dir: Path, H=256, W=256):
     """Generate camera parameters for testing."""
     params = {
-        'fx': 500.0,
-        'fy': 500.0,
-        'cx': (W - 1) / 2.0,
-        'cy': (H - 1) / 2.0,
-        'width': W,
-        'height': H,
+        "fx": 500.0,
+        "fy": 500.0,
+        "cx": (W - 1) / 2.0,
+        "cy": (H - 1) / 2.0,
+        "width": W,
+        "height": H,
     }
 
-    with open(output_dir / "camera_params.yaml", 'w') as f:
+    with open(output_dir / "camera_params.yaml", "w") as f:
         yaml.dump(params, f, default_flow_style=False)
 
     return params

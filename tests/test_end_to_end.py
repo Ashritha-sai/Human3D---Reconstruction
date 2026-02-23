@@ -26,63 +26,72 @@ if src_path not in sys.path:
 # Module Import Helpers
 # ==============================================================================
 
+
 def _setup_modules():
     """Set up module hierarchy for imports."""
     # Import gaussian_utils
     spec_utils = importlib.util.spec_from_file_location(
         "gaussian_utils",
-        Path(__file__).parent.parent / "src" / "human3d" / "reconstruct" / "gaussian_utils.py"
+        Path(__file__).parent.parent
+        / "src"
+        / "human3d"
+        / "reconstruct"
+        / "gaussian_utils.py",
     )
     gaussian_utils = importlib.util.module_from_spec(spec_utils)
     spec_utils.loader.exec_module(gaussian_utils)
 
     # Set up module hierarchy
-    if 'human3d' not in sys.modules:
-        sys.modules['human3d'] = types.ModuleType('human3d')
-    if 'human3d.reconstruct' not in sys.modules:
-        sys.modules['human3d.reconstruct'] = types.ModuleType('human3d.reconstruct')
-        sys.modules['human3d'].reconstruct = sys.modules['human3d.reconstruct']
-    if 'human3d.export' not in sys.modules:
-        sys.modules['human3d.export'] = types.ModuleType('human3d.export')
-        sys.modules['human3d'].export = sys.modules['human3d.export']
+    if "human3d" not in sys.modules:
+        sys.modules["human3d"] = types.ModuleType("human3d")
+    if "human3d.reconstruct" not in sys.modules:
+        sys.modules["human3d.reconstruct"] = types.ModuleType("human3d.reconstruct")
+        sys.modules["human3d"].reconstruct = sys.modules["human3d.reconstruct"]
+    if "human3d.export" not in sys.modules:
+        sys.modules["human3d.export"] = types.ModuleType("human3d.export")
+        sys.modules["human3d"].export = sys.modules["human3d.export"]
 
-    sys.modules['human3d.reconstruct.gaussian_utils'] = gaussian_utils
-    sys.modules['human3d.reconstruct'].gaussian_utils = gaussian_utils
+    sys.modules["human3d.reconstruct.gaussian_utils"] = gaussian_utils
+    sys.modules["human3d.reconstruct"].gaussian_utils = gaussian_utils
 
     # Import losses
     spec_losses = importlib.util.spec_from_file_location(
         "human3d.reconstruct.losses",
-        Path(__file__).parent.parent / "src" / "human3d" / "reconstruct" / "losses.py"
+        Path(__file__).parent.parent / "src" / "human3d" / "reconstruct" / "losses.py",
     )
     losses = importlib.util.module_from_spec(spec_losses)
-    sys.modules['human3d.reconstruct.losses'] = losses
-    sys.modules['human3d.reconstruct'].losses = losses
+    sys.modules["human3d.reconstruct.losses"] = losses
+    sys.modules["human3d.reconstruct"].losses = losses
     spec_losses.loader.exec_module(losses)
 
     # Import ply_exporter
     spec_ply = importlib.util.spec_from_file_location(
         "human3d.export.ply_exporter",
-        Path(__file__).parent.parent / "src" / "human3d" / "export" / "ply_exporter.py"
+        Path(__file__).parent.parent / "src" / "human3d" / "export" / "ply_exporter.py",
     )
     ply_exporter = importlib.util.module_from_spec(spec_ply)
-    sys.modules['human3d.export.ply_exporter'] = ply_exporter
-    sys.modules['human3d.export'].ply_exporter = ply_exporter
+    sys.modules["human3d.export.ply_exporter"] = ply_exporter
+    sys.modules["human3d.export"].ply_exporter = ply_exporter
     spec_ply.loader.exec_module(ply_exporter)
 
     # Import gaussian_trainer
     spec_trainer = importlib.util.spec_from_file_location(
         "human3d.reconstruct.gaussian_trainer",
-        Path(__file__).parent.parent / "src" / "human3d" / "reconstruct" / "gaussian_trainer.py"
+        Path(__file__).parent.parent
+        / "src"
+        / "human3d"
+        / "reconstruct"
+        / "gaussian_trainer.py",
     )
     gaussian_trainer = importlib.util.module_from_spec(spec_trainer)
-    sys.modules['human3d.reconstruct.gaussian_trainer'] = gaussian_trainer
+    sys.modules["human3d.reconstruct.gaussian_trainer"] = gaussian_trainer
     spec_trainer.loader.exec_module(gaussian_trainer)
 
     return {
-        'gaussian_utils': gaussian_utils,
-        'gaussian_trainer': gaussian_trainer,
-        'losses': losses,
-        'ply_exporter': ply_exporter,
+        "gaussian_utils": gaussian_utils,
+        "gaussian_trainer": gaussian_trainer,
+        "losses": losses,
+        "ply_exporter": ply_exporter,
     }
 
 
@@ -93,6 +102,7 @@ def load_fixtures():
     # Check if fixtures exist, generate if not
     if not (fixtures_dir / "person.jpg").exists():
         import subprocess
+
         subprocess.run([sys.executable, str(fixtures_dir / "generate_fixtures.py")])
 
     # Load RGB image
@@ -107,7 +117,7 @@ def load_fixtures():
     mask = np.load(str(fixtures_dir / "person_mask.npy"))
 
     # Load camera params
-    with open(fixtures_dir / "camera_params.yaml", 'r') as f:
+    with open(fixtures_dir / "camera_params.yaml", "r") as f:
         camera_params = yaml.safe_load(f)
 
     return rgb, depth, mask, camera_params
@@ -116,6 +126,7 @@ def load_fixtures():
 # ==============================================================================
 # PSNR Helper
 # ==============================================================================
+
 
 def compute_psnr(img1, img2, mask=None):
     """
@@ -164,6 +175,7 @@ def compute_psnr(img1, img2, mask=None):
 # End-to-End Tests
 # ==============================================================================
 
+
 class TestGaussianPipeline:
     """Tests for the complete Gaussian splatting pipeline."""
 
@@ -179,19 +191,19 @@ class TestGaussianPipeline:
 
     def test_gaussian_pipeline_basic(self, modules, fixture_data):
         """Test full pipeline from image to PLY (fast test)."""
-        gt = modules['gaussian_trainer']
-        ply = modules['ply_exporter']
+        gt = modules["gaussian_trainer"]
+        ply = modules["ply_exporter"]
 
         rgb, depth, mask, camera_params = fixture_data
 
         # Create camera
         camera = gt.CameraParams(
-            fx=camera_params['fx'],
-            fy=camera_params['fy'],
-            cx=camera_params['cx'],
-            cy=camera_params['cy'],
-            width=camera_params['width'],
-            height=camera_params['height'],
+            fx=camera_params["fx"],
+            fy=camera_params["fy"],
+            cx=camera_params["cx"],
+            cy=camera_params["cy"],
+            width=camera_params["width"],
+            height=camera_params["height"],
         )
 
         # Create config
@@ -215,7 +227,7 @@ class TestGaussianPipeline:
                 output_dir=tmpdir,
             )
 
-            assert len(history['loss']) == 20
+            assert len(history["loss"]) == 20
 
             # Export PLY
             ply_path = Path(tmpdir) / "output.ply"
@@ -227,21 +239,21 @@ class TestGaussianPipeline:
 
             # Load and verify structure
             data = ply.load_gaussian_ply(ply_path)
-            assert data['num_gaussians'] == num_gaussians
+            assert data["num_gaussians"] == num_gaussians
 
     def test_loss_decreases_during_training(self, modules, fixture_data):
         """Test that loss decreases during training."""
-        gt = modules['gaussian_trainer']
+        gt = modules["gaussian_trainer"]
 
         rgb, depth, mask, camera_params = fixture_data
 
         camera = gt.CameraParams(
-            fx=camera_params['fx'],
-            fy=camera_params['fy'],
-            cx=camera_params['cx'],
-            cy=camera_params['cy'],
-            width=camera_params['width'],
-            height=camera_params['height'],
+            fx=camera_params["fx"],
+            fy=camera_params["fy"],
+            cx=camera_params["cx"],
+            cy=camera_params["cy"],
+            width=camera_params["width"],
+            height=camera_params["height"],
         )
 
         config = gt.GaussianConfig(sh_degree=0)
@@ -258,11 +270,12 @@ class TestGaussianPipeline:
             )
 
         # Loss should decrease
-        initial_loss = np.mean(history['loss'][:5])
-        final_loss = np.mean(history['loss'][-5:])
+        initial_loss = np.mean(history["loss"][:5])
+        final_loss = np.mean(history["loss"][-5:])
 
-        assert final_loss < initial_loss, \
+        assert final_loss < initial_loss, (
             f"Loss should decrease: {initial_loss:.4f} -> {final_loss:.4f}"
+        )
 
 
 class TestInitializationConsistency:
@@ -278,17 +291,17 @@ class TestInitializationConsistency:
 
     def test_initialization_produces_valid_points(self, modules, fixture_data):
         """Verify Gaussian initialization produces valid 3D points."""
-        gt = modules['gaussian_trainer']
+        gt = modules["gaussian_trainer"]
 
         rgb, depth, mask, camera_params = fixture_data
 
         camera = gt.CameraParams(
-            fx=camera_params['fx'],
-            fy=camera_params['fy'],
-            cx=camera_params['cx'],
-            cy=camera_params['cy'],
-            width=camera_params['width'],
-            height=camera_params['height'],
+            fx=camera_params["fx"],
+            fy=camera_params["fy"],
+            cx=camera_params["cx"],
+            cy=camera_params["cy"],
+            width=camera_params["width"],
+            height=camera_params["height"],
         )
 
         config = gt.GaussianConfig(sh_degree=0, position_noise=0.0)
@@ -305,8 +318,8 @@ class TestInitializationConsistency:
 
     def test_initialization_matches_depth_to_xyz(self, modules, fixture_data):
         """Verify Gaussian init uses correct depth unprojection."""
-        gt = modules['gaussian_trainer']
-        gu = modules['gaussian_utils']
+        gt = modules["gaussian_trainer"]
+        gu = modules["gaussian_utils"]
 
         rgb, depth, mask, camera_params = fixture_data
 
@@ -319,20 +332,20 @@ class TestInitializationConsistency:
         xyz_direct = gu.depth_to_xyz(
             depth_normalized,
             mask_tensor,
-            fx=camera_params['fx'],
-            fy=camera_params['fy'],
-            cx=camera_params['cx'],
-            cy=camera_params['cy'],
+            fx=camera_params["fx"],
+            fy=camera_params["fy"],
+            cx=camera_params["cx"],
+            cy=camera_params["cy"],
         )
 
         # Trainer initialization
         camera = gt.CameraParams(
-            fx=camera_params['fx'],
-            fy=camera_params['fy'],
-            cx=camera_params['cx'],
-            cy=camera_params['cy'],
-            width=camera_params['width'],
-            height=camera_params['height'],
+            fx=camera_params["fx"],
+            fy=camera_params["fy"],
+            cx=camera_params["cx"],
+            cy=camera_params["cy"],
+            width=camera_params["width"],
+            height=camera_params["height"],
         )
 
         config = gt.GaussianConfig(sh_degree=0, position_noise=0.0)
@@ -343,8 +356,9 @@ class TestInitializationConsistency:
         xyz_trainer = trainer.means.detach()
 
         # Should produce same points
-        assert xyz_direct.shape == xyz_trainer.shape, \
+        assert xyz_direct.shape == xyz_trainer.shape, (
             f"Shape mismatch: {xyz_direct.shape} vs {xyz_trainer.shape}"
+        )
 
         # Allow small tolerance for floating point
         np.testing.assert_allclose(
@@ -368,17 +382,17 @@ class TestRenderingQuality:
 
     def test_initial_render_produces_valid_image(self, modules, fixture_data):
         """Test that initial render produces a valid image."""
-        gt = modules['gaussian_trainer']
+        gt = modules["gaussian_trainer"]
 
         rgb, depth, mask, camera_params = fixture_data
 
         camera = gt.CameraParams(
-            fx=camera_params['fx'],
-            fy=camera_params['fy'],
-            cx=camera_params['cx'],
-            cy=camera_params['cy'],
-            width=camera_params['width'],
-            height=camera_params['height'],
+            fx=camera_params["fx"],
+            fy=camera_params["fy"],
+            cx=camera_params["cx"],
+            cy=camera_params["cy"],
+            width=camera_params["width"],
+            height=camera_params["height"],
         )
 
         config = gt.GaussianConfig(sh_degree=0)
@@ -389,7 +403,7 @@ class TestRenderingQuality:
         rendered_rgb, rendered_depth, rendered_alpha = trainer.render_view()
 
         # Check shapes
-        H, W = camera_params['height'], camera_params['width']
+        H, W = camera_params["height"], camera_params["width"]
         assert rendered_rgb.shape == (H, W, 3), f"RGB shape: {rendered_rgb.shape}"
         assert rendered_depth.shape == (H, W), f"Depth shape: {rendered_depth.shape}"
         assert rendered_alpha.shape == (H, W), f"Alpha shape: {rendered_alpha.shape}"
@@ -403,17 +417,17 @@ class TestRenderingQuality:
     @pytest.mark.slow
     def test_rendering_quality_after_training(self, modules, fixture_data):
         """Test that rendering quality improves after training (PSNR > 20 dB)."""
-        gt = modules['gaussian_trainer']
+        gt = modules["gaussian_trainer"]
 
         rgb, depth, mask, camera_params = fixture_data
 
         camera = gt.CameraParams(
-            fx=camera_params['fx'],
-            fy=camera_params['fy'],
-            cx=camera_params['cx'],
-            cy=camera_params['cy'],
-            width=camera_params['width'],
-            height=camera_params['height'],
+            fx=camera_params["fx"],
+            fy=camera_params["fy"],
+            cx=camera_params["cx"],
+            cy=camera_params["cy"],
+            width=camera_params["width"],
+            height=camera_params["height"],
         )
 
         config = gt.GaussianConfig(
@@ -462,18 +476,18 @@ class TestCUDAPipeline:
     @pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA not available")
     def test_cuda_pipeline(self, modules, fixture_data):
         """Test pipeline on CUDA."""
-        gt = modules['gaussian_trainer']
-        ply = modules['ply_exporter']
+        gt = modules["gaussian_trainer"]
+        ply = modules["ply_exporter"]
 
         rgb, depth, mask, camera_params = fixture_data
 
         camera = gt.CameraParams(
-            fx=camera_params['fx'],
-            fy=camera_params['fy'],
-            cx=camera_params['cx'],
-            cy=camera_params['cy'],
-            width=camera_params['width'],
-            height=camera_params['height'],
+            fx=camera_params["fx"],
+            fy=camera_params["fy"],
+            cx=camera_params["cx"],
+            cy=camera_params["cy"],
+            width=camera_params["width"],
+            height=camera_params["height"],
         )
 
         config = gt.GaussianConfig(sh_degree=0)
@@ -497,7 +511,7 @@ class TestCUDAPipeline:
 
             assert ply_path.exists()
             data = ply.load_gaussian_ply(ply_path)
-            assert data['num_gaussians'] == trainer.num_gaussians
+            assert data["num_gaussians"] == trainer.num_gaussians
 
 
 # ==============================================================================

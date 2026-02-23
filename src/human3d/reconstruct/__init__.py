@@ -3,30 +3,9 @@ Reconstruction module for Human3D.
 
 Provides 3D reconstruction capabilities from RGB-D data, including
 point cloud generation and Gaussian splatting.
-
-Submodules:
-    pointcloud: Depth-to-point-cloud unprojection and PLY export
-    gaussian_trainer: 3D Gaussian Splatting training
-    gaussian_utils: Mathematical utilities for Gaussian operations
-    losses: Loss functions for Gaussian optimization
-
-Classes:
-    GaussianTrainer: Main trainer class for Gaussian Splatting
-    GaussianConfig: Configuration dataclass for training
-    CameraParams: Camera intrinsic/extrinsic parameters
-    GaussianLosses: Combined loss functions
-
-Functions:
-    depth_to_pointcloud: Convert depth map to Open3D point cloud
-    save_ply: Save Open3D point cloud to PLY file
-    depth_to_xyz: Unproject depth to 3D coordinates
-    estimate_point_scales: Estimate Gaussian scales from point density
 """
 
-# Original point cloud functionality
-from .pointcloud import depth_to_pointcloud, save_ply
-
-# Gaussian splatting (new)
+# Gaussian splatting (core — always available)
 from .gaussian_trainer import (
     GaussianTrainer,
     GaussianConfig,
@@ -40,9 +19,6 @@ from .gaussian_utils import (
     rgb_to_spherical_harmonics,
     spherical_harmonics_to_rgb,
     quaternion_to_rotation_matrix,
-    rotation_matrix_to_quaternion,
-    build_covariance_3d,
-    project_covariance_to_2d,
     sigmoid,
     inverse_sigmoid,
     # Camera utilities
@@ -58,8 +34,17 @@ from .losses import (
     compute_ssim_map,
 )
 
+
+# Point cloud functionality requires open3d — lazy import
+def __getattr__(name):
+    if name in ("depth_to_pointcloud", "save_ply"):
+        from . import pointcloud
+        return getattr(pointcloud, name)
+    raise AttributeError(f"module 'human3d.reconstruct' has no attribute {name!r}")
+
+
 __all__ = [
-    # Point cloud
+    # Point cloud (lazy)
     "depth_to_pointcloud",
     "save_ply",
     # Gaussian trainer
@@ -73,9 +58,6 @@ __all__ = [
     "rgb_to_spherical_harmonics",
     "spherical_harmonics_to_rgb",
     "quaternion_to_rotation_matrix",
-    "rotation_matrix_to_quaternion",
-    "build_covariance_3d",
-    "project_covariance_to_2d",
     "sigmoid",
     "inverse_sigmoid",
     # Camera utilities

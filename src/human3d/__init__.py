@@ -34,19 +34,27 @@ Example:
 
 __version__ = "0.1.0"
 
-# Main pipeline
-from .pipeline import Human3DPipeline
-
-# Reconstruction components
+# Reconstruction components (always available — only depends on torch/numpy/scipy)
 from .reconstruct import (
     GaussianTrainer,
     GaussianConfig,
     CameraParams,
-    depth_to_pointcloud,
 )
 
 # Convenience imports
 from .utils import load_config, pick_device
+
+# Pipeline import is lazy because it depends on ultralytics, segment_anything, etc.
+# Use: from human3d.pipeline import Human3DPipeline
+def __getattr__(name):
+    if name == "Human3DPipeline":
+        from .pipeline import Human3DPipeline
+        return Human3DPipeline
+    if name == "depth_to_pointcloud":
+        from .reconstruct.pointcloud import depth_to_pointcloud
+        return depth_to_pointcloud
+    raise AttributeError(f"module 'human3d' has no attribute {name!r}")
+
 
 __all__ = [
     "__version__",

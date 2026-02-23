@@ -350,31 +350,7 @@ class GaussianTrainer:
         self.opacities = nn.Parameter(logit_opacity.contiguous())
 
         # Set up optimizer with per-parameter learning rates
-        self.optimizer = torch.optim.Adam(
-            [
-                {
-                    "params": [self.means],
-                    "lr": self.config.lr_position,
-                    "name": "means",
-                },
-                {"params": [self.scales], "lr": self.config.lr_scale, "name": "scales"},
-                {
-                    "params": [self.rotations],
-                    "lr": self.config.lr_rotation,
-                    "name": "rotations",
-                },
-                {
-                    "params": [self.sh_coeffs],
-                    "lr": self.config.lr_color,
-                    "name": "sh_coeffs",
-                },
-                {
-                    "params": [self.opacities],
-                    "lr": self.config.lr_opacity,
-                    "name": "opacities",
-                },
-            ]
-        )
+        self._create_optimizer()
 
         # Initialize gradient accumulators for densification
         self._xyz_gradient_accum = torch.zeros((n_points, 1), device=self.device)
@@ -456,22 +432,8 @@ class GaussianTrainer:
             output_dir = Path(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        # Create optimizer with recommended learning rates from 3DGS paper.
-        # These learning rates are empirically tuned:
-        # - means (1.6e-4): Slow position updates prevent oscillation
-        # - scales (5e-3): Moderate rate allows size adjustment
-        # - rotations (1e-3): Careful orientation updates for stability
-        # - sh_coeffs (2.5e-3): Balance color refinement speed
-        # - opacities (5e-2): Fast transparency updates for pruning
-        self.optimizer = torch.optim.Adam(
-            [
-                {"params": [self.means], "lr": 1.6e-4, "name": "means"},
-                {"params": [self.scales], "lr": 5e-3, "name": "scales"},
-                {"params": [self.rotations], "lr": 1e-3, "name": "rotations"},
-                {"params": [self.sh_coeffs], "lr": 2.5e-3, "name": "sh_coeffs"},
-                {"params": [self.opacities], "lr": 5e-2, "name": "opacities"},
-            ]
-        )
+        # Recreate optimizer (parameters may have changed via densification)
+        self._create_optimizer()
 
         # Create loss function
         losses = GaussianLosses(
@@ -815,18 +777,25 @@ class GaussianTrainer:
     ) -> Tuple[Tensor, Tensor, Tensor]:
         """Render using gsplat library (requires CUDA)."""
         import os
+        import shutil
 
         # Set CUDA_HOME if not already set, to help gsplat find CUDA toolkit
         if "CUDA_HOME" not in os.environ and "CUDA_PATH" not in os.environ:
-            cuda_paths = [
-                r"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v13.1",
-                r"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.4",
-                r"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.1",
-            ]
-            for cuda_path in cuda_paths:
-                if os.path.exists(cuda_path):
-                    os.environ["CUDA_HOME"] = cuda_path
-                    break
+            # Try torch's built-in CUDA path first
+            try:
+                from torch.utils.cpp_extension import CUDA_HOME as _torch_cuda
+                if _torch_cuda and os.path.exists(_torch_cuda):
+                    os.environ["CUDA_HOME"] = _torch_cuda
+            except ImportError:
+                pass
+
+            # Fall back to finding nvcc on PATH
+            if "CUDA_HOME" not in os.environ:
+                nvcc_path = shutil.which("nvcc")
+                if nvcc_path:
+                    # nvcc is typically at <CUDA_HOME>/bin/nvcc
+                    cuda_home = str(Path(nvcc_path).parent.parent)
+                    os.environ["CUDA_HOME"] = cuda_home
 
         from gsplat import rasterization
 
@@ -1282,19 +1251,19 @@ class GaussianTrainer:
         self._denom = torch.zeros((self.num_gaussians, 1), device=self.device)
 
         # Rebuild optimizer with new parameters
-        self._rebuild_optimizer()
+        self._create_optimizer()
 
         return num_added, num_removed
 
-    def _rebuild_optimizer(self) -> None:
-        """Rebuild optimizer after densification/pruning changes parameter counts."""
+    def _create_optimizer(self) -> None:
+        """Create (or recreate) the Adam optimizer using config learning rates."""
         self.optimizer = torch.optim.Adam(
             [
-                {"params": [self.means], "lr": 1.6e-4, "name": "means"},
-                {"params": [self.scales], "lr": 5e-3, "name": "scales"},
-                {"params": [self.rotations], "lr": 1e-3, "name": "rotations"},
-                {"params": [self.sh_coeffs], "lr": 2.5e-3, "name": "sh_coeffs"},
-                {"params": [self.opacities], "lr": 5e-2, "name": "opacities"},
+                {"params": [self.means], "lr": self.config.lr_position, "name": "means"},
+                {"params": [self.scales], "lr": self.config.lr_scale, "name": "scales"},
+                {"params": [self.rotations], "lr": self.config.lr_rotation, "name": "rotations"},
+                {"params": [self.sh_coeffs], "lr": self.config.lr_color, "name": "sh_coeffs"},
+                {"params": [self.opacities], "lr": self.config.lr_opacity, "name": "opacities"},
             ]
         )
 

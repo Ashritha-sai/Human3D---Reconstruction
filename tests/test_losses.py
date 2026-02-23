@@ -8,29 +8,13 @@ Tests that:
 4. Visualization helpers work
 """
 
-import sys
 from pathlib import Path
-import importlib.util
 import tempfile
 
 import torch
 import pytest
 
-# Add src to path
-src_path = str(Path(__file__).parent.parent / "src")
-if src_path not in sys.path:
-    sys.path.insert(0, src_path)
-
-
-def _import_losses():
-    """Import losses module directly to avoid package dependencies."""
-    spec = importlib.util.spec_from_file_location(
-        "losses",
-        Path(__file__).parent.parent / "src" / "human3d" / "reconstruct" / "losses.py",
-    )
-    losses = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(losses)
-    return losses
+from human3d.reconstruct import losses as _losses_module
 
 
 # ==============================================================================
@@ -41,7 +25,7 @@ def _import_losses():
 @pytest.fixture
 def losses_module():
     """Provide the losses module."""
-    return _import_losses()
+    return _losses_module
 
 
 @pytest.fixture

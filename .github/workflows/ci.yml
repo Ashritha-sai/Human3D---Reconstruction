@@ -31,7 +31,7 @@ jobs:
         pip install pytest pytest-cov
         pip install numpy opencv-python-headless pyyaml tqdm matplotlib
         pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-        pip install open3d timm ultralytics
+        pip install open3d timm ultralytics plyfile
         pip install -e .
 
     - name: Run tests

@@ -1,6 +1,8 @@
-.venv/ 
-checkpoints/ 
-*.dll 
-*.pth 
-data/ 
-outputs/ 
+.venv/
+__pycache__/
+*.pyc
+checkpoints/
+*.dll
+*.pth
+data/
+outputs/

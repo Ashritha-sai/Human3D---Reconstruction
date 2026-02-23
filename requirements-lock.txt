@@ -23,6 +23,9 @@ ultralytics==8.1.24
 # Point cloud processing
 open3d==0.18.0
 
+# PLY file I/O
+plyfile==1.0.3
+
 # Segment Anything
 # Install from: pip install git+https://github.com/facebookresearch/segment-anything.git
 

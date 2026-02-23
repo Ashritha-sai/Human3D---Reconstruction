@@ -18,5 +18,8 @@ ultralytics>=8.0
 # Point cloud processing
 open3d>=0.18
 
+# PLY file I/O (used by ply_exporter for Gaussian splat export)
+plyfile>=1.0
+
 # Segment Anything
 git+https://github.com/facebookresearch/segment-anything.git

@@ -1,0 +1,47 @@
+# Gaussian Splatting Configuration
+# =================================
+# Configuration file for GaussianTrainer
+
+# Training parameters
+training:
+  num_iterations: 5000
+  log_every: 50
+  save_every: 500
+
+# Learning rates (per parameter group)
+learning_rates:
+  position: 1.6e-4      # Gaussian center positions (xyz)
+  scale: 5e-3           # Gaussian scales (log-space)
+  rotation: 1e-3        # Rotation quaternions
+  color: 2.5e-3         # Spherical harmonic coefficients
+  opacity: 5e-2         # Opacity values (logit-space)
+
+# Loss function weights
+loss_weights:
+  l1: 0.8               # L1 photometric loss
+  ssim: 0.2             # SSIM structural loss
+  lpips: 0.0            # LPIPS perceptual loss (expensive, usually disabled)
+  scale_reg: 0.01       # Scale regularization
+  opacity_reg: 0.01     # Opacity regularization
+
+# Densification parameters
+densification:
+  grad_threshold: 0.0002      # Gradient threshold for densification
+  opacity_threshold: 0.005    # Minimum opacity before pruning
+  densify_from_iter: 500      # Start densification after this iteration
+  densify_until_iter: 3000    # Stop densification after this iteration
+  densify_interval: 100       # Iterations between densification steps
+  max_gaussians: 100000       # Maximum number of Gaussians allowed
+
+# Initialization parameters
+initialization:
+  scale_init: 0.01            # Initial scale for Gaussians (meters)
+  opacity_init: 0.9           # Initial opacity value [0, 1]
+  position_noise: 0.001       # Random noise added to initial positions
+  sh_degree: 0                # Spherical harmonics degree (0 = DC only, 3 = full)
+
+# Rendering parameters
+rendering:
+  near_plane: 0.01            # Near clipping plane (meters)
+  far_plane: 100.0            # Far clipping plane (meters)
+  background_color: [0, 0, 0] # Background color (RGB, 0-1)

@@ -1,1 +1,1 @@
-# Human3D Test Suite
+"""Human3D test suite."""

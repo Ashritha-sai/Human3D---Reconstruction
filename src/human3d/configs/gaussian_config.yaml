@@ -1,0 +1,247 @@
+# =============================================================================
+# Gaussian Splatting Configuration
+# =============================================================================
+#
+# This configuration file contains hyperparameters for 3D Gaussian Splatting
+# training from a single RGB-D image with segmentation mask.
+#
+# Usage:
+#   from human3d.utils.config import load_config
+#   cfg = load_config("src/human3d/configs/gaussian_config.yaml")
+#
+# Reference values are based on the original 3DGS paper:
+#   https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Training Parameters
+# -----------------------------------------------------------------------------
+training:
+  # Total number of optimization iterations
+  # Range: 1000-30000 depending on scene complexity
+  # Single-image reconstruction: 1000-3000 typically sufficient
+  num_iterations: 1000
+
+  # Learning rates for different Gaussian parameters
+  # These are tuned for single-image reconstruction
+  learning_rates:
+    # Position learning rate (xyz coordinates)
+    # Lower = more stable but slower convergence
+    # Range: 0.0001 - 0.01
+    position: 0.001
+
+    # Color/SH coefficient learning rate
+    # Higher than position since color converges faster
+    # Range: 0.001 - 0.05
+    color: 0.01
+
+    # Scale learning rate (log-space)
+    # Range: 0.001 - 0.01
+    scale: 0.005
+
+    # Opacity learning rate (logit-space)
+    # Range: 0.01 - 0.1
+    opacity: 0.01
+
+    # Rotation learning rate (quaternion)
+    # Usually similar to or lower than position
+    # Range: 0.0001 - 0.005
+    rotation: 0.001
+
+  # Learning rate scheduling
+  scheduler:
+    # Whether to use learning rate decay
+    enabled: true
+
+    # Decay position LR to this fraction at end of training
+    position_lr_final_factor: 0.01
+
+    # Number of iterations for LR warmup
+    warmup_iterations: 100
+
+# -----------------------------------------------------------------------------
+# Loss Function Weights
+# -----------------------------------------------------------------------------
+loss_weights:
+  # L1 photometric loss weight
+  # Primary reconstruction loss
+  # Range: 0.5 - 1.0
+  l1: 0.8
+
+  # SSIM structural similarity loss weight
+  # Helps with perceptual quality
+  # Range: 0.1 - 0.5
+  ssim: 0.2
+
+  # LPIPS perceptual loss weight
+  # Expensive but improves perceptual quality
+  # Set to 0 to disable (faster training)
+  # Range: 0.0 - 0.2
+  lpips: 0.0
+
+  # Scale regularization weight
+  # Prevents degenerate Gaussian sizes
+  # Range: 0.0 - 0.01
+  scale_reg: 0.0
+
+  # Opacity regularization weight
+  # Encourages binary opacities (reduces floaters)
+  # Range: 0.0 - 0.01
+  opacity_reg: 0.0
+
+# -----------------------------------------------------------------------------
+# Initialization Parameters
+# -----------------------------------------------------------------------------
+initialization:
+  # Initial scale for Gaussians (meters)
+  # Should be appropriate for point cloud density
+  # Range: 0.001 - 0.1
+  scale_init: 0.01
+
+  # Initial opacity value [0, 1]
+  # Higher = more opaque starting points
+  # Range: 0.1 - 0.9
+  opacity_init: 0.5
+
+  # Random noise added to initial positions (meters)
+  # Helps break symmetry and improve optimization
+  # Range: 0.0 - 0.01
+  position_noise: 0.001
+
+  # Spherical harmonics degree for view-dependent color
+  # 0: View-independent (DC only) - fastest
+  # 1: First-order (4 coefficients) - subtle view effects
+  # 2: Second-order (9 coefficients)
+  # 3: Third-order (16 coefficients) - full view-dependence
+  # For single-image, degree 0 is usually sufficient
+  sh_degree: 0
+
+  # Number of nearest neighbors for scale estimation
+  # Higher = smoother scale distribution
+  # Range: 4 - 16
+  scale_knn_neighbors: 8
+
+# -----------------------------------------------------------------------------
+# Densification and Pruning
+# -----------------------------------------------------------------------------
+densification:
+  # Whether to enable adaptive density control
+  enabled: true
+
+  # Iterations between densification steps
+  # Range: 100 - 500
+  interval: 100
+
+  # Start densification after this many iterations
+  # Allows initial convergence before adding Gaussians
+  start_iteration: 100
+
+  # Stop densification after this iteration
+  # Final iterations focus on refinement
+  stop_iteration: 800
+
+  # Gradient threshold for densification
+  # Gaussians with position gradient > threshold are candidates
+  # Lower = more aggressive densification
+  # Range: 0.0001 - 0.001
+  grad_threshold: 0.0002
+
+  # Scale threshold for split vs clone decision
+  # Gaussians larger than this are split (subdivided)
+  # Gaussians smaller than this are cloned (duplicated)
+  # Units: Percentage of scene extent
+  scale_threshold_percent: 0.01
+
+  # Maximum number of Gaussians allowed
+  # Prevents memory issues
+  max_gaussians: 500000
+
+# -----------------------------------------------------------------------------
+# Pruning Parameters
+# -----------------------------------------------------------------------------
+pruning:
+  # Minimum opacity before pruning
+  # Gaussians below this threshold are removed
+  # Range: 0.001 - 0.05
+  opacity_threshold: 0.005
+
+  # Prune every N iterations (in addition to densification)
+  interval: 100
+
+  # Maximum screen-space size before pruning
+  # Removes Gaussians that project too large
+  # Units: Pixels
+  max_screen_size: 40
+
+# -----------------------------------------------------------------------------
+# Camera Parameters (Defaults)
+# -----------------------------------------------------------------------------
+# These can be overridden per-image if calibration is known
+camera:
+  # Default focal lengths (in pixels)
+  # For uncalibrated images, estimate based on field of view
+  # fx = width / (2 * tan(fov_x / 2))
+  fx: 1000.0
+  fy: 1000.0
+
+  # Principal point (optical center)
+  # null = use image center (recommended for uncalibrated)
+  cx: null
+  cy: null
+
+# -----------------------------------------------------------------------------
+# Output Settings
+# -----------------------------------------------------------------------------
+output:
+  # Save Gaussian PLY file
+  save_ply: true
+
+  # Save rendered images during training
+  save_renders: true
+
+  # Render every N iterations (for visualization)
+  render_interval: 100
+
+  # Resolution for rendered outputs
+  render_resolution:
+    - 512
+    - 512
+
+  # Save training metrics to TensorBoard
+  tensorboard: true
+
+  # Save checkpoints during training
+  save_checkpoints: false
+
+  # Checkpoint interval
+  checkpoint_interval: 500
+
+# -----------------------------------------------------------------------------
+# Rendering Settings
+# -----------------------------------------------------------------------------
+rendering:
+  # Background color for rendering [R, G, B]
+  # Range: [0, 1] per channel
+  background_color:
+    - 0.0
+    - 0.0
+    - 0.0
+
+  # Whether to use anti-aliasing in rasterization
+  antialiasing: true
+
+  # Tile size for rasterization (gsplat parameter)
+  # Larger tiles = faster but more memory
+  tile_size: 16
+
+# -----------------------------------------------------------------------------
+# Device Settings
+# -----------------------------------------------------------------------------
+device:
+  # Preferred computation device
+  # Options: "cuda", "cpu"
+  prefer: "cuda"
+
+  # Mixed precision training
+  # Faster and less memory but may affect quality slightly
+  mixed_precision: false

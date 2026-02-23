@@ -1,0 +1,2353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>gaussian_trainer API documentation</title>
+<meta name="description" content="Gaussian Splatting Trainer Module …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>gaussian_trainer</code></h1>
+</header>
+<section id="section-intro">
+<p>Gaussian Splatting Trainer Module</p>
+<p>This module provides the core training loop for 3D Gaussian Splatting reconstruction
+from a single RGB-D image with segmentation mask. It handles initialization of
+Gaussian primitives from depth data and optimizes their parameters to minimize
+photometric loss.</p>
+<p>The implementation uses gsplat for efficient differentiable rasterization.</p>
+<h2 id="references">References</h2>
+<ul>
+<li>3D Gaussian Splatting: <a href="https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/">https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/</a></li>
+<li>gsplat library: <a href="https://github.com/nerfstudio-project/gsplat">https://github.com/nerfstudio-project/gsplat</a></li>
+</ul>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="gaussian_trainer.CameraParams"><code class="flex name class">
+<span>class <span class="ident">CameraParams</span></span>
+<span>(</span><span>fx: float,<br>fy: float,<br>cx: float,<br>cy: float,<br>width: int,<br>height: int,<br>world_to_camera: Optional[np.ndarray] = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class CameraParams:
+    &#34;&#34;&#34;
+    Camera intrinsic and extrinsic parameters.
+
+    Attributes:
+        fx: Focal length in x direction (pixels).
+        fy: Focal length in y direction (pixels).
+        cx: Principal point x coordinate (pixels).
+        cy: Principal point y coordinate (pixels).
+        width: Image width in pixels.
+        height: Image height in pixels.
+        world_to_camera: 4x4 transformation matrix from world to camera coordinates.
+            Default is identity (camera at origin looking down -Z).
+    &#34;&#34;&#34;
+
+    fx: float
+    fy: float
+    cx: float
+    cy: float
+    width: int
+    height: int
+    world_to_camera: Optional[np.ndarray] = None
+
+    def __post_init__(self):
+        if self.world_to_camera is None:
+            self.world_to_camera = np.eye(4, dtype=np.float32)</code></pre>
+</details>
+<div class="desc"><p>Camera intrinsic and extrinsic parameters.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>fx</code></strong></dt>
+<dd>Focal length in x direction (pixels).</dd>
+<dt><strong><code>fy</code></strong></dt>
+<dd>Focal length in y direction (pixels).</dd>
+<dt><strong><code>cx</code></strong></dt>
+<dd>Principal point x coordinate (pixels).</dd>
+<dt><strong><code>cy</code></strong></dt>
+<dd>Principal point y coordinate (pixels).</dd>
+<dt><strong><code>width</code></strong></dt>
+<dd>Image width in pixels.</dd>
+<dt><strong><code>height</code></strong></dt>
+<dd>Image height in pixels.</dd>
+<dt><strong><code>world_to_camera</code></strong></dt>
+<dd>4x4 transformation matrix from world to camera coordinates.
+Default is identity (camera at origin looking down -Z).</dd>
+</dl></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="gaussian_trainer.CameraParams.cx"><code class="name">var <span class="ident">cx</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.CameraParams.cy"><code class="name">var <span class="ident">cy</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.CameraParams.fx"><code class="name">var <span class="ident">fx</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.CameraParams.fy"><code class="name">var <span class="ident">fy</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.CameraParams.height"><code class="name">var <span class="ident">height</span> : int</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.CameraParams.width"><code class="name">var <span class="ident">width</span> : int</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.CameraParams.world_to_camera"><code class="name">var <span class="ident">world_to_camera</span> : numpy.ndarray | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="gaussian_trainer.GaussianConfig"><code class="flex name class">
+<span>class <span class="ident">GaussianConfig</span></span>
+<span>(</span><span>num_iterations: int = 1000,<br>lr_position: float = 0.001,<br>lr_color: float = 0.01,<br>lr_scale: float = 0.005,<br>lr_opacity: float = 0.01,<br>lr_rotation: float = 0.001,<br>loss_weight_l1: float = 0.8,<br>loss_weight_ssim: float = 0.2,<br>loss_weight_lpips: float = 0.0,<br>densify_from_iter: int = 500,<br>densify_until_iter: int = 3000,<br>densify_interval: int = 100,<br>densify_grad_threshold: float = 0.0002,<br>prune_opacity_threshold: float = 0.005,<br>max_gaussians: int = 100000,<br>scale_init: float = 0.01,<br>opacity_init: float = 0.5,<br>position_noise: float = 0.001,<br>sh_degree: int = 0)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class GaussianConfig:
+    &#34;&#34;&#34;
+    Configuration for Gaussian Splatting training.
+
+    Attributes:
+        num_iterations: Total number of optimization iterations.
+        lr_position: Learning rate for Gaussian center positions (xyz).
+        lr_color: Learning rate for spherical harmonic coefficients.
+        lr_scale: Learning rate for Gaussian scales (log-space).
+        lr_opacity: Learning rate for opacity (logit-space).
+        lr_rotation: Learning rate for rotation quaternions.
+        loss_weight_l1: Weight for L1 photometric loss.
+        loss_weight_ssim: Weight for SSIM structural loss.
+        loss_weight_lpips: Weight for LPIPS perceptual loss.
+        densify_from_iter: Start densification after this iteration.
+        densify_until_iter: Stop densification after this iteration.
+        densify_interval: Iterations between densification steps.
+        densify_grad_threshold: Gradient threshold for densification.
+        prune_opacity_threshold: Minimum opacity before pruning.
+        max_gaussians: Maximum number of Gaussians allowed.
+        scale_init: Initial scale for Gaussians (meters).
+        opacity_init: Initial opacity value [0, 1].
+        position_noise: Random noise added to initial positions (meters).
+        sh_degree: Spherical harmonics degree (0 = DC only, 3 = full).
+    &#34;&#34;&#34;
+
+    num_iterations: int = 1000
+    lr_position: float = 0.001
+    lr_color: float = 0.01
+    lr_scale: float = 0.005
+    lr_opacity: float = 0.01
+    lr_rotation: float = 0.001
+    loss_weight_l1: float = 0.8
+    loss_weight_ssim: float = 0.2
+    loss_weight_lpips: float = 0.0
+    # Densification parameters
+    densify_from_iter: int = 500
+    densify_until_iter: int = 3000
+    densify_interval: int = 100
+    densify_grad_threshold: float = 0.0002
+    prune_opacity_threshold: float = 0.005
+    max_gaussians: int = 100000
+    # Initialization parameters
+    scale_init: float = 0.01
+    opacity_init: float = 0.5
+    position_noise: float = 0.001
+    sh_degree: int = 0</code></pre>
+</details>
+<div class="desc"><p>Configuration for Gaussian Splatting training.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>num_iterations</code></strong></dt>
+<dd>Total number of optimization iterations.</dd>
+<dt><strong><code>lr_position</code></strong></dt>
+<dd>Learning rate for Gaussian center positions (xyz).</dd>
+<dt><strong><code>lr_color</code></strong></dt>
+<dd>Learning rate for spherical harmonic coefficients.</dd>
+<dt><strong><code>lr_scale</code></strong></dt>
+<dd>Learning rate for Gaussian scales (log-space).</dd>
+<dt><strong><code>lr_opacity</code></strong></dt>
+<dd>Learning rate for opacity (logit-space).</dd>
+<dt><strong><code>lr_rotation</code></strong></dt>
+<dd>Learning rate for rotation quaternions.</dd>
+<dt><strong><code>loss_weight_l1</code></strong></dt>
+<dd>Weight for L1 photometric loss.</dd>
+<dt><strong><code>loss_weight_ssim</code></strong></dt>
+<dd>Weight for SSIM structural loss.</dd>
+<dt><strong><code>loss_weight_lpips</code></strong></dt>
+<dd>Weight for LPIPS perceptual loss.</dd>
+<dt><strong><code>densify_from_iter</code></strong></dt>
+<dd>Start densification after this iteration.</dd>
+<dt><strong><code>densify_until_iter</code></strong></dt>
+<dd>Stop densification after this iteration.</dd>
+<dt><strong><code>densify_interval</code></strong></dt>
+<dd>Iterations between densification steps.</dd>
+<dt><strong><code>densify_grad_threshold</code></strong></dt>
+<dd>Gradient threshold for densification.</dd>
+<dt><strong><code>prune_opacity_threshold</code></strong></dt>
+<dd>Minimum opacity before pruning.</dd>
+<dt><strong><code>max_gaussians</code></strong></dt>
+<dd>Maximum number of Gaussians allowed.</dd>
+<dt><strong><code>scale_init</code></strong></dt>
+<dd>Initial scale for Gaussians (meters).</dd>
+<dt><strong><code>opacity_init</code></strong></dt>
+<dd>Initial opacity value [0, 1].</dd>
+<dt><strong><code>position_noise</code></strong></dt>
+<dd>Random noise added to initial positions (meters).</dd>
+<dt><strong><code>sh_degree</code></strong></dt>
+<dd>Spherical harmonics degree (0 = DC only, 3 = full).</dd>
+</dl></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="gaussian_trainer.GaussianConfig.densify_from_iter"><code class="name">var <span class="ident">densify_from_iter</span> : int</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.GaussianConfig.densify_grad_threshold"><code class="name">var <span class="ident">densify_grad_threshold</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.GaussianConfig.densify_interval"><code class="name">var <span class="ident">densify_interval</span> : int</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.GaussianConfig.densify_until_iter"><code class="name">var <span class="ident">densify_until_iter</span> : int</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.GaussianConfig.loss_weight_l1"><code class="name">var <span class="ident">loss_weight_l1</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.GaussianConfig.loss_weight_lpips"><code class="name">var <span class="ident">loss_weight_lpips</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.GaussianConfig.loss_weight_ssim"><code class="name">var <span class="ident">loss_weight_ssim</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.GaussianConfig.lr_color"><code class="name">var <span class="ident">lr_color</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.GaussianConfig.lr_opacity"><code class="name">var <span class="ident">lr_opacity</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.GaussianConfig.lr_position"><code class="name">var <span class="ident">lr_position</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.GaussianConfig.lr_rotation"><code class="name">var <span class="ident">lr_rotation</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.GaussianConfig.lr_scale"><code class="name">var <span class="ident">lr_scale</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.GaussianConfig.max_gaussians"><code class="name">var <span class="ident">max_gaussians</span> : int</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.GaussianConfig.num_iterations"><code class="name">var <span class="ident">num_iterations</span> : int</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.GaussianConfig.opacity_init"><code class="name">var <span class="ident">opacity_init</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.GaussianConfig.position_noise"><code class="name">var <span class="ident">position_noise</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.GaussianConfig.prune_opacity_threshold"><code class="name">var <span class="ident">prune_opacity_threshold</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.GaussianConfig.scale_init"><code class="name">var <span class="ident">scale_init</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="gaussian_trainer.GaussianConfig.sh_degree"><code class="name">var <span class="ident">sh_degree</span> : int</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="gaussian_trainer.GaussianTrainer"><code class="flex name class">
+<span>class <span class="ident">GaussianTrainer</span></span>
+<span>(</span><span>rgb: np.ndarray,<br>depth: np.ndarray,<br>mask: np.ndarray,<br>camera_params: <a title="gaussian_trainer.CameraParams" href="#gaussian_trainer.CameraParams">CameraParams</a>,<br>config: <a title="gaussian_trainer.GaussianConfig" href="#gaussian_trainer.GaussianConfig">GaussianConfig</a>,<br>device: str = 'cuda')</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GaussianTrainer:
+    &#34;&#34;&#34;
+    Trainer for 3D Gaussian Splatting from a single RGB-D image.
+
+    This class handles:
+    1. Initialization of Gaussian primitives from depth map
+    2. Optimization of Gaussian parameters (position, color, scale, opacity, rotation)
+    3. Adaptive density control (densification and pruning)
+    4. Rendering novel views
+    5. Exporting trained Gaussians to PLY format
+
+    The Gaussian representation consists of:
+        - means: (N, 3) center positions in world coordinates
+        - scales: (N, 3) axis-aligned scales (log-space during optimization)
+        - rotations: (N, 4) rotation quaternions (wxyz format)
+        - sh_coeffs: (N, C, 3) spherical harmonic coefficients for view-dependent color
+        - opacities: (N,) opacity values (logit-space during optimization)
+
+    Attributes:
+        rgb: Original RGB image as torch.Tensor, shape (H, W, 3), range [0, 1].
+        depth: Depth map as torch.Tensor, shape (H, W), in meters.
+        mask: Binary segmentation mask as torch.Tensor, shape (H, W), {0, 1}.
+        camera: CameraParams instance with intrinsics and pose.
+        config: GaussianConfig instance with training hyperparameters.
+        device: torch.device for computation (&#39;cuda&#39; or &#39;cpu&#39;).
+
+    Example:
+        &gt;&gt;&gt; trainer = GaussianTrainer(rgb, depth, mask, camera_params, config)
+        &gt;&gt;&gt; trainer.initialize_gaussians()
+        &gt;&gt;&gt; trainer.optimize(num_iterations=1000)
+        &gt;&gt;&gt; trainer.export_ply(&#34;output/gaussians.ply&#34;)
+    &#34;&#34;&#34;
+
+    def __init__(
+        self,
+        rgb: np.ndarray,
+        depth: np.ndarray,
+        mask: np.ndarray,
+        camera_params: CameraParams,
+        config: GaussianConfig,
+        device: str = &#34;cuda&#34;,
+    ) -&gt; None:
+        &#34;&#34;&#34;
+        Initialize the Gaussian trainer with input data.
+
+        Args:
+            rgb: Input RGB image.
+                Shape: (H, W, 3)
+                dtype: uint8 or float32
+                Range: [0, 255] for uint8, [0, 1] for float32
+
+            depth: Depth map (metric or relative).
+                Shape: (H, W)
+                dtype: float32
+                Range: Positive values, higher = farther
+
+            mask: Binary segmentation mask indicating subject pixels.
+                Shape: (H, W)
+                dtype: uint8 or bool
+                Values: 0 = background, 1 = subject
+
+            camera_params: Camera intrinsic and extrinsic parameters.
+                See CameraParams dataclass for details.
+
+            config: Training configuration.
+                See GaussianConfig dataclass for details.
+
+            device: Computation device, either &#39;cuda&#39; or &#39;cpu&#39;.
+                Default: &#39;cuda&#39;
+
+        Raises:
+            ValueError: If input shapes are incompatible.
+            RuntimeError: If CUDA is requested but not available.
+        &#34;&#34;&#34;
+        # Validate device
+        if device == &#34;cuda&#34; and not torch.cuda.is_available():
+            print(&#34;[WARN] CUDA not available, falling back to CPU&#34;)
+            device = &#34;cpu&#34;
+        self.device = device
+
+        # Validate input shapes
+        if rgb.ndim != 3 or rgb.shape[2] != 3:
+            raise ValueError(f&#34;RGB must have shape (H, W, 3), got {rgb.shape}&#34;)
+        if depth.ndim != 2:
+            raise ValueError(f&#34;Depth must have shape (H, W), got {depth.shape}&#34;)
+        if mask.ndim != 2:
+            raise ValueError(f&#34;Mask must have shape (H, W), got {mask.shape}&#34;)
+
+        h, w = depth.shape
+        if rgb.shape[:2] != (h, w):
+            raise ValueError(f&#34;RGB shape {rgb.shape[:2]} doesn&#39;t match depth shape {(h, w)}&#34;)
+        if mask.shape != (h, w):
+            raise ValueError(f&#34;Mask shape {mask.shape} doesn&#39;t match depth shape {(h, w)}&#34;)
+
+        # Convert RGB to float32 [0, 1] if needed
+        if rgb.dtype == np.uint8:
+            rgb = rgb.astype(np.float32) / 255.0
+        elif rgb.max() &gt; 1.0:
+            rgb = rgb.astype(np.float32) / 255.0
+
+        # Convert to torch tensors
+        self.rgb = torch.from_numpy(rgb.astype(np.float32)).to(device)  # (H, W, 3)
+        self.depth = torch.from_numpy(depth.astype(np.float32)).to(device)  # (H, W)
+        self.mask = torch.from_numpy(mask.astype(np.float32)).to(device)  # (H, W)
+
+        # Store camera params and config
+        self.camera = camera_params
+        self.config = config
+
+        # Initialize placeholders for Gaussian parameters (set by initialize_gaussians)
+        self.means: Optional[nn.Parameter] = None
+        self.scales: Optional[nn.Parameter] = None
+        self.rotations: Optional[nn.Parameter] = None
+        self.sh_coeffs: Optional[nn.Parameter] = None
+        self.opacities: Optional[nn.Parameter] = None
+
+        # Optimizer (set by initialize_gaussians)
+        self.optimizer: Optional[torch.optim.Adam] = None
+
+        # For tracking gradients during densification
+        self._xyz_gradient_accum: Optional[Tensor] = None
+        self._denom: Optional[Tensor] = None
+
+    def initialize_gaussians(self) -&gt; int:
+        &#34;&#34;&#34;
+        Initialize Gaussian primitives from depth map and mask.
+
+        This method:
+        1. Unprojects masked depth pixels to 3D points using camera intrinsics
+        2. Samples RGB colors from corresponding pixels
+        3. Estimates initial scales based on local point density
+        4. Sets default rotation (identity quaternion) and opacity
+
+        The number of Gaussians equals the number of valid masked pixels.
+
+        Returns:
+            int: Number of Gaussians initialized (N).
+
+        Side Effects:
+            Initializes the following trainable parameters:
+                - self.means: (N, 3) Gaussian centers
+                - self.scales: (N, 3) log-scale parameters
+                - self.rotations: (N, 4) quaternions (wxyz)
+                - self.sh_coeffs: (N, 1, 3) or (N, 16, 3) SH coefficients
+                - self.opacities: (N,) logit-opacity values
+
+        Mathematical Operations:
+            Unprojection from pixel (u, v) with depth d:
+                X = (u - cx) * d / fx
+                Y = (v - cy) * d / fy
+                Z = d
+
+            Scale estimation via k-NN:
+                scale_i = mean(||p_i - p_neighbors||) / 2
+
+            Opacity initialization:
+                logit_opacity = log(opacity_init / (1 - opacity_init))
+
+        Example:
+            &gt;&gt;&gt; num_gaussians = trainer.initialize_gaussians()
+            &gt;&gt;&gt; print(f&#34;Initialized {num_gaussians} Gaussians&#34;)
+        &#34;&#34;&#34;
+        from .gaussian_utils import (
+            normalize_depth_to_metric,
+            depth_to_xyz,
+            estimate_point_scales,
+            rgb_to_spherical_harmonics,
+            inverse_sigmoid,
+        )
+
+        # Normalize depth to pseudo-metric range (same as original pointcloud.py)
+        depth_normalized = normalize_depth_to_metric(self.depth, min_depth=0.5, max_depth=2.5)
+
+        # Get 3D points from depth (using mask to filter)
+        xyz = depth_to_xyz(
+            depth_normalized,
+            self.mask,
+            fx=self.camera.fx,
+            fy=self.camera.fy,
+            cx=self.camera.cx,
+            cy=self.camera.cy,
+        )
+
+        n_points = xyz.shape[0]
+        if n_points == 0:
+            raise ValueError(&#34;No valid points found in masked region&#34;)
+
+        # Add small position noise for better optimization
+        if self.config.position_noise &gt; 0:
+            noise = torch.randn_like(xyz) * self.config.position_noise
+            xyz = xyz + noise
+
+        # Sample RGB colors from image at masked pixel locations
+        # Get the mask indices
+        mask_bool = self.mask &gt; 0
+        valid_mask = mask_bool &amp; (depth_normalized &gt; 0) &amp; torch.isfinite(depth_normalized)
+
+        # Flatten and get valid indices
+        rgb_flat = self.rgb.reshape(-1, 3)  # (H*W, 3)
+        valid_flat = valid_mask.reshape(-1)
+
+        rgb_colors = rgb_flat[valid_flat]  # (N, 3)
+
+        # Convert RGB to spherical harmonics
+        sh_degree = self.config.sh_degree
+        sh_coeffs = rgb_to_spherical_harmonics(rgb_colors, degree=sh_degree)  # (N, num_sh, 3)
+
+        # Estimate scales using k-NN
+        scales = estimate_point_scales(xyz, k_neighbors=8)  # (N, 3)
+
+        # Convert scales to log-space for optimization
+        log_scales = torch.log(scales + 1e-8)
+
+        # Initialize rotations as identity quaternions (w, x, y, z) = (1, 0, 0, 0)
+        rotations = torch.zeros((n_points, 4), dtype=torch.float32, device=self.device)
+        rotations[:, 0] = 1.0  # w = 1
+
+        # Initialize opacities in logit space
+        # Default opacity = 0.9
+        opacity_init = self.config.opacity_init
+        # Clamp to avoid infinity
+        opacity_init = max(0.01, min(0.99, opacity_init))
+        logit_opacity = inverse_sigmoid(
+            torch.full((n_points,), opacity_init, dtype=torch.float32, device=self.device)
+        )
+
+        # Create trainable parameters
+        self.means = nn.Parameter(xyz.contiguous())
+        self.scales = nn.Parameter(log_scales.contiguous())
+        self.rotations = nn.Parameter(rotations.contiguous())
+        self.sh_coeffs = nn.Parameter(sh_coeffs.contiguous())
+        self.opacities = nn.Parameter(logit_opacity.contiguous())
+
+        # Set up optimizer with per-parameter learning rates
+        self.optimizer = torch.optim.Adam([
+            {&#39;params&#39;: [self.means], &#39;lr&#39;: self.config.lr_position, &#39;name&#39;: &#39;means&#39;},
+            {&#39;params&#39;: [self.scales], &#39;lr&#39;: self.config.lr_scale, &#39;name&#39;: &#39;scales&#39;},
+            {&#39;params&#39;: [self.rotations], &#39;lr&#39;: self.config.lr_rotation, &#39;name&#39;: &#39;rotations&#39;},
+            {&#39;params&#39;: [self.sh_coeffs], &#39;lr&#39;: self.config.lr_color, &#39;name&#39;: &#39;sh_coeffs&#39;},
+            {&#39;params&#39;: [self.opacities], &#39;lr&#39;: self.config.lr_opacity, &#39;name&#39;: &#39;opacities&#39;},
+        ])
+
+        # Initialize gradient accumulators for densification
+        self._xyz_gradient_accum = torch.zeros((n_points, 1), device=self.device)
+        self._denom = torch.zeros((n_points, 1), device=self.device)
+
+        return n_points
+
+    def optimize(
+        self,
+        num_iterations: Optional[int] = None,
+        log_every: int = 50,
+        save_every: int = 500,
+        output_dir: Optional[str] = None,
+    ) -&gt; Dict[str, list]:
+        &#34;&#34;&#34;
+        Run the main optimization loop.
+
+        Optimizes Gaussian parameters to minimize photometric loss between
+        rendered and target images. Periodically performs densification
+        and pruning to improve reconstruction quality.
+
+        Args:
+            num_iterations: Number of optimization steps.
+                If None, uses config.num_iterations.
+                Default: None
+
+            log_every: Print loss every N iterations.
+                Default: 50
+
+            save_every: Save rendered image every N iterations.
+                Default: 500
+
+            output_dir: Directory to save rendered images.
+                If None, uses &#39;./outputs&#39;.
+                Default: None
+
+        Returns:
+            Dict[str, list]: Training history containing:
+                - &#39;loss&#39;: Total loss per iteration
+                - &#39;l1&#39;: L1 component per iteration
+                - &#39;ssim&#39;: SSIM component per iteration
+                - &#39;num_gaussians&#39;: Gaussian count per iteration
+                - &#39;iteration&#39;: Iteration numbers
+
+        Side Effects:
+            - Updates all trainable Gaussian parameters
+            - May change number of Gaussians via densification/pruning
+            - Prints progress every log_every iterations
+            - Saves rendered images every save_every iterations
+
+        Training Loop:
+            For each iteration:
+                1. Render image from training viewpoint
+                2. Compute loss (L1 + SSIM + optional LPIPS)
+                3. Backpropagate gradients
+                4. Update parameters via optimizer
+                5. If iteration % densify_interval == 0:
+                   - Densify Gaussians with high gradient
+                   - Prune Gaussians with low opacity
+
+        Example:
+            &gt;&gt;&gt; history = trainer.optimize(num_iterations=1000)
+            &gt;&gt;&gt; plt.plot(history[&#39;loss&#39;])
+            &gt;&gt;&gt; plt.title(&#39;Training Loss&#39;)
+        &#34;&#34;&#34;
+        from .losses import GaussianLosses, save_comparison_image
+        import cv2
+
+        # Validate state
+        if self.means is None:
+            raise RuntimeError(&#34;Must call initialize_gaussians() before optimize()&#34;)
+
+        # Set up parameters
+        if num_iterations is None:
+            num_iterations = self.config.num_iterations
+
+        if output_dir is None:
+            output_dir = Path(&#34;./outputs&#34;)
+        else:
+            output_dir = Path(output_dir)
+        output_dir.mkdir(parents=True, exist_ok=True)
+
+        # Create optimizer with recommended learning rates
+        # Override the default optimizer with specific learning rates
+        self.optimizer = torch.optim.Adam([
+            {&#39;params&#39;: [self.means], &#39;lr&#39;: 1.6e-4, &#39;name&#39;: &#39;means&#39;},
+            {&#39;params&#39;: [self.scales], &#39;lr&#39;: 5e-3, &#39;name&#39;: &#39;scales&#39;},
+            {&#39;params&#39;: [self.rotations], &#39;lr&#39;: 1e-3, &#39;name&#39;: &#39;rotations&#39;},
+            {&#39;params&#39;: [self.sh_coeffs], &#39;lr&#39;: 2.5e-3, &#39;name&#39;: &#39;sh_coeffs&#39;},
+            {&#39;params&#39;: [self.opacities], &#39;lr&#39;: 5e-2, &#39;name&#39;: &#39;opacities&#39;},
+        ])
+
+        # Create loss function
+        losses = GaussianLosses(
+            weight_l1=self.config.loss_weight_l1,
+            weight_ssim=self.config.loss_weight_ssim,
+            weight_lpips=self.config.loss_weight_lpips,
+            weight_scale_reg=0.01,
+            weight_opacity_reg=0.01,
+            device=self.device,
+        )
+
+        # Initialize history
+        history = {
+            &#39;loss&#39;: [],
+            &#39;l1&#39;: [],
+            &#39;ssim&#39;: [],
+            &#39;lpips&#39;: [],
+            &#39;num_gaussians&#39;: [],
+            &#39;iteration&#39;: [],
+            &#39;densify_added&#39;: [],
+            &#39;densify_removed&#39;: [],
+        }
+
+        # Target image and mask
+        target_rgb = self.rgb  # (H, W, 3)
+        mask = self.mask  # (H, W)
+
+        # Initialize gradient accumulators
+        self._xyz_gradient_accum = torch.zeros((self.num_gaussians, 1), device=self.device)
+        self._denom = torch.zeros((self.num_gaussians, 1), device=self.device)
+
+        # Densification settings
+        densify_from = self.config.densify_from_iter
+        densify_until = self.config.densify_until_iter
+        densify_interval = self.config.densify_interval
+
+        print(f&#34;Starting optimization for {num_iterations} iterations&#34;)
+        print(f&#34;  Gaussians: {self.num_gaussians}&#34;)
+        print(f&#34;  Image size: {target_rgb.shape[0]}x{target_rgb.shape[1]}&#34;)
+        print(f&#34;  Device: {self.device}&#34;)
+        print(f&#34;  Densification: iter {densify_from} to {densify_until}, every {densify_interval}&#34;)
+        print(&#34;-&#34; * 50)
+
+        # Training loop
+        for iteration in range(num_iterations):
+            self.optimizer.zero_grad()
+
+            # Render current view
+            rendered_rgb, rendered_depth, rendered_alpha = self.render_view()
+
+            # Compute loss
+            total_loss, components = losses.total_loss(
+                rendered=rendered_rgb,
+                target=target_rgb,
+                mask=mask,
+                scales=self.scales,
+                opacities=self.opacities,
+            )
+
+            # Check for NaN
+            if torch.isnan(total_loss):
+                print(f&#34;[WARN] NaN loss at iteration {iteration}, stopping&#34;)
+                break
+
+            # Backward pass
+            total_loss.backward()
+
+            # Accumulate gradients for densification (before clipping)
+            self._accumulate_gradients()
+
+            # Gradient clipping to prevent explosions
+            torch.nn.utils.clip_grad_norm_(
+                [self.means, self.scales, self.rotations, self.sh_coeffs, self.opacities],
+                max_norm=1.0
+            )
+
+            # Optimizer step
+            self.optimizer.step()
+
+            # Normalize quaternions after update
+            with torch.no_grad():
+                self.rotations.data = self.rotations.data / (
+                    torch.norm(self.rotations.data, dim=-1, keepdim=True) + 1e-8
+                )
+
+            # Densification and pruning
+            num_added, num_removed = 0, 0
+            if (iteration &gt;= densify_from and
+                iteration &lt; densify_until and
+                iteration % densify_interval == 0 and
+                iteration &gt; 0):
+                num_added, num_removed = self._densify_and_prune()
+                if num_added &gt; 0 or num_removed &gt; 0:
+                    print(f&#34;  [Densify] Added: {num_added}, Removed: {num_removed}, Total: {self.num_gaussians}&#34;)
+
+            # Record history
+            history[&#39;loss&#39;].append(components.get(&#39;total&#39;, total_loss.item()))
+            history[&#39;l1&#39;].append(components.get(&#39;l1&#39;, 0.0))
+            history[&#39;ssim&#39;].append(components.get(&#39;ssim&#39;, 0.0))
+            history[&#39;lpips&#39;].append(components.get(&#39;lpips&#39;, 0.0))
+            history[&#39;num_gaussians&#39;].append(self.num_gaussians)
+            history[&#39;iteration&#39;].append(iteration)
+            history[&#39;densify_added&#39;].append(num_added)
+            history[&#39;densify_removed&#39;].append(num_removed)
+
+            # Logging
+            if iteration % log_every == 0 or iteration == num_iterations - 1:
+                loss_str = f&#34;Iter {iteration:5d}/{num_iterations}&#34;
+                loss_str += f&#34; | Loss: {total_loss.item():.4f}&#34;
+                loss_str += f&#34; | L1: {components.get(&#39;l1&#39;, 0):.4f}&#34;
+                loss_str += f&#34; | SSIM: {components.get(&#39;ssim&#39;, 0):.4f}&#34;
+                loss_str += f&#34; | Gaussians: {self.num_gaussians}&#34;
+                print(loss_str)
+
+            # Save rendered image
+            if save_every &gt; 0 and (iteration % save_every == 0 or iteration == num_iterations - 1):
+                self._save_iteration_image(
+                    rendered_rgb, target_rgb, iteration, output_dir
+                )
+
+        print(&#34;-&#34; * 50)
+        print(f&#34;Optimization complete!&#34;)
+        print(f&#34;  Final loss: {history[&#39;loss&#39;][-1]:.4f}&#34;)
+        print(f&#34;  Gaussians: {self.num_gaussians}&#34;)
+
+        return history
+
+    def _save_iteration_image(
+        self,
+        rendered: Tensor,
+        target: Tensor,
+        iteration: int,
+        output_dir: Path,
+    ) -&gt; None:
+        &#34;&#34;&#34;Save rendered image for visualization.&#34;&#34;&#34;
+        import cv2
+
+        # Detach and convert to numpy
+        rendered_np = rendered.detach().cpu().numpy()
+        rendered_np = np.clip(rendered_np, 0, 1)
+
+        # Convert RGB to BGR for OpenCV
+        rendered_bgr = (rendered_np[:, :, ::-1] * 255).astype(np.uint8)
+
+        # Save
+        filename = output_dir / f&#34;iteration_{iteration:05d}.png&#34;
+        cv2.imwrite(str(filename), rendered_bgr)
+
+        # Also save comparison image
+        target_np = target.detach().cpu().numpy()
+        target_np = np.clip(target_np, 0, 1)
+
+        # Side by side: target | rendered | difference
+        diff_np = np.abs(target_np - rendered_np)
+        diff_enhanced = np.clip(diff_np * 5.0, 0, 1)
+
+        comparison = np.concatenate([target_np, rendered_np, diff_enhanced], axis=1)
+        comparison_bgr = (comparison[:, :, ::-1] * 255).astype(np.uint8)
+
+        comparison_filename = output_dir / f&#34;comparison_{iteration:05d}.png&#34;
+        cv2.imwrite(str(comparison_filename), comparison_bgr)
+
+    def render_view(
+        self,
+        camera_pose: Optional[np.ndarray] = None,
+        intrinsics: Optional[CameraParams] = None,
+    ) -&gt; Tuple[Tensor, Tensor, Tensor]:
+        &#34;&#34;&#34;
+        Render the Gaussian splats from a given camera viewpoint.
+
+        Uses differentiable rasterization via gsplat to project 3D Gaussians
+        to a 2D image. Supports rendering from the training view or novel views.
+
+        Args:
+            camera_pose: 4x4 world-to-camera transformation matrix.
+                Shape: (4, 4)
+                dtype: float32
+                If None, uses the training camera pose.
+                Default: None
+
+            intrinsics: Camera intrinsic parameters for rendering.
+                If None, uses the training camera intrinsics.
+                Default: None
+
+        Returns:
+            Tuple[Tensor, Tensor, Tensor]: Rendered outputs
+                - rgb: Rendered RGB image
+                    Shape: (H, W, 3)
+                    Range: [0, 1]
+
+                - depth: Rendered depth map
+                    Shape: (H, W)
+                    Range: [0, inf) meters
+
+                - alpha: Rendered alpha/opacity map
+                    Shape: (H, W)
+                    Range: [0, 1]
+
+        Mathematical Operations:
+            For each Gaussian i:
+                1. Transform mean to camera space: p_cam = R @ p_world + t
+                2. Project to image plane: u = fx * x/z + cx, v = fy * y/z + cy
+                3. Compute 2D covariance from 3D covariance + Jacobian
+                4. Evaluate Gaussian contribution per pixel
+                5. Alpha-composite front-to-back
+
+        Example:
+            &gt;&gt;&gt; rgb, depth, alpha = trainer.render_view()
+            &gt;&gt;&gt; plt.imshow(rgb.cpu().numpy())
+
+            &gt;&gt;&gt; # Render from rotated viewpoint
+            &gt;&gt;&gt; R = rotation_matrix_y(np.pi / 6)  # 30 degree rotation
+            &gt;&gt;&gt; pose = np.eye(4)
+            &gt;&gt;&gt; pose[:3, :3] = R
+            &gt;&gt;&gt; rgb_novel, _, _ = trainer.render_view(camera_pose=pose)
+        &#34;&#34;&#34;
+        from .gaussian_utils import (
+            create_camera_intrinsics,
+            create_front_camera_pose,
+            spherical_harmonics_to_rgb,
+            sigmoid,
+        )
+
+        # Get camera parameters
+        if intrinsics is None:
+            intrinsics = self.camera
+
+        H, W = intrinsics.height, intrinsics.width
+        fx, fy = intrinsics.fx, intrinsics.fy
+        cx, cy = intrinsics.cx, intrinsics.cy
+
+        # Get view matrix
+        if camera_pose is None:
+            viewmat = create_front_camera_pose(device=self.device)
+        else:
+            if isinstance(camera_pose, np.ndarray):
+                viewmat = torch.tensor(camera_pose, dtype=torch.float32, device=self.device)
+            else:
+                viewmat = camera_pose.to(self.device)
+
+        # Get intrinsics matrix
+        K = create_camera_intrinsics(fx, fy, cx, cy, device=self.device)
+
+        # Get Gaussian parameters
+        means = self.means  # (N, 3)
+        quats = self.rotations  # (N, 4) wxyz
+        scales = torch.exp(self.scales)  # (N, 3) - convert from log-space
+        opacities = sigmoid(self.opacities)  # (N,) - convert from logit-space
+        sh_coeffs = self.sh_coeffs  # (N, num_sh, 3)
+
+        # Normalize quaternions
+        quats = quats / (torch.norm(quats, dim=-1, keepdim=True) + 1e-8)
+
+        # Check if we can use gsplat (requires CUDA)
+        use_gsplat = self.device != &#34;cpu&#34; and torch.cuda.is_available()
+
+        if use_gsplat:
+            try:
+                return self._render_gsplat(
+                    means, quats, scales, opacities, sh_coeffs,
+                    viewmat, K, H, W
+                )
+            except Exception as e:
+                print(f&#34;[WARN] gsplat rendering failed: {e}, falling back to CPU renderer&#34;)
+                use_gsplat = False
+
+        # CPU fallback renderer
+        return self._render_cpu_fallback(
+            means, quats, scales, opacities, sh_coeffs,
+            viewmat, K, H, W
+        )
+
+    def _render_gsplat(
+        self,
+        means: Tensor,
+        quats: Tensor,
+        scales: Tensor,
+        opacities: Tensor,
+        sh_coeffs: Tensor,
+        viewmat: Tensor,
+        K: Tensor,
+        H: int,
+        W: int,
+    ) -&gt; Tuple[Tensor, Tensor, Tensor]:
+        &#34;&#34;&#34;Render using gsplat library (requires CUDA).&#34;&#34;&#34;
+        import os
+        # Set CUDA_HOME if not already set, to help gsplat find CUDA toolkit
+        if &#39;CUDA_HOME&#39; not in os.environ and &#39;CUDA_PATH&#39; not in os.environ:
+            cuda_paths = [
+                r&#39;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v13.1&#39;,
+                r&#39;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.4&#39;,
+                r&#39;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.1&#39;,
+            ]
+            for cuda_path in cuda_paths:
+                if os.path.exists(cuda_path):
+                    os.environ[&#39;CUDA_HOME&#39;] = cuda_path
+                    break
+
+        from gsplat import rasterization
+
+        # Prepare inputs for gsplat
+        # gsplat expects: viewmats (C, 4, 4), Ks (C, 3, 3)
+        viewmats = viewmat.unsqueeze(0)  # (1, 4, 4)
+        Ks = K.unsqueeze(0)  # (1, 3, 3)
+
+        # Determine SH degree from coefficient shape
+        num_sh = sh_coeffs.shape[1]
+        sh_degree = int(np.sqrt(num_sh)) - 1
+
+        # Rasterize
+        render_colors, render_alphas, meta = rasterization(
+            means=means,
+            quats=quats,
+            scales=scales,
+            opacities=opacities,
+            colors=sh_coeffs,  # (N, K, 3) SH coefficients
+            viewmats=viewmats,
+            Ks=Ks,
+            width=W,
+            height=H,
+            near_plane=0.01,
+            far_plane=100.0,
+            render_mode=&#34;RGB+D&#34;,
+            sh_degree=sh_degree if sh_degree &gt;= 0 else None,
+        )
+
+        # Extract outputs
+        # render_colors shape: (1, H, W, 4) for RGB+D mode
+        rgb = render_colors[0, :, :, :3]  # (H, W, 3)
+        depth = render_colors[0, :, :, 3]  # (H, W)
+        alpha = render_alphas[0, :, :, 0]  # (H, W)
+
+        # Clamp RGB to [0, 1]
+        rgb = torch.clamp(rgb, 0.0, 1.0)
+
+        return rgb, depth, alpha
+
+    def _render_cpu_fallback(
+        self,
+        means: Tensor,
+        quats: Tensor,
+        scales: Tensor,
+        opacities: Tensor,
+        sh_coeffs: Tensor,
+        viewmat: Tensor,
+        K: Tensor,
+        H: int,
+        W: int,
+    ) -&gt; Tuple[Tensor, Tensor, Tensor]:
+        &#34;&#34;&#34;
+        Simple CPU-based splatting renderer for testing.
+
+        This is a simplified renderer that projects Gaussians as circles.
+        It&#39;s much slower and less accurate than gsplat but works on CPU.
+        &#34;&#34;&#34;
+        from .gaussian_utils import spherical_harmonics_to_rgb, quaternion_to_rotation_matrix
+
+        device = means.device
+        N = means.shape[0]
+
+        # Initialize output buffers
+        rgb_buffer = torch.zeros((H, W, 3), dtype=torch.float32, device=device)
+        depth_buffer = torch.full((H, W), float(&#39;inf&#39;), dtype=torch.float32, device=device)
+        alpha_buffer = torch.zeros((H, W), dtype=torch.float32, device=device)
+        weight_buffer = torch.zeros((H, W), dtype=torch.float32, device=device)
+
+        # Extract camera parameters
+        fx, fy = K[0, 0], K[1, 1]
+        cx, cy = K[0, 2], K[1, 2]
+
+        # Transform means to camera space
+        R = viewmat[:3, :3]  # (3, 3)
+        t = viewmat[:3, 3]   # (3,)
+        means_cam = means @ R.T + t  # (N, 3)
+
+        # Filter points behind camera
+        valid = means_cam[:, 2] &gt; 0.1
+        if not valid.any():
+            return rgb_buffer, depth_buffer, alpha_buffer
+
+        means_cam = means_cam[valid]
+        scales_valid = scales[valid]
+        opacities_valid = opacities[valid]
+        sh_coeffs_valid = sh_coeffs[valid]
+        quats_valid = quats[valid]
+
+        # Project to image plane
+        z = means_cam[:, 2]
+        u = fx * means_cam[:, 0] / z + cx  # (N,)
+        v = fy * means_cam[:, 1] / z + cy  # (N,)
+
+        # Get colors from SH (DC term only for CPU fallback)
+        colors = spherical_harmonics_to_rgb(sh_coeffs_valid)  # (N, 3)
+
+        # Compute approximate 2D radius from 3D scale
+        # Use average scale and project
+        avg_scale = scales_valid.mean(dim=1)  # (N,)
+        radius_2d = (fx * avg_scale / z).clamp(min=1, max=50)  # (N,)
+
+        # Sort by depth (front to back for proper compositing)
+        depth_order = torch.argsort(z)
+
+        # Splat each Gaussian
+        for idx in depth_order:
+            px, py = int(u[idx].item()), int(v[idx].item())
+            r = int(radius_2d[idx].item())
+            color = colors[idx]
+            opacity = opacities_valid[idx].item()
+            d = z[idx].item()
+
+            # Bounds check
+            x_min = max(0, px - r)
+            x_max = min(W, px + r + 1)
+            y_min = max(0, py - r)
+            y_max = min(H, py + r + 1)
+
+            if x_min &gt;= x_max or y_min &gt;= y_max:
+                continue
+
+            # Create coordinate grids for the patch
+            yy, xx = torch.meshgrid(
+                torch.arange(y_min, y_max, device=device),
+                torch.arange(x_min, x_max, device=device),
+                indexing=&#39;ij&#39;
+            )
+
+            # Compute Gaussian weights
+            dist_sq = ((xx - px).float() ** 2 + (yy - py).float() ** 2)
+            sigma = r / 2.0
+            weights = torch.exp(-dist_sq / (2 * sigma ** 2)) * opacity
+
+            # Alpha compositing
+            alpha_contrib = weights * (1 - alpha_buffer[y_min:y_max, x_min:x_max])
+
+            rgb_buffer[y_min:y_max, x_min:x_max] += alpha_contrib.unsqueeze(-1) * color
+            alpha_buffer[y_min:y_max, x_min:x_max] += alpha_contrib
+
+            # Update depth (keep minimum)
+            depth_mask = weights &gt; 0.01
+            depth_buffer[y_min:y_max, x_min:x_max] = torch.where(
+                depth_mask &amp; (d &lt; depth_buffer[y_min:y_max, x_min:x_max]),
+                torch.full_like(depth_buffer[y_min:y_max, x_min:x_max], d),
+                depth_buffer[y_min:y_max, x_min:x_max]
+            )
+
+        # Normalize by alpha
+        rgb_buffer = torch.clamp(rgb_buffer, 0.0, 1.0)
+
+        return rgb_buffer, depth_buffer, alpha_buffer
+
+    def export_ply(self, output_path: str | Path) -&gt; None:
+        &#34;&#34;&#34;
+        Export trained Gaussians to PLY format.
+
+        Saves Gaussian parameters in a format compatible with standard
+        3D Gaussian Splatting viewers. The PLY file contains:
+            - positions (xyz)
+            - colors (RGB or SH coefficients)
+            - scales (3D)
+            - rotations (quaternion)
+            - opacities
+
+        Args:
+            output_path: Path to save the PLY file.
+                Will create parent directories if needed.
+                Should have .ply extension.
+
+        Side Effects:
+            Creates a PLY file at the specified path.
+
+        File Format:
+            The PLY file contains the following properties per vertex:
+                - x, y, z: Position coordinates
+                - f_dc_0, f_dc_1, f_dc_2: DC spherical harmonic (color)
+                - f_rest_0 ... f_rest_44: Higher-order SH (if sh_degree &gt; 0)
+                - opacity: Opacity value (sigmoid-activated)
+                - scale_0, scale_1, scale_2: Log-scale values
+                - rot_0, rot_1, rot_2, rot_3: Rotation quaternion (wxyz)
+
+        Example:
+            &gt;&gt;&gt; trainer.export_ply(&#34;outputs/trained_gaussians.ply&#34;)
+        &#34;&#34;&#34;
+        from ..export.ply_exporter import save_gaussian_ply
+        from .gaussian_utils import sigmoid
+
+        if self.means is None:
+            raise RuntimeError(&#34;No Gaussians to export. Call initialize_gaussians() first.&#34;)
+
+        # Convert to numpy
+        means_np = self.means.detach().cpu().numpy()
+        scales_np = self.scales.detach().cpu().numpy()  # Keep in log-space
+        rotations_np = self.rotations.detach().cpu().numpy()
+        sh_coeffs_np = self.sh_coeffs.detach().cpu().numpy()
+
+        # Apply sigmoid to opacities
+        opacities_np = sigmoid(self.opacities).detach().cpu().numpy()
+
+        # Save PLY
+        save_gaussian_ply(
+            means=means_np,
+            scales=scales_np,
+            rotations=rotations_np,
+            sh_coeffs=sh_coeffs_np,
+            opacities=opacities_np,
+            filepath=output_path,
+        )
+
+        print(f&#34;Saved {self.num_gaussians} Gaussians to {output_path}&#34;)
+        print(f&#34;  View at: https://antimatter15.com/splat/&#34;)
+
+    def _densify_and_prune(
+        self,
+        grad_threshold: Optional[float] = None,
+        opacity_threshold: Optional[float] = None,
+        max_screen_size: float = 20.0,
+    ) -&gt; Tuple[int, int]:
+        &#34;&#34;&#34;
+        Adaptive density control: add and remove Gaussians.
+
+        This method improves reconstruction quality by:
+        1. Splitting/cloning Gaussians in under-reconstructed regions
+           (high positional gradient indicates need for more detail)
+        2. Removing Gaussians that contribute little
+           (low opacity or very large scale)
+
+        Args:
+            grad_threshold: Gradient magnitude threshold for densification.
+                If None, uses config.densify_grad_threshold.
+            opacity_threshold: Minimum opacity to keep a Gaussian.
+                If None, uses config.prune_opacity_threshold.
+            max_screen_size: Maximum projected screen size before splitting.
+
+        Returns:
+            Tuple[int, int]: (num_added, num_removed)
+                Number of Gaussians added and removed.
+
+        Side Effects:
+            - May increase or decrease total number of Gaussians
+            - Updates all parameter tensors accordingly
+            - Rebuilds optimizer with new parameters
+            - Resets gradient accumulators
+
+        Densification Strategy:
+            For Gaussians with ||grad_position|| &gt; threshold:
+                - If scale &gt; threshold: SPLIT into 2 smaller Gaussians
+                - If scale &lt; threshold: CLONE with slight position offset
+
+        Pruning Strategy:
+            Remove Gaussians where:
+                - opacity &lt; prune_opacity_threshold
+                - scale &gt; scene_extent (too large)
+
+        Example:
+            &gt;&gt;&gt; added, removed = trainer._densify_and_prune()
+            &gt;&gt;&gt; print(f&#34;Added {added}, removed {removed} Gaussians&#34;)
+        &#34;&#34;&#34;
+        from .gaussian_utils import sigmoid, inverse_sigmoid
+
+        if grad_threshold is None:
+            grad_threshold = self.config.densify_grad_threshold
+        if opacity_threshold is None:
+            opacity_threshold = self.config.prune_opacity_threshold
+
+        n_before = self.num_gaussians
+
+        # Get current gradient magnitudes (averaged over accumulation period)
+        if self._xyz_gradient_accum is None or self._denom is None:
+            # No gradients accumulated yet
+            return 0, 0
+
+        # Compute average gradient magnitude
+        grad_avg = self._xyz_gradient_accum / (self._denom + 1e-8)
+        grad_mag = grad_avg.squeeze(-1)  # (N,)
+
+        # Get actual scales (from log-space)
+        scales_actual = torch.exp(self.scales.data)  # (N, 3)
+        max_scale = scales_actual.max(dim=1).values  # (N,)
+
+        # Compute scale percentile for split/clone decision
+        scale_percentile_90 = torch.quantile(max_scale, 0.9)
+
+        # =====================================================================
+        # DENSIFICATION: Clone small Gaussians, Split large Gaussians
+        # =====================================================================
+
+        # Find Gaussians with high gradient
+        high_grad_mask = grad_mag &gt; grad_threshold
+
+        # Clone: high gradient AND small scale
+        clone_mask = high_grad_mask &amp; (max_scale &lt;= scale_percentile_90)
+
+        # Split: high gradient AND large scale
+        split_mask = high_grad_mask &amp; (max_scale &gt; scale_percentile_90)
+
+        # Check max Gaussians limit
+        n_to_add = clone_mask.sum().item() + split_mask.sum().item() * 2
+        if self.num_gaussians + n_to_add &gt; self.config.max_gaussians:
+            # Reduce densification to stay within limits
+            clone_mask = clone_mask &amp; False  # Disable cloning
+            split_mask = split_mask &amp; False  # Disable splitting
+
+        # === CLONE ===
+        if clone_mask.any():
+            clone_indices = clone_mask.nonzero(as_tuple=True)[0]
+
+            # Create clones with slight position offset
+            new_means = self.means.data[clone_indices].clone()
+            offset = torch.randn_like(new_means) * 0.001
+            new_means = new_means + offset
+
+            new_scales = self.scales.data[clone_indices].clone()
+            new_rotations = self.rotations.data[clone_indices].clone()
+            new_sh_coeffs = self.sh_coeffs.data[clone_indices].clone()
+            new_opacities = self.opacities.data[clone_indices].clone()
+
+            # Append to existing
+            self.means = nn.Parameter(torch.cat([self.means.data, new_means], dim=0))
+            self.scales = nn.Parameter(torch.cat([self.scales.data, new_scales], dim=0))
+            self.rotations = nn.Parameter(torch.cat([self.rotations.data, new_rotations], dim=0))
+            self.sh_coeffs = nn.Parameter(torch.cat([self.sh_coeffs.data, new_sh_coeffs], dim=0))
+            self.opacities = nn.Parameter(torch.cat([self.opacities.data, new_opacities], dim=0))
+
+        # === SPLIT ===
+        if split_mask.any():
+            split_indices = split_mask.nonzero(as_tuple=True)[0]
+
+            # Get Gaussians to split
+            split_means = self.means.data[split_indices]
+            split_scales = self.scales.data[split_indices]
+            split_rotations = self.rotations.data[split_indices]
+            split_sh_coeffs = self.sh_coeffs.data[split_indices]
+            split_opacities = self.opacities.data[split_indices]
+
+            # Create 2 new Gaussians per split Gaussian
+            # Reduce scale by factor of 1.6 (sqrt of 2.56)
+            scale_reduction = torch.log(torch.tensor(1.6, device=self.device))
+
+            # Offset in direction of largest scale
+            scales_actual_split = torch.exp(split_scales)
+            max_axis = scales_actual_split.argmax(dim=1)  # (N_split,)
+
+            # Create offset vectors
+            offset_mag = scales_actual_split.max(dim=1).values * 0.5  # (N_split,)
+            offset1 = torch.zeros_like(split_means)
+            offset2 = torch.zeros_like(split_means)
+
+            for i in range(len(split_indices)):
+                axis = max_axis[i].item()
+                offset1[i, axis] = offset_mag[i]
+                offset2[i, axis] = -offset_mag[i]
+
+            # New positions
+            new_means1 = split_means + offset1
+            new_means2 = split_means + offset2
+
+            # New scales (reduced)
+            new_scales1 = split_scales - scale_reduction
+            new_scales2 = split_scales - scale_reduction
+
+            # Keep same rotation, color, reduce opacity slightly
+            new_rotations1 = split_rotations.clone()
+            new_rotations2 = split_rotations.clone()
+            new_sh_coeffs1 = split_sh_coeffs.clone()
+            new_sh_coeffs2 = split_sh_coeffs.clone()
+
+            # Reduce opacity (in logit space, subtract to reduce)
+            opacity_reduction = 0.5  # Reduce by ~half
+            new_opacities1 = split_opacities - opacity_reduction
+            new_opacities2 = split_opacities - opacity_reduction
+
+            # Combine all new Gaussians
+            new_means = torch.cat([new_means1, new_means2], dim=0)
+            new_scales = torch.cat([new_scales1, new_scales2], dim=0)
+            new_rotations = torch.cat([new_rotations1, new_rotations2], dim=0)
+            new_sh_coeffs = torch.cat([new_sh_coeffs1, new_sh_coeffs2], dim=0)
+            new_opacities = torch.cat([new_opacities1, new_opacities2], dim=0)
+
+            # Remove original split Gaussians and add new ones
+            keep_mask = ~split_mask
+            self.means = nn.Parameter(torch.cat([self.means.data[keep_mask], new_means], dim=0))
+            self.scales = nn.Parameter(torch.cat([self.scales.data[keep_mask], new_scales], dim=0))
+            self.rotations = nn.Parameter(torch.cat([self.rotations.data[keep_mask], new_rotations], dim=0))
+            self.sh_coeffs = nn.Parameter(torch.cat([self.sh_coeffs.data[keep_mask], new_sh_coeffs], dim=0))
+            self.opacities = nn.Parameter(torch.cat([self.opacities.data[keep_mask], new_opacities], dim=0))
+
+        # =====================================================================
+        # PRUNING: Remove low-opacity and too-large Gaussians
+        # =====================================================================
+
+        # Get current opacities (from logit-space)
+        opacities_actual = sigmoid(self.opacities.data)  # (N,)
+
+        # Prune low opacity
+        prune_mask = opacities_actual &lt; opacity_threshold
+
+        # Also prune very large Gaussians (scene extent estimation)
+        scales_actual = torch.exp(self.scales.data)
+        max_scale = scales_actual.max(dim=1).values
+        scene_extent = 2.0  # Approximate scene extent
+        prune_mask = prune_mask | (max_scale &gt; scene_extent)
+
+        if prune_mask.any():
+            keep_mask = ~prune_mask
+            self.means = nn.Parameter(self.means.data[keep_mask])
+            self.scales = nn.Parameter(self.scales.data[keep_mask])
+            self.rotations = nn.Parameter(self.rotations.data[keep_mask])
+            self.sh_coeffs = nn.Parameter(self.sh_coeffs.data[keep_mask])
+            self.opacities = nn.Parameter(self.opacities.data[keep_mask])
+
+        # =====================================================================
+        # Rebuild optimizer and reset gradient accumulators
+        # =====================================================================
+
+        n_after = self.num_gaussians
+        num_added = max(0, n_after - n_before + prune_mask.sum().item())
+        num_removed = prune_mask.sum().item()
+
+        # Reset gradient accumulators
+        self._xyz_gradient_accum = torch.zeros((self.num_gaussians, 1), device=self.device)
+        self._denom = torch.zeros((self.num_gaussians, 1), device=self.device)
+
+        # Rebuild optimizer with new parameters
+        self._rebuild_optimizer()
+
+        return num_added, num_removed
+
+    def _rebuild_optimizer(self) -&gt; None:
+        &#34;&#34;&#34;Rebuild optimizer after densification/pruning changes parameter counts.&#34;&#34;&#34;
+        self.optimizer = torch.optim.Adam([
+            {&#39;params&#39;: [self.means], &#39;lr&#39;: 1.6e-4, &#39;name&#39;: &#39;means&#39;},
+            {&#39;params&#39;: [self.scales], &#39;lr&#39;: 5e-3, &#39;name&#39;: &#39;scales&#39;},
+            {&#39;params&#39;: [self.rotations], &#39;lr&#39;: 1e-3, &#39;name&#39;: &#39;rotations&#39;},
+            {&#39;params&#39;: [self.sh_coeffs], &#39;lr&#39;: 2.5e-3, &#39;name&#39;: &#39;sh_coeffs&#39;},
+            {&#39;params&#39;: [self.opacities], &#39;lr&#39;: 5e-2, &#39;name&#39;: &#39;opacities&#39;},
+        ])
+
+    def _accumulate_gradients(self) -&gt; None:
+        &#34;&#34;&#34;Accumulate position gradients for densification decisions.&#34;&#34;&#34;
+        if self.means.grad is None:
+            return
+
+        # Accumulate gradient magnitude
+        grad_mag = self.means.grad.norm(dim=1, keepdim=True)
+
+        if self._xyz_gradient_accum is None:
+            self._xyz_gradient_accum = torch.zeros_like(grad_mag)
+            self._denom = torch.zeros_like(grad_mag)
+
+        self._xyz_gradient_accum += grad_mag
+        self._denom += 1
+
+    @property
+    def num_gaussians(self) -&gt; int:
+        &#34;&#34;&#34;Return current number of Gaussian primitives.&#34;&#34;&#34;
+        if self.means is None:
+            return 0
+        return self.means.shape[0]
+
+    def get_parameters(self) -&gt; Dict[str, Tensor]:
+        &#34;&#34;&#34;
+        Get all trainable Gaussian parameters.
+
+        Returns:
+            Dict[str, Tensor]: Dictionary containing:
+                - &#39;means&#39;: (N, 3) positions
+                - &#39;scales&#39;: (N, 3) log-scales
+                - &#39;rotations&#39;: (N, 4) quaternions
+                - &#39;sh_coeffs&#39;: (N, C, 3) SH coefficients
+                - &#39;opacities&#39;: (N,) logit-opacities
+        &#34;&#34;&#34;
+        return {
+            &#39;means&#39;: self.means,
+            &#39;scales&#39;: self.scales,
+            &#39;rotations&#39;: self.rotations,
+            &#39;sh_coeffs&#39;: self.sh_coeffs,
+            &#39;opacities&#39;: self.opacities,
+        }</code></pre>
+</details>
+<div class="desc"><p>Trainer for 3D Gaussian Splatting from a single RGB-D image.</p>
+<p>This class handles:
+1. Initialization of Gaussian primitives from depth map
+2. Optimization of Gaussian parameters (position, color, scale, opacity, rotation)
+3. Adaptive density control (densification and pruning)
+4. Rendering novel views
+5. Exporting trained Gaussians to PLY format</p>
+<p>The Gaussian representation consists of:
+- means: (N, 3) center positions in world coordinates
+- scales: (N, 3) axis-aligned scales (log-space during optimization)
+- rotations: (N, 4) rotation quaternions (wxyz format)
+- sh_coeffs: (N, C, 3) spherical harmonic coefficients for view-dependent color
+- opacities: (N,) opacity values (logit-space during optimization)</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>rgb</code></strong></dt>
+<dd>Original RGB image as torch.Tensor, shape (H, W, 3), range [0, 1].</dd>
+<dt><strong><code>depth</code></strong></dt>
+<dd>Depth map as torch.Tensor, shape (H, W), in meters.</dd>
+<dt><strong><code>mask</code></strong></dt>
+<dd>Binary segmentation mask as torch.Tensor, shape (H, W), {0, 1}.</dd>
+<dt><strong><code>camera</code></strong></dt>
+<dd>CameraParams instance with intrinsics and pose.</dd>
+<dt><strong><code>config</code></strong></dt>
+<dd>GaussianConfig instance with training hyperparameters.</dd>
+<dt><strong><code>device</code></strong></dt>
+<dd>torch.device for computation ('cuda' or 'cpu').</dd>
+</dl>
+<h2 id="example">Example</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; trainer = GaussianTrainer(rgb, depth, mask, camera_params, config)
+&gt;&gt;&gt; trainer.initialize_gaussians()
+&gt;&gt;&gt; trainer.optimize(num_iterations=1000)
+&gt;&gt;&gt; trainer.export_ply(&quot;output/gaussians.ply&quot;)
+</code></pre>
+<p>Initialize the Gaussian trainer with input data.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>rgb</code></strong></dt>
+<dd>Input RGB image.
+Shape: (H, W, 3)
+dtype: uint8 or float32
+Range: [0, 255] for uint8, [0, 1] for float32</dd>
+<dt><strong><code>depth</code></strong></dt>
+<dd>Depth map (metric or relative).
+Shape: (H, W)
+dtype: float32
+Range: Positive values, higher = farther</dd>
+<dt><strong><code>mask</code></strong></dt>
+<dd>Binary segmentation mask indicating subject pixels.
+Shape: (H, W)
+dtype: uint8 or bool
+Values: 0 = background, 1 = subject</dd>
+<dt><strong><code>camera_params</code></strong></dt>
+<dd>Camera intrinsic and extrinsic parameters.
+See CameraParams dataclass for details.</dd>
+<dt><strong><code>config</code></strong></dt>
+<dd>Training configuration.
+See GaussianConfig dataclass for details.</dd>
+<dt><strong><code>device</code></strong></dt>
+<dd>Computation device, either 'cuda' or 'cpu'.
+Default: 'cuda'</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>If input shapes are incompatible.</dd>
+<dt><code>RuntimeError</code></dt>
+<dd>If CUDA is requested but not available.</dd>
+</dl></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="gaussian_trainer.GaussianTrainer.num_gaussians"><code class="name">prop <span class="ident">num_gaussians</span> : int</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def num_gaussians(self) -&gt; int:
+    &#34;&#34;&#34;Return current number of Gaussian primitives.&#34;&#34;&#34;
+    if self.means is None:
+        return 0
+    return self.means.shape[0]</code></pre>
+</details>
+<div class="desc"><p>Return current number of Gaussian primitives.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="gaussian_trainer.GaussianTrainer.export_ply"><code class="name flex">
+<span>def <span class="ident">export_ply</span></span>(<span>self, output_path: str | Path) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def export_ply(self, output_path: str | Path) -&gt; None:
+    &#34;&#34;&#34;
+    Export trained Gaussians to PLY format.
+
+    Saves Gaussian parameters in a format compatible with standard
+    3D Gaussian Splatting viewers. The PLY file contains:
+        - positions (xyz)
+        - colors (RGB or SH coefficients)
+        - scales (3D)
+        - rotations (quaternion)
+        - opacities
+
+    Args:
+        output_path: Path to save the PLY file.
+            Will create parent directories if needed.
+            Should have .ply extension.
+
+    Side Effects:
+        Creates a PLY file at the specified path.
+
+    File Format:
+        The PLY file contains the following properties per vertex:
+            - x, y, z: Position coordinates
+            - f_dc_0, f_dc_1, f_dc_2: DC spherical harmonic (color)
+            - f_rest_0 ... f_rest_44: Higher-order SH (if sh_degree &gt; 0)
+            - opacity: Opacity value (sigmoid-activated)
+            - scale_0, scale_1, scale_2: Log-scale values
+            - rot_0, rot_1, rot_2, rot_3: Rotation quaternion (wxyz)
+
+    Example:
+        &gt;&gt;&gt; trainer.export_ply(&#34;outputs/trained_gaussians.ply&#34;)
+    &#34;&#34;&#34;
+    from ..export.ply_exporter import save_gaussian_ply
+    from .gaussian_utils import sigmoid
+
+    if self.means is None:
+        raise RuntimeError(&#34;No Gaussians to export. Call initialize_gaussians() first.&#34;)
+
+    # Convert to numpy
+    means_np = self.means.detach().cpu().numpy()
+    scales_np = self.scales.detach().cpu().numpy()  # Keep in log-space
+    rotations_np = self.rotations.detach().cpu().numpy()
+    sh_coeffs_np = self.sh_coeffs.detach().cpu().numpy()
+
+    # Apply sigmoid to opacities
+    opacities_np = sigmoid(self.opacities).detach().cpu().numpy()
+
+    # Save PLY
+    save_gaussian_ply(
+        means=means_np,
+        scales=scales_np,
+        rotations=rotations_np,
+        sh_coeffs=sh_coeffs_np,
+        opacities=opacities_np,
+        filepath=output_path,
+    )
+
+    print(f&#34;Saved {self.num_gaussians} Gaussians to {output_path}&#34;)
+    print(f&#34;  View at: https://antimatter15.com/splat/&#34;)</code></pre>
+</details>
+<div class="desc"><p>Export trained Gaussians to PLY format.</p>
+<p>Saves Gaussian parameters in a format compatible with standard
+3D Gaussian Splatting viewers. The PLY file contains:
+- positions (xyz)
+- colors (RGB or SH coefficients)
+- scales (3D)
+- rotations (quaternion)
+- opacities</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>output_path</code></strong></dt>
+<dd>Path to save the PLY file.
+Will create parent directories if needed.
+Should have .ply extension.</dd>
+</dl>
+<p>Side Effects:
+Creates a PLY file at the specified path.</p>
+<p>File Format:
+The PLY file contains the following properties per vertex:
+- x, y, z: Position coordinates
+- f_dc_0, f_dc_1, f_dc_2: DC spherical harmonic (color)
+- f_rest_0 &hellip; f_rest_44: Higher-order SH (if sh_degree &gt; 0)
+- opacity: Opacity value (sigmoid-activated)
+- scale_0, scale_1, scale_2: Log-scale values
+- rot_0, rot_1, rot_2, rot_3: Rotation quaternion (wxyz)</p>
+<h2 id="example">Example</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; trainer.export_ply(&quot;outputs/trained_gaussians.ply&quot;)
+</code></pre></div>
+</dd>
+<dt id="gaussian_trainer.GaussianTrainer.get_parameters"><code class="name flex">
+<span>def <span class="ident">get_parameters</span></span>(<span>self) ‑> Dict[str, torch.Tensor]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_parameters(self) -&gt; Dict[str, Tensor]:
+    &#34;&#34;&#34;
+    Get all trainable Gaussian parameters.
+
+    Returns:
+        Dict[str, Tensor]: Dictionary containing:
+            - &#39;means&#39;: (N, 3) positions
+            - &#39;scales&#39;: (N, 3) log-scales
+            - &#39;rotations&#39;: (N, 4) quaternions
+            - &#39;sh_coeffs&#39;: (N, C, 3) SH coefficients
+            - &#39;opacities&#39;: (N,) logit-opacities
+    &#34;&#34;&#34;
+    return {
+        &#39;means&#39;: self.means,
+        &#39;scales&#39;: self.scales,
+        &#39;rotations&#39;: self.rotations,
+        &#39;sh_coeffs&#39;: self.sh_coeffs,
+        &#39;opacities&#39;: self.opacities,
+    }</code></pre>
+</details>
+<div class="desc"><p>Get all trainable Gaussian parameters.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Dict[str, Tensor]</code></dt>
+<dd>Dictionary containing:
+- 'means': (N, 3) positions
+- 'scales': (N, 3) log-scales
+- 'rotations': (N, 4) quaternions
+- 'sh_coeffs': (N, C, 3) SH coefficients
+- 'opacities': (N,) logit-opacities</dd>
+</dl></div>
+</dd>
+<dt id="gaussian_trainer.GaussianTrainer.initialize_gaussians"><code class="name flex">
+<span>def <span class="ident">initialize_gaussians</span></span>(<span>self) ‑> int</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def initialize_gaussians(self) -&gt; int:
+    &#34;&#34;&#34;
+    Initialize Gaussian primitives from depth map and mask.
+
+    This method:
+    1. Unprojects masked depth pixels to 3D points using camera intrinsics
+    2. Samples RGB colors from corresponding pixels
+    3. Estimates initial scales based on local point density
+    4. Sets default rotation (identity quaternion) and opacity
+
+    The number of Gaussians equals the number of valid masked pixels.
+
+    Returns:
+        int: Number of Gaussians initialized (N).
+
+    Side Effects:
+        Initializes the following trainable parameters:
+            - self.means: (N, 3) Gaussian centers
+            - self.scales: (N, 3) log-scale parameters
+            - self.rotations: (N, 4) quaternions (wxyz)
+            - self.sh_coeffs: (N, 1, 3) or (N, 16, 3) SH coefficients
+            - self.opacities: (N,) logit-opacity values
+
+    Mathematical Operations:
+        Unprojection from pixel (u, v) with depth d:
+            X = (u - cx) * d / fx
+            Y = (v - cy) * d / fy
+            Z = d
+
+        Scale estimation via k-NN:
+            scale_i = mean(||p_i - p_neighbors||) / 2
+
+        Opacity initialization:
+            logit_opacity = log(opacity_init / (1 - opacity_init))
+
+    Example:
+        &gt;&gt;&gt; num_gaussians = trainer.initialize_gaussians()
+        &gt;&gt;&gt; print(f&#34;Initialized {num_gaussians} Gaussians&#34;)
+    &#34;&#34;&#34;
+    from .gaussian_utils import (
+        normalize_depth_to_metric,
+        depth_to_xyz,
+        estimate_point_scales,
+        rgb_to_spherical_harmonics,
+        inverse_sigmoid,
+    )
+
+    # Normalize depth to pseudo-metric range (same as original pointcloud.py)
+    depth_normalized = normalize_depth_to_metric(self.depth, min_depth=0.5, max_depth=2.5)
+
+    # Get 3D points from depth (using mask to filter)
+    xyz = depth_to_xyz(
+        depth_normalized,
+        self.mask,
+        fx=self.camera.fx,
+        fy=self.camera.fy,
+        cx=self.camera.cx,
+        cy=self.camera.cy,
+    )
+
+    n_points = xyz.shape[0]
+    if n_points == 0:
+        raise ValueError(&#34;No valid points found in masked region&#34;)
+
+    # Add small position noise for better optimization
+    if self.config.position_noise &gt; 0:
+        noise = torch.randn_like(xyz) * self.config.position_noise
+        xyz = xyz + noise
+
+    # Sample RGB colors from image at masked pixel locations
+    # Get the mask indices
+    mask_bool = self.mask &gt; 0
+    valid_mask = mask_bool &amp; (depth_normalized &gt; 0) &amp; torch.isfinite(depth_normalized)
+
+    # Flatten and get valid indices
+    rgb_flat = self.rgb.reshape(-1, 3)  # (H*W, 3)
+    valid_flat = valid_mask.reshape(-1)
+
+    rgb_colors = rgb_flat[valid_flat]  # (N, 3)
+
+    # Convert RGB to spherical harmonics
+    sh_degree = self.config.sh_degree
+    sh_coeffs = rgb_to_spherical_harmonics(rgb_colors, degree=sh_degree)  # (N, num_sh, 3)
+
+    # Estimate scales using k-NN
+    scales = estimate_point_scales(xyz, k_neighbors=8)  # (N, 3)
+
+    # Convert scales to log-space for optimization
+    log_scales = torch.log(scales + 1e-8)
+
+    # Initialize rotations as identity quaternions (w, x, y, z) = (1, 0, 0, 0)
+    rotations = torch.zeros((n_points, 4), dtype=torch.float32, device=self.device)
+    rotations[:, 0] = 1.0  # w = 1
+
+    # Initialize opacities in logit space
+    # Default opacity = 0.9
+    opacity_init = self.config.opacity_init
+    # Clamp to avoid infinity
+    opacity_init = max(0.01, min(0.99, opacity_init))
+    logit_opacity = inverse_sigmoid(
+        torch.full((n_points,), opacity_init, dtype=torch.float32, device=self.device)
+    )
+
+    # Create trainable parameters
+    self.means = nn.Parameter(xyz.contiguous())
+    self.scales = nn.Parameter(log_scales.contiguous())
+    self.rotations = nn.Parameter(rotations.contiguous())
+    self.sh_coeffs = nn.Parameter(sh_coeffs.contiguous())
+    self.opacities = nn.Parameter(logit_opacity.contiguous())
+
+    # Set up optimizer with per-parameter learning rates
+    self.optimizer = torch.optim.Adam([
+        {&#39;params&#39;: [self.means], &#39;lr&#39;: self.config.lr_position, &#39;name&#39;: &#39;means&#39;},
+        {&#39;params&#39;: [self.scales], &#39;lr&#39;: self.config.lr_scale, &#39;name&#39;: &#39;scales&#39;},
+        {&#39;params&#39;: [self.rotations], &#39;lr&#39;: self.config.lr_rotation, &#39;name&#39;: &#39;rotations&#39;},
+        {&#39;params&#39;: [self.sh_coeffs], &#39;lr&#39;: self.config.lr_color, &#39;name&#39;: &#39;sh_coeffs&#39;},
+        {&#39;params&#39;: [self.opacities], &#39;lr&#39;: self.config.lr_opacity, &#39;name&#39;: &#39;opacities&#39;},
+    ])
+
+    # Initialize gradient accumulators for densification
+    self._xyz_gradient_accum = torch.zeros((n_points, 1), device=self.device)
+    self._denom = torch.zeros((n_points, 1), device=self.device)
+
+    return n_points</code></pre>
+</details>
+<div class="desc"><p>Initialize Gaussian primitives from depth map and mask.</p>
+<p>This method:
+1. Unprojects masked depth pixels to 3D points using camera intrinsics
+2. Samples RGB colors from corresponding pixels
+3. Estimates initial scales based on local point density
+4. Sets default rotation (identity quaternion) and opacity</p>
+<p>The number of Gaussians equals the number of valid masked pixels.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>int</code></dt>
+<dd>Number of Gaussians initialized (N).</dd>
+</dl>
+<p>Side Effects:
+Initializes the following trainable parameters:
+- self.means: (N, 3) Gaussian centers
+- self.scales: (N, 3) log-scale parameters
+- self.rotations: (N, 4) quaternions (wxyz)
+- self.sh_coeffs: (N, 1, 3) or (N, 16, 3) SH coefficients
+- self.opacities: (N,) logit-opacity values</p>
+<p>Mathematical Operations:
+Unprojection from pixel (u, v) with depth d:
+X = (u - cx) * d / fx
+Y = (v - cy) * d / fy
+Z = d</p>
+<pre><code>Scale estimation via k-NN:
+    scale_i = mean(||p_i - p_neighbors||) / 2
+
+Opacity initialization:
+    logit_opacity = log(opacity_init / (1 - opacity_init))
+</code></pre>
+<h2 id="example">Example</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; num_gaussians = trainer.initialize_gaussians()
+&gt;&gt;&gt; print(f&quot;Initialized {num_gaussians} Gaussians&quot;)
+</code></pre></div>
+</dd>
+<dt id="gaussian_trainer.GaussianTrainer.optimize"><code class="name flex">
+<span>def <span class="ident">optimize</span></span>(<span>self,<br>num_iterations: Optional[int] = None,<br>log_every: int = 50,<br>save_every: int = 500,<br>output_dir: Optional[str] = None) ‑> Dict[str, list]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def optimize(
+    self,
+    num_iterations: Optional[int] = None,
+    log_every: int = 50,
+    save_every: int = 500,
+    output_dir: Optional[str] = None,
+) -&gt; Dict[str, list]:
+    &#34;&#34;&#34;
+    Run the main optimization loop.
+
+    Optimizes Gaussian parameters to minimize photometric loss between
+    rendered and target images. Periodically performs densification
+    and pruning to improve reconstruction quality.
+
+    Args:
+        num_iterations: Number of optimization steps.
+            If None, uses config.num_iterations.
+            Default: None
+
+        log_every: Print loss every N iterations.
+            Default: 50
+
+        save_every: Save rendered image every N iterations.
+            Default: 500
+
+        output_dir: Directory to save rendered images.
+            If None, uses &#39;./outputs&#39;.
+            Default: None
+
+    Returns:
+        Dict[str, list]: Training history containing:
+            - &#39;loss&#39;: Total loss per iteration
+            - &#39;l1&#39;: L1 component per iteration
+            - &#39;ssim&#39;: SSIM component per iteration
+            - &#39;num_gaussians&#39;: Gaussian count per iteration
+            - &#39;iteration&#39;: Iteration numbers
+
+    Side Effects:
+        - Updates all trainable Gaussian parameters
+        - May change number of Gaussians via densification/pruning
+        - Prints progress every log_every iterations
+        - Saves rendered images every save_every iterations
+
+    Training Loop:
+        For each iteration:
+            1. Render image from training viewpoint
+            2. Compute loss (L1 + SSIM + optional LPIPS)
+            3. Backpropagate gradients
+            4. Update parameters via optimizer
+            5. If iteration % densify_interval == 0:
+               - Densify Gaussians with high gradient
+               - Prune Gaussians with low opacity
+
+    Example:
+        &gt;&gt;&gt; history = trainer.optimize(num_iterations=1000)
+        &gt;&gt;&gt; plt.plot(history[&#39;loss&#39;])
+        &gt;&gt;&gt; plt.title(&#39;Training Loss&#39;)
+    &#34;&#34;&#34;
+    from .losses import GaussianLosses, save_comparison_image
+    import cv2
+
+    # Validate state
+    if self.means is None:
+        raise RuntimeError(&#34;Must call initialize_gaussians() before optimize()&#34;)
+
+    # Set up parameters
+    if num_iterations is None:
+        num_iterations = self.config.num_iterations
+
+    if output_dir is None:
+        output_dir = Path(&#34;./outputs&#34;)
+    else:
+        output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    # Create optimizer with recommended learning rates
+    # Override the default optimizer with specific learning rates
+    self.optimizer = torch.optim.Adam([
+        {&#39;params&#39;: [self.means], &#39;lr&#39;: 1.6e-4, &#39;name&#39;: &#39;means&#39;},
+        {&#39;params&#39;: [self.scales], &#39;lr&#39;: 5e-3, &#39;name&#39;: &#39;scales&#39;},
+        {&#39;params&#39;: [self.rotations], &#39;lr&#39;: 1e-3, &#39;name&#39;: &#39;rotations&#39;},
+        {&#39;params&#39;: [self.sh_coeffs], &#39;lr&#39;: 2.5e-3, &#39;name&#39;: &#39;sh_coeffs&#39;},
+        {&#39;params&#39;: [self.opacities], &#39;lr&#39;: 5e-2, &#39;name&#39;: &#39;opacities&#39;},
+    ])
+
+    # Create loss function
+    losses = GaussianLosses(
+        weight_l1=self.config.loss_weight_l1,
+        weight_ssim=self.config.loss_weight_ssim,
+        weight_lpips=self.config.loss_weight_lpips,
+        weight_scale_reg=0.01,
+        weight_opacity_reg=0.01,
+        device=self.device,
+    )
+
+    # Initialize history
+    history = {
+        &#39;loss&#39;: [],
+        &#39;l1&#39;: [],
+        &#39;ssim&#39;: [],
+        &#39;lpips&#39;: [],
+        &#39;num_gaussians&#39;: [],
+        &#39;iteration&#39;: [],
+        &#39;densify_added&#39;: [],
+        &#39;densify_removed&#39;: [],
+    }
+
+    # Target image and mask
+    target_rgb = self.rgb  # (H, W, 3)
+    mask = self.mask  # (H, W)
+
+    # Initialize gradient accumulators
+    self._xyz_gradient_accum = torch.zeros((self.num_gaussians, 1), device=self.device)
+    self._denom = torch.zeros((self.num_gaussians, 1), device=self.device)
+
+    # Densification settings
+    densify_from = self.config.densify_from_iter
+    densify_until = self.config.densify_until_iter
+    densify_interval = self.config.densify_interval
+
+    print(f&#34;Starting optimization for {num_iterations} iterations&#34;)
+    print(f&#34;  Gaussians: {self.num_gaussians}&#34;)
+    print(f&#34;  Image size: {target_rgb.shape[0]}x{target_rgb.shape[1]}&#34;)
+    print(f&#34;  Device: {self.device}&#34;)
+    print(f&#34;  Densification: iter {densify_from} to {densify_until}, every {densify_interval}&#34;)
+    print(&#34;-&#34; * 50)
+
+    # Training loop
+    for iteration in range(num_iterations):
+        self.optimizer.zero_grad()
+
+        # Render current view
+        rendered_rgb, rendered_depth, rendered_alpha = self.render_view()
+
+        # Compute loss
+        total_loss, components = losses.total_loss(
+            rendered=rendered_rgb,
+            target=target_rgb,
+            mask=mask,
+            scales=self.scales,
+            opacities=self.opacities,
+        )
+
+        # Check for NaN
+        if torch.isnan(total_loss):
+            print(f&#34;[WARN] NaN loss at iteration {iteration}, stopping&#34;)
+            break
+
+        # Backward pass
+        total_loss.backward()
+
+        # Accumulate gradients for densification (before clipping)
+        self._accumulate_gradients()
+
+        # Gradient clipping to prevent explosions
+        torch.nn.utils.clip_grad_norm_(
+            [self.means, self.scales, self.rotations, self.sh_coeffs, self.opacities],
+            max_norm=1.0
+        )
+
+        # Optimizer step
+        self.optimizer.step()
+
+        # Normalize quaternions after update
+        with torch.no_grad():
+            self.rotations.data = self.rotations.data / (
+                torch.norm(self.rotations.data, dim=-1, keepdim=True) + 1e-8
+            )
+
+        # Densification and pruning
+        num_added, num_removed = 0, 0
+        if (iteration &gt;= densify_from and
+            iteration &lt; densify_until and
+            iteration % densify_interval == 0 and
+            iteration &gt; 0):
+            num_added, num_removed = self._densify_and_prune()
+            if num_added &gt; 0 or num_removed &gt; 0:
+                print(f&#34;  [Densify] Added: {num_added}, Removed: {num_removed}, Total: {self.num_gaussians}&#34;)
+
+        # Record history
+        history[&#39;loss&#39;].append(components.get(&#39;total&#39;, total_loss.item()))
+        history[&#39;l1&#39;].append(components.get(&#39;l1&#39;, 0.0))
+        history[&#39;ssim&#39;].append(components.get(&#39;ssim&#39;, 0.0))
+        history[&#39;lpips&#39;].append(components.get(&#39;lpips&#39;, 0.0))
+        history[&#39;num_gaussians&#39;].append(self.num_gaussians)
+        history[&#39;iteration&#39;].append(iteration)
+        history[&#39;densify_added&#39;].append(num_added)
+        history[&#39;densify_removed&#39;].append(num_removed)
+
+        # Logging
+        if iteration % log_every == 0 or iteration == num_iterations - 1:
+            loss_str = f&#34;Iter {iteration:5d}/{num_iterations}&#34;
+            loss_str += f&#34; | Loss: {total_loss.item():.4f}&#34;
+            loss_str += f&#34; | L1: {components.get(&#39;l1&#39;, 0):.4f}&#34;
+            loss_str += f&#34; | SSIM: {components.get(&#39;ssim&#39;, 0):.4f}&#34;
+            loss_str += f&#34; | Gaussians: {self.num_gaussians}&#34;
+            print(loss_str)
+
+        # Save rendered image
+        if save_every &gt; 0 and (iteration % save_every == 0 or iteration == num_iterations - 1):
+            self._save_iteration_image(
+                rendered_rgb, target_rgb, iteration, output_dir
+            )
+
+    print(&#34;-&#34; * 50)
+    print(f&#34;Optimization complete!&#34;)
+    print(f&#34;  Final loss: {history[&#39;loss&#39;][-1]:.4f}&#34;)
+    print(f&#34;  Gaussians: {self.num_gaussians}&#34;)
+
+    return history</code></pre>
+</details>
+<div class="desc"><p>Run the main optimization loop.</p>
+<p>Optimizes Gaussian parameters to minimize photometric loss between
+rendered and target images. Periodically performs densification
+and pruning to improve reconstruction quality.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>num_iterations</code></strong></dt>
+<dd>Number of optimization steps.
+If None, uses config.num_iterations.
+Default: None</dd>
+<dt><strong><code>log_every</code></strong></dt>
+<dd>Print loss every N iterations.
+Default: 50</dd>
+<dt><strong><code>save_every</code></strong></dt>
+<dd>Save rendered image every N iterations.
+Default: 500</dd>
+<dt><strong><code>output_dir</code></strong></dt>
+<dd>Directory to save rendered images.
+If None, uses './outputs'.
+Default: None</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Dict[str, list]</code></dt>
+<dd>Training history containing:
+- 'loss': Total loss per iteration
+- 'l1': L1 component per iteration
+- 'ssim': SSIM component per iteration
+- 'num_gaussians': Gaussian count per iteration
+- 'iteration': Iteration numbers</dd>
+</dl>
+<p>Side Effects:
+- Updates all trainable Gaussian parameters
+- May change number of Gaussians via densification/pruning
+- Prints progress every log_every iterations
+- Saves rendered images every save_every iterations</p>
+<p>Training Loop:
+For each iteration:
+1. Render image from training viewpoint
+2. Compute loss (L1 + SSIM + optional LPIPS)
+3. Backpropagate gradients
+4. Update parameters via optimizer
+5. If iteration % densify_interval == 0:
+- Densify Gaussians with high gradient
+- Prune Gaussians with low opacity</p>
+<h2 id="example">Example</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; history = trainer.optimize(num_iterations=1000)
+&gt;&gt;&gt; plt.plot(history['loss'])
+&gt;&gt;&gt; plt.title('Training Loss')
+</code></pre></div>
+</dd>
+<dt id="gaussian_trainer.GaussianTrainer.render_view"><code class="name flex">
+<span>def <span class="ident">render_view</span></span>(<span>self,<br>camera_pose: Optional[np.ndarray] = None,<br>intrinsics: Optional[<a title="gaussian_trainer.CameraParams" href="#gaussian_trainer.CameraParams">CameraParams</a>] = None) ‑> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def render_view(
+    self,
+    camera_pose: Optional[np.ndarray] = None,
+    intrinsics: Optional[CameraParams] = None,
+) -&gt; Tuple[Tensor, Tensor, Tensor]:
+    &#34;&#34;&#34;
+    Render the Gaussian splats from a given camera viewpoint.
+
+    Uses differentiable rasterization via gsplat to project 3D Gaussians
+    to a 2D image. Supports rendering from the training view or novel views.
+
+    Args:
+        camera_pose: 4x4 world-to-camera transformation matrix.
+            Shape: (4, 4)
+            dtype: float32
+            If None, uses the training camera pose.
+            Default: None
+
+        intrinsics: Camera intrinsic parameters for rendering.
+            If None, uses the training camera intrinsics.
+            Default: None
+
+    Returns:
+        Tuple[Tensor, Tensor, Tensor]: Rendered outputs
+            - rgb: Rendered RGB image
+                Shape: (H, W, 3)
+                Range: [0, 1]
+
+            - depth: Rendered depth map
+                Shape: (H, W)
+                Range: [0, inf) meters
+
+            - alpha: Rendered alpha/opacity map
+                Shape: (H, W)
+                Range: [0, 1]
+
+    Mathematical Operations:
+        For each Gaussian i:
+            1. Transform mean to camera space: p_cam = R @ p_world + t
+            2. Project to image plane: u = fx * x/z + cx, v = fy * y/z + cy
+            3. Compute 2D covariance from 3D covariance + Jacobian
+            4. Evaluate Gaussian contribution per pixel
+            5. Alpha-composite front-to-back
+
+    Example:
+        &gt;&gt;&gt; rgb, depth, alpha = trainer.render_view()
+        &gt;&gt;&gt; plt.imshow(rgb.cpu().numpy())
+
+        &gt;&gt;&gt; # Render from rotated viewpoint
+        &gt;&gt;&gt; R = rotation_matrix_y(np.pi / 6)  # 30 degree rotation
+        &gt;&gt;&gt; pose = np.eye(4)
+        &gt;&gt;&gt; pose[:3, :3] = R
+        &gt;&gt;&gt; rgb_novel, _, _ = trainer.render_view(camera_pose=pose)
+    &#34;&#34;&#34;
+    from .gaussian_utils import (
+        create_camera_intrinsics,
+        create_front_camera_pose,
+        spherical_harmonics_to_rgb,
+        sigmoid,
+    )
+
+    # Get camera parameters
+    if intrinsics is None:
+        intrinsics = self.camera
+
+    H, W = intrinsics.height, intrinsics.width
+    fx, fy = intrinsics.fx, intrinsics.fy
+    cx, cy = intrinsics.cx, intrinsics.cy
+
+    # Get view matrix
+    if camera_pose is None:
+        viewmat = create_front_camera_pose(device=self.device)
+    else:
+        if isinstance(camera_pose, np.ndarray):
+            viewmat = torch.tensor(camera_pose, dtype=torch.float32, device=self.device)
+        else:
+            viewmat = camera_pose.to(self.device)
+
+    # Get intrinsics matrix
+    K = create_camera_intrinsics(fx, fy, cx, cy, device=self.device)
+
+    # Get Gaussian parameters
+    means = self.means  # (N, 3)
+    quats = self.rotations  # (N, 4) wxyz
+    scales = torch.exp(self.scales)  # (N, 3) - convert from log-space
+    opacities = sigmoid(self.opacities)  # (N,) - convert from logit-space
+    sh_coeffs = self.sh_coeffs  # (N, num_sh, 3)
+
+    # Normalize quaternions
+    quats = quats / (torch.norm(quats, dim=-1, keepdim=True) + 1e-8)
+
+    # Check if we can use gsplat (requires CUDA)
+    use_gsplat = self.device != &#34;cpu&#34; and torch.cuda.is_available()
+
+    if use_gsplat:
+        try:
+            return self._render_gsplat(
+                means, quats, scales, opacities, sh_coeffs,
+                viewmat, K, H, W
+            )
+        except Exception as e:
+            print(f&#34;[WARN] gsplat rendering failed: {e}, falling back to CPU renderer&#34;)
+            use_gsplat = False
+
+    # CPU fallback renderer
+    return self._render_cpu_fallback(
+        means, quats, scales, opacities, sh_coeffs,
+        viewmat, K, H, W
+    )</code></pre>
+</details>
+<div class="desc"><p>Render the Gaussian splats from a given camera viewpoint.</p>
+<p>Uses differentiable rasterization via gsplat to project 3D Gaussians
+to a 2D image. Supports rendering from the training view or novel views.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>camera_pose</code></strong></dt>
+<dd>4x4 world-to-camera transformation matrix.
+Shape: (4, 4)
+dtype: float32
+If None, uses the training camera pose.
+Default: None</dd>
+<dt><strong><code>intrinsics</code></strong></dt>
+<dd>Camera intrinsic parameters for rendering.
+If None, uses the training camera intrinsics.
+Default: None</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Tuple[Tensor, Tensor, Tensor]</code></dt>
+<dd>
+<p>Rendered outputs
+- rgb: Rendered RGB image
+Shape: (H, W, 3)
+Range: [0, 1]</p>
+<ul>
+<li>
+<p>depth: Rendered depth map
+Shape: (H, W)
+Range: [0, inf) meters</p>
+</li>
+<li>
+<p>alpha: Rendered alpha/opacity map
+Shape: (H, W)
+Range: [0, 1]</p>
+</li>
+</ul>
+</dd>
+</dl>
+<p>Mathematical Operations:
+For each Gaussian i:
+1. Transform mean to camera space: p_cam = R @ p_world + t
+2. Project to image plane: u = fx * x/z + cx, v = fy * y/z + cy
+3. Compute 2D covariance from 3D covariance + Jacobian
+4. Evaluate Gaussian contribution per pixel
+5. Alpha-composite front-to-back</p>
+<h2 id="example">Example</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; rgb, depth, alpha = trainer.render_view()
+&gt;&gt;&gt; plt.imshow(rgb.cpu().numpy())
+</code></pre>
+<pre><code class="language-python-repl">&gt;&gt;&gt; # Render from rotated viewpoint
+&gt;&gt;&gt; R = rotation_matrix_y(np.pi / 6)  # 30 degree rotation
+&gt;&gt;&gt; pose = np.eye(4)
+&gt;&gt;&gt; pose[:3, :3] = R
+&gt;&gt;&gt; rgb_novel, _, _ = trainer.render_view(camera_pose=pose)
+</code></pre></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="gaussian_trainer.CameraParams" href="#gaussian_trainer.CameraParams">CameraParams</a></code></h4>
+<ul class="two-column">
+<li><code><a title="gaussian_trainer.CameraParams.cx" href="#gaussian_trainer.CameraParams.cx">cx</a></code></li>
+<li><code><a title="gaussian_trainer.CameraParams.cy" href="#gaussian_trainer.CameraParams.cy">cy</a></code></li>
+<li><code><a title="gaussian_trainer.CameraParams.fx" href="#gaussian_trainer.CameraParams.fx">fx</a></code></li>
+<li><code><a title="gaussian_trainer.CameraParams.fy" href="#gaussian_trainer.CameraParams.fy">fy</a></code></li>
+<li><code><a title="gaussian_trainer.CameraParams.height" href="#gaussian_trainer.CameraParams.height">height</a></code></li>
+<li><code><a title="gaussian_trainer.CameraParams.width" href="#gaussian_trainer.CameraParams.width">width</a></code></li>
+<li><code><a title="gaussian_trainer.CameraParams.world_to_camera" href="#gaussian_trainer.CameraParams.world_to_camera">world_to_camera</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="gaussian_trainer.GaussianConfig" href="#gaussian_trainer.GaussianConfig">GaussianConfig</a></code></h4>
+<ul class="">
+<li><code><a title="gaussian_trainer.GaussianConfig.densify_from_iter" href="#gaussian_trainer.GaussianConfig.densify_from_iter">densify_from_iter</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianConfig.densify_grad_threshold" href="#gaussian_trainer.GaussianConfig.densify_grad_threshold">densify_grad_threshold</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianConfig.densify_interval" href="#gaussian_trainer.GaussianConfig.densify_interval">densify_interval</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianConfig.densify_until_iter" href="#gaussian_trainer.GaussianConfig.densify_until_iter">densify_until_iter</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianConfig.loss_weight_l1" href="#gaussian_trainer.GaussianConfig.loss_weight_l1">loss_weight_l1</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianConfig.loss_weight_lpips" href="#gaussian_trainer.GaussianConfig.loss_weight_lpips">loss_weight_lpips</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianConfig.loss_weight_ssim" href="#gaussian_trainer.GaussianConfig.loss_weight_ssim">loss_weight_ssim</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianConfig.lr_color" href="#gaussian_trainer.GaussianConfig.lr_color">lr_color</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianConfig.lr_opacity" href="#gaussian_trainer.GaussianConfig.lr_opacity">lr_opacity</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianConfig.lr_position" href="#gaussian_trainer.GaussianConfig.lr_position">lr_position</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianConfig.lr_rotation" href="#gaussian_trainer.GaussianConfig.lr_rotation">lr_rotation</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianConfig.lr_scale" href="#gaussian_trainer.GaussianConfig.lr_scale">lr_scale</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianConfig.max_gaussians" href="#gaussian_trainer.GaussianConfig.max_gaussians">max_gaussians</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianConfig.num_iterations" href="#gaussian_trainer.GaussianConfig.num_iterations">num_iterations</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianConfig.opacity_init" href="#gaussian_trainer.GaussianConfig.opacity_init">opacity_init</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianConfig.position_noise" href="#gaussian_trainer.GaussianConfig.position_noise">position_noise</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianConfig.prune_opacity_threshold" href="#gaussian_trainer.GaussianConfig.prune_opacity_threshold">prune_opacity_threshold</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianConfig.scale_init" href="#gaussian_trainer.GaussianConfig.scale_init">scale_init</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianConfig.sh_degree" href="#gaussian_trainer.GaussianConfig.sh_degree">sh_degree</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="gaussian_trainer.GaussianTrainer" href="#gaussian_trainer.GaussianTrainer">GaussianTrainer</a></code></h4>
+<ul class="">
+<li><code><a title="gaussian_trainer.GaussianTrainer.export_ply" href="#gaussian_trainer.GaussianTrainer.export_ply">export_ply</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianTrainer.get_parameters" href="#gaussian_trainer.GaussianTrainer.get_parameters">get_parameters</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianTrainer.initialize_gaussians" href="#gaussian_trainer.GaussianTrainer.initialize_gaussians">initialize_gaussians</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianTrainer.num_gaussians" href="#gaussian_trainer.GaussianTrainer.num_gaussians">num_gaussians</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianTrainer.optimize" href="#gaussian_trainer.GaussianTrainer.optimize">optimize</a></code></li>
+<li><code><a title="gaussian_trainer.GaussianTrainer.render_view" href="#gaussian_trainer.GaussianTrainer.render_view">render_view</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

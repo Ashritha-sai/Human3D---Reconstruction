@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m pytest:*)",
+      "Bash(pip install:*)",
+      "WebFetch(domain:docs.gsplat.studio)",
+      "Bash(python:*)",
+      "Bash(nvidia-smi:*)",
+      "Bash(pip uninstall:*)",
+      "Bash(where:*)",
+      "Bash(nvcc:*)",
+      "Bash(dir:*)",
+      "Bash(echo:*)",
+      "Bash(dir \"C:\\\\Program Files\\\\NVIDIA GPU Computing Toolkit\\\\CUDA\\\\v*\\\\bin\\\\nvcc.exe\")",
+      "Bash(\"C:\\\\Program Files\\\\NVIDIA GPU Computing Toolkit\\\\CUDA\\\\v13.1\\\\bin\\\\nvcc.exe\" --version)",
+      "Bash(set \"CUDA_HOME=C:\\\\Program Files\\\\NVIDIA GPU Computing Toolkit\\\\CUDA\\\\v13.1\")",
+      "Bash(set \"PATH=%CUDA_HOME%\\\\bin;%PATH%\")",
+      "Bash(timeout:*)"
+    ]
+  }
+}

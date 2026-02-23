@@ -1,0 +1,46 @@
+# Core scientific stack
+numpy>=1.23
+opencv-python>=4.8
+pyyaml>=6.0
+tqdm>=4.66
+matplotlib>=3.7
+
+# PyTorch (CPU or CUDA depending on system)
+torch>=2.0
+torchvision>=0.15
+
+# Depth estimation (MiDaS dependency)
+timm>=0.9
+
+# YOLOv8 Pose
+ultralytics>=8.0
+
+# Point cloud processing
+open3d>=0.18
+
+# Segment Anything
+git+https://github.com/facebookresearch/segment-anything.git
+
+# ============================================
+# Gaussian Splatting Dependencies (NEW)
+# ============================================
+
+# gsplat - High-performance 3D Gaussian Splatting library
+# https://github.com/nerfstudio-project/gsplat
+gsplat>=1.0.0
+
+# PyTorch3D - 3D deep learning utilities
+# Note: May require building from source for CUDA support
+# See: https://github.com/facebookresearch/pytorch3d/blob/main/INSTALL.md
+pytorch3d>=0.7.0
+
+# LPIPS - Learned Perceptual Image Patch Similarity
+# Used for perceptual loss during Gaussian optimization
+lpips>=0.1.4
+
+# TensorBoard - Training visualization and logging
+tensorboard>=2.14
+
+# plyfile - PLY file I/O for Gaussian splat export
+# Required for writing Gaussian-specific PLY format with SH coefficients
+plyfile>=1.0

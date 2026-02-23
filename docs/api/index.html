@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Human3D Gaussian Splatting API Reference</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.25rem;
+        }
+
+        .card h2 a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .card h2 a:hover {
+            text-decoration: underline;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .card .module-path {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            background: var(--bg);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 0.75rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin: 2.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .quick-links {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .quick-links h3 {
+            margin: 0 0 1rem 0;
+        }
+
+        .quick-links ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+
+        .quick-links li {
+            margin: 0.5rem 0;
+        }
+
+        .quick-links a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .quick-links a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        code {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            background: var(--bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Human3D API Reference</h1>
+        <p class="subtitle">Gaussian Splatting Module Documentation</p>
+
+        <div class="quick-links">
+            <h3>Quick Navigation</h3>
+            <ul>
+                <li><a href="#core">Core Modules</a> - Main training and export functionality</li>
+                <li><a href="#utils">Utilities</a> - Helper functions and math operations</li>
+                <li><a href="../GAUSSIAN_SPLATTING.html">Technical Guide</a> - Detailed documentation</li>
+            </ul>
+        </div>
+
+        <h2 class="section-title" id="core">Core Modules</h2>
+
+        <div class="card-grid">
+            <div class="card">
+                <h2><a href="gaussian_trainer.html">gaussian_trainer</a></h2>
+                <p>Main trainer class for 3D Gaussian Splatting. Handles initialization, optimization loop, densification, and export.</p>
+                <span class="module-path">human3d.reconstruct.gaussian_trainer</span>
+            </div>
+
+            <div class="card">
+                <h2><a href="ply_exporter.html">ply_exporter</a></h2>
+                <p>Export Gaussians to PLY format compatible with standard 3DGS viewers (antimatter15, SuperSplat, etc.).</p>
+                <span class="module-path">human3d.export.ply_exporter</span>
+            </div>
+
+            <div class="card">
+                <h2><a href="losses.html">losses</a></h2>
+                <p>Loss functions including L1, SSIM, LPIPS, and regularization terms for training.</p>
+                <span class="module-path">human3d.reconstruct.losses</span>
+            </div>
+        </div>
+
+        <h2 class="section-title" id="utils">Utilities</h2>
+
+        <div class="card-grid">
+            <div class="card">
+                <h2><a href="gaussian_utils.html">gaussian_utils</a></h2>
+                <p>Mathematical utilities for depth unprojection, scale estimation, spherical harmonics, and camera operations.</p>
+                <span class="module-path">human3d.reconstruct.gaussian_utils</span>
+            </div>
+        </div>
+
+        <h2 class="section-title">Key Classes</h2>
+
+        <div class="card-grid">
+            <div class="card">
+                <h2><a href="gaussian_trainer.html#GaussianTrainer">GaussianTrainer</a></h2>
+                <p>Main class for training 3D Gaussians from RGB-D input. Includes methods for initialization, optimization, rendering, and export.</p>
+            </div>
+
+            <div class="card">
+                <h2><a href="gaussian_trainer.html#GaussianConfig">GaussianConfig</a></h2>
+                <p>Dataclass for training configuration including learning rates, iterations, and densification parameters.</p>
+            </div>
+
+            <div class="card">
+                <h2><a href="gaussian_trainer.html#CameraParams">CameraParams</a></h2>
+                <p>Camera intrinsic parameters including focal length, principal point, and image dimensions.</p>
+            </div>
+
+            <div class="card">
+                <h2><a href="losses.html#GaussianLosses">GaussianLosses</a></h2>
+                <p>Combined loss function class with configurable weights for L1, SSIM, LPIPS, and regularization.</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">Key Functions</h2>
+
+        <div class="card-grid">
+            <div class="card">
+                <h2><a href="ply_exporter.html#save_gaussian_ply">save_gaussian_ply()</a></h2>
+                <p>Export Gaussian parameters to binary PLY file format.</p>
+            </div>
+
+            <div class="card">
+                <h2><a href="ply_exporter.html#load_gaussian_ply">load_gaussian_ply()</a></h2>
+                <p>Load Gaussian parameters from PLY file.</p>
+            </div>
+
+            <div class="card">
+                <h2><a href="gaussian_utils.html#depth_to_xyz">depth_to_xyz()</a></h2>
+                <p>Unproject depth map to 3D points using pinhole camera model.</p>
+            </div>
+
+            <div class="card">
+                <h2><a href="gaussian_utils.html#estimate_point_scales">estimate_point_scales()</a></h2>
+                <p>Estimate Gaussian scales from local point density using k-NN.</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>Generated with pdoc3 | Human3D Gaussian Splatting Module</p>
+            <p><a href="../../README.md">Back to README</a> | <a href="../GAUSSIAN_SPLATTING.md">Technical Guide</a></p>
+        </footer>
+    </div>
+</body>
+</html>

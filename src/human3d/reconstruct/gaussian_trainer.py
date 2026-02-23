@@ -17,7 +17,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional, Tuple, Dict, Any
+from typing import Optional, Tuple, Dict
 
 import numpy as np
 import torch
@@ -833,13 +833,11 @@ class GaussianTrainer:
         from .gaussian_utils import spherical_harmonics_to_rgb
 
         device = means.device
-        N = means.shape[0]
 
         # Initialize output buffers
         rgb_buffer = torch.zeros((H, W, 3), dtype=torch.float32, device=device)
         depth_buffer = torch.full((H, W), float("inf"), dtype=torch.float32, device=device)
         alpha_buffer = torch.zeros((H, W), dtype=torch.float32, device=device)
-        weight_buffer = torch.zeros((H, W), dtype=torch.float32, device=device)
 
         # Extract camera parameters
         fx, fy = K[0, 0], K[1, 1]
@@ -859,7 +857,6 @@ class GaussianTrainer:
         scales_valid = scales[valid]
         opacities_valid = opacities[valid]
         sh_coeffs_valid = sh_coeffs[valid]
-        quats_valid = quats[valid]
 
         # Project to image plane
         z = means_cam[:, 2]
@@ -983,7 +980,7 @@ class GaussianTrainer:
         )
 
         print(f"Saved {self.num_gaussians} Gaussians to {output_path}")
-        print(f"  View at: https://antimatter15.com/splat/")
+        print("  View at: https://antimatter15.com/splat/")
 
     def _densify_and_prune(
         self,
@@ -1031,7 +1028,7 @@ class GaussianTrainer:
             >>> added, removed = trainer._densify_and_prune()
             >>> print(f"Added {added}, removed {removed} Gaussians")
         """
-        from .gaussian_utils import sigmoid, inverse_sigmoid
+        from .gaussian_utils import sigmoid
 
         if grad_threshold is None:
             grad_threshold = self.config.densify_grad_threshold

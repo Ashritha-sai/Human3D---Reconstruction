@@ -132,8 +132,8 @@ def main():
     print(f"   Masked pixels: {mask.sum()}")
 
     print("4. Generating camera parameters...")
-    params = generate_camera_params(output_dir)
-    print(f"   Saved: camera_params.yaml")
+    generate_camera_params(output_dir)
+    print("   Saved: camera_params.yaml")
 
     print("\nFixtures generated successfully!")
 

@@ -14,14 +14,14 @@ import importlib.util
 import types
 import tempfile
 
+import numpy as np
+import torch
+import pytest
+
 # Add src to path
 src_path = str(Path(__file__).parent.parent / "src")
 if src_path not in sys.path:
     sys.path.insert(0, src_path)
-
-import numpy as np
-import torch
-import pytest
 
 
 def _import_modules():
@@ -299,7 +299,7 @@ class TestOptimizationCUDA:
             )
 
         assert len(history['loss']) == 20
-        assert not any(np.isnan(l) for l in history['loss'])
+        assert not any(np.isnan(loss_val) for loss_val in history['loss'])
 
 
 class TestDensification:
@@ -381,7 +381,6 @@ class TestDensification:
 
         # With aggressive settings, count should have changed at some point
         # (either increased from densification or decreased from pruning)
-        unique_counts = set(counts)
         # Just verify it tracked properly - actual changes depend on gradients
         assert len(counts) > 0
 
@@ -523,8 +522,6 @@ def run_quick_training_demo():
 
 
 if __name__ == "__main__":
-    import sys
-
     if len(sys.argv) > 1 and sys.argv[1] == "--demo":
         run_quick_training_demo()
     else:

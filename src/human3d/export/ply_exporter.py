@@ -164,7 +164,6 @@ def save_gaussian_ply(
 
     # 4. Determine SH degree and prepare SH data
     num_sh_coeffs = sh_coeffs.shape[1]
-    sh_degree = int(np.sqrt(num_sh_coeffs)) - 1
 
     # Flatten SH coefficients: (N, num_coeffs, 3) -> separate DC and rest
     # DC term: first coefficient, 3 channels

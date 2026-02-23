@@ -8,7 +8,7 @@ class SAMSegmenter:
         if not os.path.exists(checkpoint_path):
             raise FileNotFoundError(
                 f"SAM checkpoint not found: {checkpoint_path}\n"
-                f"Download a SAM .pth and place it there, or set segmentation.enabled=false."
+                "Download a SAM .pth and place it there, or set segmentation.enabled=false."
             )
         from segment_anything import sam_model_registry, SamPredictor
 

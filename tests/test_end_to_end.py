@@ -10,16 +10,16 @@ import importlib.util
 import types
 import tempfile
 
-# Add src to path
-src_path = str(Path(__file__).parent.parent / "src")
-if src_path not in sys.path:
-    sys.path.insert(0, src_path)
-
 import numpy as np
 import torch
 import pytest
 import yaml
 import cv2
+
+# Add src to path
+src_path = str(Path(__file__).parent.parent / "src")
+if src_path not in sys.path:
+    sys.path.insert(0, src_path)
 
 
 # ==============================================================================

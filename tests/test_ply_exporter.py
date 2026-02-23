@@ -12,13 +12,13 @@ import sys
 from pathlib import Path
 import tempfile
 
+import numpy as np
+import pytest
+
 # Add src to path
 src_path = str(Path(__file__).parent.parent / "src")
 if src_path not in sys.path:
     sys.path.insert(0, src_path)
-
-import numpy as np
-import pytest
 
 
 def _import_exporter():

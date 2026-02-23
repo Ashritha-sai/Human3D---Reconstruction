@@ -234,7 +234,7 @@ def main():
     print("=" * 60)
 
     # 1. Load input data
-    print(f"\n[1/4] Loading input data...")
+    print("\n[1/4] Loading input data...")
     rgb = load_image(args.input)
     h, w = rgb.shape[:2]
     print(f"  Image: {args.input} ({w}x{h})")
@@ -256,7 +256,7 @@ def main():
         print(f"  Mask: full image ({mask.sum()} pixels)")
 
     # 2. Configure training
-    print(f"\n[2/4] Configuring training...")
+    print("\n[2/4] Configuring training...")
 
     # Quick mode adjustments
     if args.quick:
@@ -290,7 +290,7 @@ def main():
     )
 
     # 3. Train Gaussians
-    print(f"\n[3/4] Training Gaussians...")
+    print("\n[3/4] Training Gaussians...")
     start_time = time.time()
 
     trainer = GaussianTrainer(rgb, depth, mask, camera, config, device=args.device)
@@ -314,7 +314,7 @@ def main():
     print(f"  Final Gaussians: {trainer.num_gaussians}")
 
     # 4. Export results
-    print(f"\n[4/4] Exporting results...")
+    print("\n[4/4] Exporting results...")
 
     # Save PLY
     ply_path = output_dir / "gaussians.ply"
@@ -344,8 +344,8 @@ def main():
     print(f"  PLY file: {ply_path}")
     print(f"  Final loss: {history['loss'][-1]:.4f}")
     print(f"  Gaussians: {trainer.num_gaussians}")
-    print(f"\n  View your result:")
-    print(f"    1. Go to https://antimatter15.com/splat/")
+    print("\n  View your result:")
+    print("    1. Go to https://antimatter15.com/splat/")
     print(f"    2. Drag and drop: {ply_path}")
     print()
 

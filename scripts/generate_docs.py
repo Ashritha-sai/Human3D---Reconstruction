@@ -55,7 +55,7 @@ def main():
             print(f"  - {f.name}")
 
         print()
-        print(f"Open docs/api/index.html to view the documentation.")
+        print("Open docs/api/index.html to view the documentation.")
 
     except subprocess.CalledProcessError as e:
         print(f"Error generating documentation: {e}")

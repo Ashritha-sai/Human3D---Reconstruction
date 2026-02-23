@@ -79,7 +79,7 @@ def test_gsplat_basic():
             sh_degree=None,  # Not using SH, just direct RGB
         )
 
-        print(f"\nRasterization successful!")
+        print("\nRasterization successful!")
         print(f"Rendered colors shape: {render_colors.shape}")
         print(f"Rendered alphas shape: {render_alphas.shape}")
         print(f"Color range: [{render_colors.min():.3f}, {render_colors.max():.3f}]")
@@ -91,7 +91,7 @@ def test_gsplat_basic():
         rgb = np.clip(rgb, 0, 1)
         bgr = (rgb[:, :, ::-1] * 255).astype(np.uint8)
         cv2.imwrite("C:/Users/Ashritha/Desktop/Human3D/test_gsplat_output.png", bgr)
-        print(f"\nSaved test image to test_gsplat_output.png")
+        print("\nSaved test image to test_gsplat_output.png")
 
         return True
 
@@ -159,7 +159,7 @@ def test_gsplat_with_sh():
             sh_degree=sh_degree,  # Tell gsplat we're using SH
         )
 
-        print(f"SH Rasterization successful!")
+        print("SH Rasterization successful!")
         print(f"Rendered colors shape: {render_colors.shape}")
         print(f"Color range: [{render_colors.min():.3f}, {render_colors.max():.3f}]")
 

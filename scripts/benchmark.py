@@ -266,22 +266,22 @@ def benchmark(device: str = "cuda", iterations: int = 500, size: int = 256):
     print("  Benchmark Results")
     print("=" * 60)
 
-    print(f"\n  Configuration:")
+    print("\n  Configuration:")
     print(f"    Device: {device}")
     print(f"    Image size: {size}x{size}")
     print(f"    Gaussians: {trainer.num_gaussians}")
     print(f"    Iterations: {iterations}")
 
-    print(f"\n  Timing:")
+    print("\n  Timing:")
     print(f"    Initialization: {t_init * 1000:.1f} ms")
     print(f"    Total training: {t_train:.2f} s")
     print(f"    Per iteration: {t_train / iterations * 1000:.2f} ms")
     print(f"    Rendering: {t_render * 1000:.2f} ms ({1 / t_render:.1f} FPS)")
 
-    print(f"\n  Memory:")
+    print("\n  Memory:")
     print(f"    Peak usage: {mem_after:.1f} MB")
 
-    print(f"\n  Quality:")
+    print("\n  Quality:")
     print(f"    Final loss: {history['loss'][-1]:.4f}")
     print(f"    PSNR: {psnr:.2f} dB")
     print(f"    SSIM: {ssim:.4f}")
